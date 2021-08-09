@@ -2,9 +2,11 @@ import { BigNumber, ethers } from "ethers";
 import {Draw, DrawSettings, User} from "../types/types"
 
 
+const printUtils = require("./helpers/printUtils")
+const { dim } = printUtils
+
 
 export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): BigNumber { // returns number of runs it took to find a result
-    console.log("running single draw calc")
     
     const sanityCheckDrawSettingsResult = sanityCheckDrawSettings(drawSettings)
     
@@ -15,7 +17,7 @@ export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw:
     /* CALCULATE() */
     //  bytes32 userRandomNumber = keccak256(abi.encodePacked(user)); // hash the users address
     const userRandomNumber = ethers.utils.solidityKeccak256(["address"], [user.address])
-    console.log("user random number ")
+    
     // for (uint256 index = 0; index < winningRandomNumbers.length; index++) {
 
     //single winning number -> no loop required
@@ -23,7 +25,8 @@ export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw:
     /* _CALCULATE()*/   
     // uint256 totalUserPicks = balance / _drawSettings.pickCost;
     const totalUserPicks = user.balance.div(drawSettings.pickCost)
-    console.log("totalUserPicks ", totalUserPicks)
+    dim(`totalUserPicks ${totalUserPicks}`)
+
     let pickPayoutFraction: BigNumber = BigNumber.from(0)
 
     const defaultAbiCoder = ethers.utils.defaultAbiCoder
@@ -63,7 +66,7 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
             numberOfMatches++;
         }
     }
-    console.log(`found ${numberOfMatches} matches..`)
+    dim(`found ${numberOfMatches} matches..`)
 
     return calculatePrizeAmount(_drawSettings, draw, numberOfMatches)
 }

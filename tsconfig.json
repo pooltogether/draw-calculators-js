@@ -7,14 +7,14 @@
         "moduleResolution": "node",
         "forceConsistentCasingInFileNames": true,
         "resolveJsonModule": true,
+        "outDir": "dist",
+        "declaration": true,
+        "downlevelIteration": true,
+        "allowJs": true
     },
     "include": [
-        "hardhat.config.ts",
-        "hardhat.network.ts",
-        "./deploy",
-        "./scripts",
         "./test",
         "types/**/*",
-        "Constant.ts"
+        "src/**/*"
     ]
 }
