@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from "ethers";
+import { BigNumber, ethers, utils } from "ethers";
 import {Draw, DrawSettings, User} from "../types/types"
 
 
@@ -6,7 +6,7 @@ const printUtils = require("./helpers/printUtils")
 const { dim } = printUtils
 
 
-export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): BigNumber { // returns number of runs it took to find a result
+export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): BigNumber {
     
     const sanityCheckDrawSettingsResult = sanityCheckDrawSettings(drawSettings)
     
@@ -27,7 +27,7 @@ export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw:
     const totalUserPicks = user.balance.div(drawSettings.pickCost)
     dim(`totalUserPicks ${totalUserPicks}`)
 
-    let pickPayoutFraction: BigNumber = BigNumber.from(0)
+    let prize: BigNumber = BigNumber.from(0)
 
     const defaultAbiCoder = ethers.utils.defaultAbiCoder
 
@@ -45,11 +45,13 @@ export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw:
         // does the below line type need to be bytes32?
         const randomNumberThisPick: string = ethers.utils.solidityKeccak256(["string"], [abiEncodedRandomNumberPlusPickIndice])
         
-        // pickPayoutFraction += calculatePickFraction(randomNumberThisPick, winningRandomNumber, _drawSettings);
-        pickPayoutFraction = pickPayoutFraction.add(calculatePickFraction(randomNumberThisPick, draw.winningRandomNumber, drawSettings, draw))
+        // prize += calculatePickFraction(randomNumberThisPick, winningRandomNumber, _drawSettings);
+        prize = prize.add(calculatePickFraction(randomNumberThisPick, draw.winningRandomNumber, drawSettings, draw))
 
     }
-    return pickPayoutFraction.mul(draw.prize);
+    console.log(utils.formatEther(prize))
+
+    return prize //.mul(draw.prize)
 }
 
 //function calculatePickFraction(uint256 randomNumberThisPick, uint256 winningRandomNumber, DrawSettings memory _drawSettings)
@@ -67,8 +69,12 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
         }
     }
     dim(`found ${numberOfMatches} matches..`)
+    const prizeAmount = calculatePrizeAmount(_drawSettings, draw, numberOfMatches)
 
-    return calculatePrizeAmount(_drawSettings, draw, numberOfMatches)
+
+    console.log("prizeAmount ", utils.formatEther(prizeAmount))
+
+    return prizeAmount
 }
 
 
@@ -91,6 +97,7 @@ export function findBitMatchesAtIndex(word1: BigNumber, word2: BigNumber, indexO
 
 // calculates the absolute amount of Prize in Wei for the Draw and DrawSettings
 export function calculatePrizeAmount(drawSettings: DrawSettings, draw: Draw, matches :number): BigNumber {
+    
     const distributionIndex = drawSettings.matchCardinality.toNumber() - matches
     console.log("distributionIndex ", distributionIndex)
 
@@ -104,12 +111,48 @@ export function calculatePrizeAmount(drawSettings: DrawSettings, draw: Draw, mat
     
     const valueAtDistributionIndex : BigNumber = drawSettings.distributions[distributionIndex]
     console.log("valueAtDistributionIndex ", valueAtDistributionIndex)
-    const percentageOfPrize: BigNumber= valueAtDistributionIndex.div(numberOfPrizes)
-    const expectedPrizeAmount : BigNumber = (draw.prize).mul(percentageOfPrize).div(ethers.constants.WeiPerEther) 
+    
+    const fractionOfPrize: BigNumber= valueAtDistributionIndex.div(numberOfPrizes) //.div(100)
 
-    console.log("expectedPrizeAmount ", expectedPrizeAmount.toString())
+    console.log("fractionOfPrize: ", utils.formatEther(fractionOfPrize))
+    // console.log("fractionOfPrize div 1 ether ", fractionOfPrize.div(ethers.constants.WeiPerEther) )
+
+    const expectedPrizeAmount : BigNumber = (draw.prize).mul(fractionOfPrize)//.div(ethers.constants.WeiPerEther).mul(ethers.constants.WeiPerEther) 
+
+    console.log("expectedPrizeAmount ", utils.formatEther(expectedPrizeAmount))
 
     return expectedPrizeAmount
+}
+
+// inverse of calculatePrizeAmount()
+export function calculateNumberOfMatchesForPrize(drawSettings: DrawSettings, draw: Draw, prizeReceived: BigNumber): number {
+    
+    const sanityResult = sanityCheckDrawSettings(drawSettings)
+    
+    if(sanityResult == ""){
+        
+
+        // const expectedPrizeAmount : BigNumber = (draw.prize).mul(percentageOfPrize).div(ethers.constants.WeiPerEther) 
+        const fractionOfPrizeReceived: BigNumber = prizeReceived.div(draw.prize)
+        console.log("fractionOfPrizeReceived: ", utils.formatEther(fractionOfPrizeReceived))
+
+        for(let i = 0; i < drawSettings.distributions.length; i++){
+            const numPrizes = BigNumber.from(Math.pow(drawSettings.bitRangeSize.toNumber(),i))
+            const prizeFractionAtIndex = drawSettings.distributions[i].div(numPrizes)
+            
+            console.log(`prizeFractionAtIndex ${i} : ${utils.formatEther(prizeFractionAtIndex)}`)
+
+            if(fractionOfPrizeReceived.eq(prizeFractionAtIndex)){
+                
+                return drawSettings.matchCardinality.toNumber() - (drawSettings.distributions.length - i - 1) //constdrawSettings.matchCardinality.toNumber() - distributionIndex = matches 
+            }
+            
+        } 
+    }
+
+    // else there is no number of matches
+    return 0;
+
 }
 
 
