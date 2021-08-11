@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
 import { Draw, DrawSettings, DrawSimulationResult, DrawSimulationResults, User } from "../types/types"
-import { runDrawCalculatorForSingleDraw, findBitMatchesAtIndex, sanityCheckDrawSettings } from "./DrawCalculator"
+import { runDrawCalculatorForSingleDraw, findBitMatchesAtIndex, sanityCheckDrawSettings } from "./drawCalculator"
 
 
 //  runs calculate(), holds everything fixed but changes Draw.winningRandomNumber n times

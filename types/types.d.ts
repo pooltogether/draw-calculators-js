@@ -9,7 +9,6 @@ export type DrawSettings  = {
 }
 
 export type Draw = {
-    timestamp : number // dont think this is needed in the sim since single Draw simulated
     prize: BigNumber
     winningRandomNumber: BigNumber
 }

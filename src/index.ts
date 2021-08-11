@@ -1,6 +1,7 @@
-import {runDrawCalculatorForSingleDraw} from "./DrawCalculator"
+import {runDrawCalculatorForSingleDraw, calculatePrizeAmount} from "./drawCalculator"
 
 
 module.exports = {
-    runDrawCalculatorForSingleDraw
+    runDrawCalculatorForSingleDraw,
+    calculatePrizeAmount
 }

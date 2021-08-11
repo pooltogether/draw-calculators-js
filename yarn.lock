@@ -416,7 +416,7 @@
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-9.0.0.tgz#3205bcd15ada9bc681ac20bef64e9e6df88fd297"
   integrity sha512-scN0hAWyLVAvLR9AyW7HoFF5sJZglyBsbPuHO4fv7JRvfmPBMfp1ozWqOf/e4wwPNxezBZXRfWzMb6iFLgEVRA==
 
-"@types/node@*":
+"@types/node@*", "@types/node@>=10":
   version "16.4.13"
   resolved "https://registry.yarnpkg.com/@types/node/-/node-16.4.13.tgz#7dfd9c14661edc65cccd43a29eb454174642370d"
   integrity sha512-bLL69sKtd25w7p1nvg9pigE4gtKVpGTPojBFLMkGHXuUgap2sLqQt2qUnqmVCDfzGUL0DRNZP+1prIZJbMeAXg==
@@ -531,6 +531,13 @@ bech32@1.1.4:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/bech32/-/bech32-1.1.4.tgz#e38c9f37bf179b8eb16ae3a772b40c356d4832e9"
   integrity sha512-s0IrSOzLlbvX7yp4WBfPITzpAU8sqQcpsmwXDiKwrG4r491vwCO/XpejasRNl0piBMe/DvP4Tz0mIS/X1DPJBQ==
+
+bigint-conversion@^2.1.12:
+  version "2.1.12"
+  resolved "https://registry.yarnpkg.com/bigint-conversion/-/bigint-conversion-2.1.12.tgz#2cac6e67f3d1c4bda8dd83f53a54491d5009262d"
+  integrity sha512-3VaW54fAag+ODLwBYNV4eAvTtHZQPpGyNnGkzRhDvg5VHNCMYskGKKEIuq5RQ4CvZWEzTLJs1C3Zlw3rsal/RA==
+  dependencies:
+    "@types/node" ">=10"
 
 binary-extensions@^2.0.0:
   version "2.2.0"
