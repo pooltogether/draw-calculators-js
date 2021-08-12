@@ -1,5 +1,5 @@
 {
-  "name": "@pooltogether/pooltogether-contracts-tsunami",
+  "name": "@pooltogether/tsunami-js-sdk",
   "version": "1.0.0-beta.1",
   "description": "PoolTogether Tsunami SDK",
   "main": "dist/src/index.js",
@@ -8,7 +8,7 @@
   "scripts": {
     "dev": "ts-node ./src/runSimulation.ts",
     "test": "ts-mocha ./test/**",
-    "build": "yarn clean && tsc --project tsconfig.json",
+    "build": "yarn clean && tsc --project tsconfig.json && yalc push",
     "clean": "rm -rf dist/"
   },
   "dependencies": {},
@@ -24,7 +24,8 @@
     "ts-generator": "0.1.1",
     "ts-mocha": "^8.0.0",
     "ts-node": "9.1.1",
-    "typescript": "4.2.3"
+    "typescript": "4.2.3",
+    "yalc": "^1.0.0-pre.53"
   },
   "files": [
     "dist/"

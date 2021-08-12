@@ -1,6 +1,10 @@
 import { BigNumber, ethers } from "ethers";
 import { Draw, DrawSettings, DrawSimulationResult, DrawSimulationResults, User } from "../types/types"
-import { runDrawCalculatorForSingleDraw, findBitMatchesAtIndex, sanityCheckDrawSettings } from "./drawCalculator"
+import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "./drawCalculator"
+
+
+const printUtils = require("./helpers/printUtils")
+const { dim, green, yellow } = printUtils
 
 
 //  runs calculate(), holds everything fixed but changes Draw.winningRandomNumber n times
@@ -17,10 +21,6 @@ function runDrawNTimesSingleUser(n: number, drawSettings: DrawSettings, draw: Dr
     for(let i = 0; i < n; i++){
         // change random number
         const newWinningRandomNumberAddress = (ethers.Wallet.createRandom()).address 
-        // is ethers.Wallet.createRandom() 
-        // going to give uniform random seeds over time?
-        // there is also a bias option we can use as an input
-
         const hashOfNewWinningRandonNumber : string = ethers.utils.solidityKeccak256(["address"], [newWinningRandomNumberAddress])
         const newWinningRandomNumber = BigNumber.from(hashOfNewWinningRandonNumber)
         
@@ -46,7 +46,7 @@ function runDrawNTimesSingleUser(n: number, drawSettings: DrawSettings, draw: Dr
 
 //  changes DrawSettings.matchCardinality holds everything else constant 
 function runDrawSingleUserChangeMatchCardinality(){
-
+    dim(`running simulation...`)
     const RUN_TIME = 100
 
     const drawSettings : DrawSettings = {
@@ -54,14 +54,14 @@ function runDrawSingleUserChangeMatchCardinality(){
                         ethers.utils.parseEther("0.2"),
                         ethers.utils.parseEther("0.1")],
         pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-        matchCardinality: BigNumber.from(3),
+        matchCardinality: BigNumber.from(1),
         bitRangeValue: BigNumber.from(15),
         bitRangeSize : BigNumber.from(4)
     }
-    
+
     const draw : Draw = {
         prize: BigNumber.from(100),
-        winningRandomNumber: BigNumber.from(61676)
+        winningRandomNumber: BigNumber.from(ethers.utils.solidityKeccak256(["address"], [(ethers.Wallet.createRandom()).address]))
     }
     
     const user : User = {
@@ -75,7 +75,6 @@ function runDrawSingleUserChangeMatchCardinality(){
     // drawSettings matchCardinality must satisfy sanityCheckDrawSettings
 
     // matchCardinality is uint16 (65,536) possibilities
-
     for(let i = 0; i < 65536; i++){
         
         const drawSettingsThisRun :DrawSettings= {
@@ -84,6 +83,7 @@ function runDrawSingleUserChangeMatchCardinality(){
         }
         if(sanityCheckDrawSettings(drawSettingsThisRun)!= ""){
             // this settings cannot be set, skipping
+            dim(`skipping for cardinality ${i}`)
             continue
         }
 
@@ -94,3 +94,6 @@ function runDrawSingleUserChangeMatchCardinality(){
     // do something with results
 
 }
+
+
+runDrawSingleUserChangeMatchCardinality()

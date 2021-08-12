@@ -146,6 +146,15 @@ describe('drawCalculator', () => {
             expect(result).to.be.true
         
         })
+
+        it('Can NOT findBitMatchesAtIndex', async () => {
+            const result = findBitMatchesAtIndex(BigNumber.from(61676),
+            BigNumber.from(61612),
+            BigNumber.from(6),
+            BigNumber.from(63))
+            expect(result).to.be.false
+        
+        })    
         
         it('Can findBitMatchesAtIndex', async () => {
             const result = findBitMatchesAtIndex(
@@ -155,6 +164,6 @@ describe('drawCalculator', () => {
             BigNumber.from(255))
             expect(result).to.be.true
         
-        })    
+        }) 
     })
 })
