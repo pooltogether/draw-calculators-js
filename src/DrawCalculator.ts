@@ -3,7 +3,7 @@ import {Draw, DrawSettings, User} from "../types/types"
 
 
 const printUtils = require("./helpers/printUtils")
-const { dim, green } = printUtils
+const { dim, green, yellow } = printUtils
 
 
 export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): BigNumber {
@@ -17,7 +17,7 @@ export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw:
     /* CALCULATE() */ //single winning number -> no loop required
     //  bytes32 userRandomNumber = keccak256(abi.encodePacked(user)); // hash the users address
     const userRandomNumber = ethers.utils.solidityKeccak256(["address"], [user.address])
-    
+    console.log("userRandomNumber: ", userRandomNumber)
     /* _CALCULATE()*/   
     const totalUserPicks = user.balance.div(drawSettings.pickCost) // uint256 totalUserPicks = balance / _drawSettings.pickCost;
     dim(`totalUserPicks ${totalUserPicks}`)
@@ -33,19 +33,16 @@ export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw:
         if(user.pickIndices[i] > totalUserPicks){
             throw new Error(`User does not have this many picks!`)
         }
-        // uint256 randomNumberThisPick = uint256(keccak256(abi.encode(userRandomNumber, picks[index])));       
-        const abiEncodedRandomNumberPlusPickIndice = defaultAbiCoder.encode(["bytes32","uint256"],[userRandomNumber,user. pickIndices[i]])
-        
-        // does the below line type need to be bytes32?
-        const randomNumberThisPick: string = ethers.utils.solidityKeccak256(["string"], [abiEncodedRandomNumberPlusPickIndice])
-        
-        // prize += calculatePickFraction(randomNumberThisPick, winningRandomNumber, _drawSettings);
-        prizeAwardable = prizeAwardable.add(calculatePickFraction(randomNumberThisPick, draw.winningRandomNumber, drawSettings, draw))
 
+        const abiEncodedValue = utils.solidityPack(["bytes32","uint256"],[userRandomNumber,user. pickIndices[i]])
+        const randomNumberThisPick = utils.keccak256(abiEncodedValue)
+
+        console.log("randomNumberThisPick", randomNumberThisPick)
+        prizeAwardable = prizeAwardable.add(calculatePickFraction(randomNumberThisPick, draw.winningRandomNumber, drawSettings, draw))  // prize += calculatePickFraction(randomNumberThisPick, winningRandomNumber, _drawSettings);
     }
-    // console.log(utils.formatEther(prizeAwardable))
+    
 
-    return prizeAwardable //.mul(draw.prize)
+    return prizeAwardable
 }
 
 //function calculatePickFraction(uint256 randomNumberThisPick, uint256 winningRandomNumber, DrawSettings memory _drawSettings)
@@ -58,7 +55,7 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
         const _matchIndexOffset: number = matchIndex * _drawSettings.bitRangeSize.toNumber()
         
         console.log("winningRandomNumber: ", winningRandomNumber.toString())
-        console.log("randomNumberThisPick: ", randomNumberThisPick)
+        console.log("randomNumberThisPick: ", BigNumber.from(randomNumberThisPick).toString())
         
         if(findBitMatchesAtIndex(BigNumber.from(randomNumberThisPick), winningRandomNumber, BigNumber.from(_matchIndexOffset), _drawSettings.bitRangeValue)){
             green(`match at index ${matchIndex}`)
@@ -84,12 +81,16 @@ export function findBitMatchesAtIndex(word1: BigNumber, word2: BigNumber, indexO
     console.log("word1DataHexString", word1DataHexString)
     console.log("word2DataHexString", word2DataHexString)
 
+    console.log("bitRangeValue ", bitRangeValue.toString())
+    console.log("indexOffset ", indexOffset.toString())
+
     const mask : BigInt = BigInt(bitRangeValue.toString()) << BigInt(indexOffset.toString())
     console.log("mask: ", mask)
 
     const bits1 = BigInt(word1DataHexString) & BigInt(mask)
     const bits2 = BigInt(word2DataHexString) & BigInt(mask)
-    console.log("attempting to match ", bits1.toString(), " with", bits2.toString())
+    // console.log("attempting to match ", bits1.toString(), " with", bits2.toString())
+    yellow(`matching ${bits1.toString()} with ${bits2.toString()}`)
     return bits1 == bits2
 }
 

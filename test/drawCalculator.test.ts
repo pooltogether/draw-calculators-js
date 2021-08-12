@@ -5,7 +5,7 @@ import { Draw, DrawSettings, User } from "../types/types"
 import { runDrawCalculatorForSingleDraw, findBitMatchesAtIndex, calculateNumberOfMatchesForPrize, calculatePrizeAmount } from "../src/drawCalculator"
 
 describe('DrawCalculator', () => {
-    it.only('Single DrawCalculator run 2 matches', async () => {
+    it('Single DrawCalculator run 1 matches', async () => {
         const exampleDrawSettings : DrawSettings = {
             distributions: [ethers.utils.parseEther("0.3"),
                             ethers.utils.parseEther("0.2"),
@@ -18,20 +18,18 @@ describe('DrawCalculator', () => {
         
         const exampleDraw : Draw = {
             prize: BigNumber.from(100),
-            winningRandomNumber: BigNumber.from(BigInt(9818474807567937660714483746420294115396450454986178514367709522842585653685))//BigNumber.from(61676)
+            winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
         }
         
         const exampleUser : User = {
-            address: "0x568Ea56Dd5d8044269b1482D3ad4120a7aB0933A",
+            address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
             balance: ethers.utils.parseEther("10"),
             pickIndices: [BigNumber.from(1)]
         } 
-        console.time("singleRun")
+        // console.time("singleRun")
         const prize = runDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
-        
-        
-
-        console.timeEnd("singleRun")
+    
+        // console.timeEnd("singleRun")
         const prizeReceived = utils.parseEther("5")
         expect(prize).to.deep.equal(prizeReceived)
     })
@@ -49,7 +47,7 @@ describe('DrawCalculator', () => {
         
         const exampleDraw : Draw = {
             prize: BigNumber.from(100),
-            winningRandomNumber: BigNumber.from(BigInt(9818474807567937660714483746420294115396450454986178514367709522842585653685))//BigNumber.from(61676)
+            winningRandomNumber: BigNumber.from("9818474807567937660714483746420294115396450454986178514367709522842585653685")
         }
 
         const prizeReceived = utils.parseEther("5")
@@ -72,7 +70,7 @@ describe('DrawCalculator', () => {
         
         const exampleDraw : Draw = {
             prize: BigNumber.from(100),
-            winningRandomNumber: BigNumber.from(BigInt(9818474807567937660714483746420294115396450454986178514367709522842585653685))//BigNumber.from(61676)
+            winningRandomNumber: BigNumber.from("9818474807567937660714483746420294115396450454986178514367709522842585653685")
         }
         
         const result = calculatePrizeAmount(exampleDrawSettings, exampleDraw, 2)
@@ -94,8 +92,8 @@ describe('DrawCalculator', () => {
 
     it('Can findBitMatchesAtIndex', async () => {
         const result = findBitMatchesAtIndex(
-        BigNumber.from(BigInt(24703804328475188150699190457572086651745971796997325887553663750514688469872)),
-        BigNumber.from(BigInt(8781184742215173699638593792190316559257409652205547100981219837421219359728)),
+        BigNumber.from("24703804328475188150699190457572086651745971796997325887553663750514688469872"),
+        BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728"),
         BigNumber.from(8),
         BigNumber.from(255))
         expect(result).to.be.true
@@ -119,7 +117,7 @@ describe('DrawCalculator', () => {
         
         const exampleDraw : Draw = {
             prize: BigNumber.from(100),
-            winningRandomNumber: BigNumber.from(BigInt(8781184742215173699638593792190316559257409652205547100981219837421219359728))
+            winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
         }
         
         const exampleUser : User = {
@@ -149,19 +147,12 @@ describe('DrawCalculator', () => {
         
         const exampleDraw : Draw = {
             prize: BigNumber.from(100),
-            winningRandomNumber: BigNumber.from(BigInt(8781184742215173699638593792190316559257409652205547100981219837421219359728))
+            winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
         }
-        
-        const exampleUser : User = {
-            address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            balance: ethers.utils.parseEther("10"),
-            pickIndices: [BigNumber.from(1)]
-        } 
         
         const result = calculatePrizeAmount(exampleDrawSettings, exampleDraw, 3)
         const prizeReceived = utils.parseEther("5")
-        expect(result).to.deep.equal(prizeReceived)
-    
+        expect(result).to.deep.equal(prizeReceived)  
     })
 
     

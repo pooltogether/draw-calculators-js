@@ -60,7 +60,6 @@ function runDrawSingleUserChangeMatchCardinality(){
     }
     
     const draw : Draw = {
-        timestamp : 10000,
         prize: BigNumber.from(100),
         winningRandomNumber: BigNumber.from(61676)
     }

@@ -36,3 +36,5 @@ coverage.json
 # Development Notes
 Networks.md
 *.dev.md
+
+dist/
