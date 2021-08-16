@@ -28,11 +28,11 @@ describe('drawCalculator', () => {
                 pickIndices: [BigNumber.from(1)]
             } 
             // console.time("singleRun")
-            const prize = runDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
+            const results = runDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
         
             // console.timeEnd("singleRun")
             const prizeReceived = utils.parseEther("5")
-            expect(prize).to.deep.equal(prizeReceived)
+            expect(results.totalValue).to.deep.equal(prizeReceived)
         })
     
         it('Second single DrawCalculator run 3 matches', async () => {
@@ -59,10 +59,10 @@ describe('drawCalculator', () => {
                 pickIndices: [BigNumber.from(1)]
             } 
             
-            const prize = runDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
+            const results = runDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
             
             const prizeReceived = utils.parseEther("5")
-            expect(prize).to.deep.equal(prizeReceived)
+            expect(results.totalValue).to.deep.equal(prizeReceived)
         })
     })
 

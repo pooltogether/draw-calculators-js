@@ -1,12 +1,12 @@
 import { BigNumber, ethers, utils } from "ethers";
-import {Draw, DrawSettings, User} from "../types/types"
+import {Draw, DrawResults, DrawSettings, User, Prize} from "../types/types"
 
 
 const printUtils = require("./helpers/printUtils")
 const { dim, green, yellow } = printUtils
 
 
-export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): BigNumber {
+export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): DrawResults {
     
     const sanityCheckDrawSettingsResult = sanityCheckDrawSettings(drawSettings)
     
@@ -22,28 +22,39 @@ export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw:
     const totalUserPicks = user.balance.div(drawSettings.pickCost) // uint256 totalUserPicks = balance / _drawSettings.pickCost;
     dim(`totalUserPicks ${totalUserPicks}`)
 
-    let prizeAwardable: BigNumber = BigNumber.from(0)
-    const picksLength = user.pickIndices.length
+    const results: DrawResults = {
+        prizes: [],
+        totalValue: ethers.constants.Zero
+    }
     
+    const picksLength = user.pickIndices.length
     for(let i =0; i < picksLength; i++){ //for(uint256 index  = 0; index < picks.length; index++){
         
         if(user.pickIndices[i] > totalUserPicks){
             throw new Error(`User does not have this many picks!`)
         }
 
-        const abiEncodedValue = utils.solidityPack(["bytes32","uint256"],[userRandomNumber,user. pickIndices[i]])
+        const abiEncodedValue = utils.solidityPack(["bytes32","uint256"],[userRandomNumber,user.pickIndices[i]])
         const randomNumberThisPick = utils.keccak256(abiEncodedValue)
         // console.log("randomNumberThisPick", randomNumberThisPick)
+
         
-        prizeAwardable = prizeAwardable.add(calculatePickFraction(randomNumberThisPick, draw.winningRandomNumber, drawSettings, draw))  // prize += calculatePickFraction(randomNumberThisPick, winningRandomNumber, _drawSettings);
+        const prize: Prize = calculatePickFraction(randomNumberThisPick, draw.winningRandomNumber, drawSettings, draw)
+
+        results.totalValue = results.totalValue.add(prize.value)  // prize += calculatePickFraction(randomNumberThisPick, winningRandomNumber, _drawSettings);
+        results.prizes.push(prize)
     }
-    return prizeAwardable
+    return results
 }
 
 //SOLIDITY SIG: function calculatePickFraction(uint256 randomNumberThisPick, uint256 winningRandomNumber, DrawSettings memory _drawSettings)
-export function calculatePickFraction(randomNumberThisPick: string, winningRandomNumber: BigNumber, _drawSettings: DrawSettings, draw: Draw): BigNumber {
+export function calculatePickFraction(randomNumberThisPick: string, winningRandomNumber: BigNumber, _drawSettings: DrawSettings, draw: Draw): Prize {
     
-    let numberOfMatches : number = 0;
+    const prize: Prize = {
+        numberOfMatches: 0,
+        value: ethers.constants.Zero,
+        randomNumber: randomNumberThisPick
+    }
 
     // for(uint256 matchIndex = 0; matchIndex < _matchCardinality; matchIndex++){
     for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality.toNumber(); matchIndex++){
@@ -54,16 +65,16 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
         
         if(findBitMatchesAtIndex(BigNumber.from(randomNumberThisPick), winningRandomNumber, BigNumber.from(_matchIndexOffset), _drawSettings.bitRangeValue)){
             green(`match at index ${matchIndex}`)
-            numberOfMatches++;
+            prize.numberOfMatches += 1
         }
     }
-    green(`\n found ${numberOfMatches} matches..`)
-    const prizeAmount = calculatePrizeAmount(_drawSettings, draw, numberOfMatches)
+    green(`\n found ${prize.numberOfMatches} matches..`)
+    prize.value = calculatePrizeAmount(_drawSettings, draw, prize.numberOfMatches)
 
 
     // console.log("prizeAmount ", utils.formatEther(prizeAmount))
 
-    return prizeAmount
+    return prize
 }
 
 

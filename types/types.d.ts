@@ -19,11 +19,22 @@ export type User = {
     pickIndices: BigNumber[]
 }
 
+export type DrawResults = {
+    totalValue: BigNumber
+    prizes: Prize[]
+}
+
+export type Prize = {
+    value: BigNumber
+    randomNumber: string
+    numberOfMatches : number
+}
+
 export type DrawSimulationResult = {
     draw: Draw // think all we need from this is the winningRandomNumber
     user: User // need address - do we need pickIndices?
     drawSettings: DrawSettings
-    prizeReceived : BigNumber
+    results : DrawResults
 }
 
 export type DrawSimulationResults = {
