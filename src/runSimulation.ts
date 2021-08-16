@@ -6,13 +6,15 @@ import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "./DrawC
 const printUtils = require("./helpers/printUtils")
 const { dim, green, yellow } = printUtils
 
+const debug = require('debug')('pt:tsunami-sdk.ts')
+
 
 //  runs calculate(), holds everything fixed but changes Draw.winningRandomNumber n times
 function runDrawNTimesSingleUser(n: number, drawSettings: DrawSettings, draw: Draw, user: User) : DrawSimulationResult [] {
-    console.log(`running DrawCalculator simulation ${n} times..`)
+    debug(`running DrawCalculator simulation ${n} times..`)
 
     //record starting time
-    console.time("runSimulationNTimes")
+    // console.time("runSimulationNTimes")
 
     // how can we make the following concurrent? child.spawn() for each iteration - is there a better way to do this in modern node js?
 
@@ -39,14 +41,14 @@ function runDrawNTimesSingleUser(n: number, drawSettings: DrawSettings, draw: Dr
         })
     }
     //record finishing time
-    console.time("runSimulationNTimes")
+    // console.time("runSimulationNTimes")
 
     return simResults
 }
 
 //  changes DrawSettings.matchCardinality holds everything else constant 
 function runDrawSingleUserChangeMatchCardinality(){
-    dim(`running simulation...`)
+    debug(`running simulation...`)
     const RUN_TIME = 100
 
     const drawSettings : DrawSettings = {
@@ -83,7 +85,7 @@ function runDrawSingleUserChangeMatchCardinality(){
         }
         if(sanityCheckDrawSettings(drawSettingsThisRun)!= ""){
             // this settings cannot be set, skipping
-            dim(`skipping for cardinality ${i}`)
+            debug(`skipping for cardinality ${i}`)
             continue
         }
 
