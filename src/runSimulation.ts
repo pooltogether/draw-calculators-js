@@ -1,6 +1,6 @@
 import { BigNumber, ethers } from "ethers";
-import { Draw, DrawSettings, DrawSimulationResult, DrawSimulationResults, User } from "../types/types"
-import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "./drawCalculator"
+import { Draw, DrawResults, DrawSettings, DrawSimulationResult, DrawSimulationResults, User } from "../types/types"
+import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "./DrawCalculator"
 
 
 const printUtils = require("./helpers/printUtils")
@@ -29,13 +29,13 @@ function runDrawNTimesSingleUser(n: number, drawSettings: DrawSettings, draw: Dr
             winningRandomNumber: newWinningRandomNumber
         }   
         
-        const prizeReceived : BigNumber = runDrawCalculatorForSingleDraw(drawSettings, runDraw, user)
+        const results : DrawResults = runDrawCalculatorForSingleDraw(drawSettings, runDraw, user)
 
         simResults.push({
             draw: runDraw,
             user,
             drawSettings,
-            prizeReceived
+            results
         })
     }
     //record finishing time

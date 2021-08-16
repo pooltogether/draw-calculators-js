@@ -1,7 +1,6 @@
-import {runDrawCalculatorForSingleDraw, calculatePrizeAmount} from "./drawCalculator"
-
+import { runDrawCalculatorForSingleDraw, calculatePrizeAmount } from './DrawCalculator';
 
 module.exports = {
     runDrawCalculatorForSingleDraw,
-    calculatePrizeAmount
-}
+    calculatePrizeAmount,
+};
