@@ -86,6 +86,7 @@ describe('drawCalculator', () => {
             const result = calculatePrizeAmount(exampleDrawSettings, exampleDraw, 2)
             const prizeReceived = utils.parseEther("5")
             expect(result.value).to.deep.equal(prizeReceived)
+            expect(result.distributionIndex).to.deep.equal(1)
         
         })
         it('Can calculate the prize given the draw settings and number of matches', async () => {
