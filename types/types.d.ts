@@ -26,8 +26,7 @@ export type DrawResults = {
 
 export type Prize = {
     value: BigNumber
-    randomNumber: string
-    numberOfMatches : number
+    distributionIndex: number
 }
 
 export type DrawSimulationResult = {

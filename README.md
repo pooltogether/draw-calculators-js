@@ -6,7 +6,7 @@ The SDK provides the ability to simulate multiple draw settings and inputs, but 
 
 ### API
 ```javascript
-runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): BigNumber
+runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): DrawResults
 ```
 
 returns the prize amount for that user, if any.

@@ -50,11 +50,7 @@ export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw:
 //SOLIDITY SIG: function calculatePickFraction(uint256 randomNumberThisPick, uint256 winningRandomNumber, DrawSettings memory _drawSettings)
 export function calculatePickFraction(randomNumberThisPick: string, winningRandomNumber: BigNumber, _drawSettings: DrawSettings, draw: Draw): Prize {
     
-    const prize: Prize = {
-        numberOfMatches: 0,
-        value: ethers.constants.Zero,
-        randomNumber: randomNumberThisPick
-    }
+    let numberOfMatches = 0
 
     // for(uint256 matchIndex = 0; matchIndex < _matchCardinality; matchIndex++){
     for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality.toNumber(); matchIndex++){
@@ -65,16 +61,11 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
         
         if(findBitMatchesAtIndex(BigNumber.from(randomNumberThisPick), winningRandomNumber, BigNumber.from(_matchIndexOffset), _drawSettings.bitRangeValue)){
             green(`match at index ${matchIndex}`)
-            prize.numberOfMatches += 1
+            numberOfMatches++
         }
     }
-    green(`\n found ${prize.numberOfMatches} matches..`)
-    prize.value = calculatePrizeAmount(_drawSettings, draw, prize.numberOfMatches)
-
-
-    // console.log("prizeAmount ", utils.formatEther(prizeAmount))
-
-    return prize
+    green(`\n found ${numberOfMatches} matches..`)
+    return calculatePrizeAmount(_drawSettings, draw, numberOfMatches)
 }
 
 
@@ -105,7 +96,7 @@ export function findBitMatchesAtIndex(word1: BigNumber, word2: BigNumber, indexO
 
 
 // calculates the absolute amount of Prize in Wei for the Draw and DrawSettings
-export function calculatePrizeAmount(drawSettings: DrawSettings, draw: Draw, matches :number): BigNumber { // returns the prize you would receive for drawSettings and number of matches
+export function calculatePrizeAmount(drawSettings: DrawSettings, draw: Draw, matches :number): Prize { // returns the prize you would receive for drawSettings and number of matches
     
     const distributionIndex = drawSettings.matchCardinality.toNumber() - matches
     // console.log("distributionIndex ", distributionIndex)
@@ -127,7 +118,10 @@ export function calculatePrizeAmount(drawSettings: DrawSettings, draw: Draw, mat
     const expectedPrizeAmount : BigNumber = (draw.prize).mul(fractionOfPrize)
     // console.log("expectedPrizeAmount ", utils.formatEther(expectedPrizeAmount))
 
-    return expectedPrizeAmount
+    return {
+        value: expectedPrizeAmount,
+        distributionIndex
+    }
 }
 
 // inverse of calculatePrizeAmount()

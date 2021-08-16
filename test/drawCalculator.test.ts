@@ -2,7 +2,7 @@
 import { BigNumber, ethers, utils } from "ethers";
 import { expect } from "chai"
 import { Draw, DrawSettings, User } from "../types/types"
-import { runDrawCalculatorForSingleDraw, findBitMatchesAtIndex, calculateNumberOfMatchesForPrize, calculatePrizeAmount } from "../src/drawCalculator"
+import { runDrawCalculatorForSingleDraw, findBitMatchesAtIndex, calculateNumberOfMatchesForPrize, calculatePrizeAmount } from "../src/DrawCalculator"
 
 describe('drawCalculator', () => {
     describe('runDrawCalculatorForSingleDraw()', () => {
@@ -85,7 +85,7 @@ describe('drawCalculator', () => {
             
             const result = calculatePrizeAmount(exampleDrawSettings, exampleDraw, 2)
             const prizeReceived = utils.parseEther("5")
-            expect(result).to.deep.equal(prizeReceived)
+            expect(result.value).to.deep.equal(prizeReceived)
         
         })
         it('Can calculate the prize given the draw settings and number of matches', async () => {
@@ -108,7 +108,7 @@ describe('drawCalculator', () => {
             
             const result = calculatePrizeAmount(exampleDrawSettings, exampleDraw, 3)
             const prizeReceived = utils.parseEther("5")
-            expect(result).to.deep.equal(prizeReceived)  
+            expect(result.value).to.deep.equal(prizeReceived)  
         })
     })
 
