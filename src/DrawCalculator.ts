@@ -4,7 +4,7 @@ import {Draw, DrawResults, DrawSettings, User, Prize} from "../types/types"
 const printUtils = require("./helpers/printUtils")
 const { dim, green, yellow } = printUtils
 
-const debug = require('debug')('pt:tsunami-sdk.ts')
+const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
 export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): DrawResults {
     
@@ -40,7 +40,9 @@ export function runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw:
         
         const prize: Prize = calculatePickFraction(randomNumberThisPick, draw.winningRandomNumber, drawSettings, draw)
 
+        console.log(`adding ${utils.formatEther(prize.value)} to totalValue`)
         results.totalValue = results.totalValue.add(prize.value)  // prize += calculatePickFraction(randomNumberThisPick, winningRandomNumber, _drawSettings);
+
         results.prizes.push(prize)
     }
     return results
@@ -63,7 +65,7 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
             numberOfMatches++;
         }
     }
-    debug(green(`\n found ${numberOfMatches} matches..`))
+    debug(green(`\n DrawCalculator:: Found ${numberOfMatches} matches..`))
     const prizeAmount = calculatePrizeAmount(_drawSettings, draw, numberOfMatches)
     return prizeAmount
 }
@@ -72,10 +74,6 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
 //SOLIDITY SIG: function _findBitMatchesAtIndex(uint256 word1, uint256 word2, uint256 indexOffset, uint8 _bitRangeMaskValue) 
 export function findBitMatchesAtIndex(word1: BigNumber, word2: BigNumber, indexOffset: BigNumber, bitRangeValue: BigNumber): boolean {
 
-    // if(!(bitRangeValue.toNumber() == (Math.pow(2, indexOffset.toNumber())-1))){
-    //     throw new Error(`bitRangeValue`)
-    // }
-
     const word1DataHexString: string = word1.toHexString()
     const word2DataHexString: string = word2.toHexString()
     const mask : BigInt = BigInt(bitRangeValue.toString()) << BigInt(indexOffset.toString())
@@ -83,38 +81,51 @@ export function findBitMatchesAtIndex(word1: BigNumber, word2: BigNumber, indexO
 
     const bits1 = BigInt(word1DataHexString) & BigInt(mask)
     const bits2 = BigInt(word2DataHexString) & BigInt(mask)
-    debug(yellow(`matching ${bits1.toString()} with ${bits2.toString()}`))
+    debug(yellow(`DrawCalculator:: matching ${bits1.toString()} with ${bits2.toString()}`))
     return bits1 == bits2
 }
 
 
 // calculates the absolute amount of Prize in Wei for the Draw and DrawSettings
 export function calculatePrizeAmount(drawSettings: DrawSettings, draw: Draw, matches :number): Prize { // returns the prize you would receive for drawSettings and number of matches
-    
+
     const distributionIndex = drawSettings.matchCardinality.toNumber() - matches
-    // console.log("distributionIndex ", distributionIndex)
+    console.log(`distributionIndex: ${distributionIndex}, : (${drawSettings.matchCardinality.toNumber()} - ${matches} )`)
 
-    if(distributionIndex > drawSettings.distributions.length){
-       throw new Error(`There are only ${drawSettings.distributions.length} tiers of prizes`) // there is no prize receivable in this case
+    if(distributionIndex < drawSettings.distributions.length){
+        // now calculate the expected prize amount for these settings
+        // totalPrize *  (distributions[index]/(range ^ index)) where index = matchCardinality - numberOfMatches
+        const expectedPrizeAmount = calculatePrizeForPrizeDistributionIndex(distributionIndex, drawSettings, draw)
+        return {
+            value: expectedPrizeAmount,
+            distributionIndex
+        }
     }
-    // now calculate the expected prize amount for these settings
-    // totalPrize *  (distributions[index]/(range ^ index)) where index = matchCardinality - numberOfMatches
-    const numberOfPrizes = Math.pow(drawSettings.bitRangeSize.toNumber(), distributionIndex)
-    // console.log("numberOfPrizes ", numberOfPrizes)
-    
-    const valueAtDistributionIndex : BigNumber = drawSettings.distributions[distributionIndex]
-    // console.log("valueAtDistributionIndex ", valueAtDistributionIndex)
-    
-    const fractionOfPrize: BigNumber= valueAtDistributionIndex.div(numberOfPrizes) //.div(100)
-    // console.log("fractionOfPrize: ", utils.formatEther(fractionOfPrize))
-    
-    const expectedPrizeAmount : BigNumber = (draw.prize).mul(fractionOfPrize)
-    // console.log("expectedPrizeAmount ", utils.formatEther(expectedPrizeAmount))
-
+    //console.log("user did not qualify for a prize")
     return {
-        value: expectedPrizeAmount,
+        value: BigNumber.from("0"),
         distributionIndex
     }
+
+}
+
+export function calculatePrizeForPrizeDistributionIndex(prizeDistributionIndex: number, drawSettings: DrawSettings, draw: Draw): BigNumber {
+
+    const numberOfPrizes = Math.pow(drawSettings.bitRangeSize.toNumber(), prizeDistributionIndex)
+    console.log("numberOfPrizes for index ", numberOfPrizes)
+    
+    const valueAtDistributionIndex : BigNumber = drawSettings.distributions[prizeDistributionIndex]
+    console.log("valueAtDistributionIndex ", utils.formatEther(valueAtDistributionIndex.toString()))
+    
+    const fractionOfPrize: BigNumber= valueAtDistributionIndex.div(numberOfPrizes)
+    console.log("fractionOfPrize: ", utils.formatEther(fractionOfPrize))
+    
+    let expectedPrizeAmount : BigNumber = (draw.prize).mul(fractionOfPrize)
+    expectedPrizeAmount = expectedPrizeAmount.div(ethers.constants.WeiPerEther)
+
+    console.log("expectedPrizeAmount ", utils.formatEther(expectedPrizeAmount))
+
+    return expectedPrizeAmount
 }
 
 // inverse of calculatePrizeAmount()
@@ -124,7 +135,7 @@ export function calculateNumberOfMatchesForPrize(drawSettings: DrawSettings, dra
     
     if(sanityResult == ""){
          
-        const fractionOfPrizeReceived: BigNumber = prizeReceived.div(draw.prize) // const expectedPrizeAmount : BigNumber = (draw.prize).mul(percentageOfPrize).div(ethers.constants.WeiPerEther)
+        const fractionOfPrizeReceived: BigNumber = prizeReceived.mul(ethers.constants.WeiPerEther).div(draw.prize) // const expectedPrizeAmount : BigNumber = (draw.prize).mul(percentageOfPrize).div(ethers.constants.WeiPerEther)
         for(let i = 0; i < drawSettings.distributions.length; i++){
             const numPrizes = BigNumber.from(Math.pow(drawSettings.bitRangeSize.toNumber(),i))
             const prizeFractionAtIndex = drawSettings.distributions[i].div(numPrizes)
@@ -145,7 +156,7 @@ export function calculateNumberOfMatchesForPrize(drawSettings: DrawSettings, dra
 // checks that the drawSettings are appropriate 
 export function sanityCheckDrawSettings(drawSettings: DrawSettings) : string {
 
-    if(drawSettings.matchCardinality.gt(drawSettings.distributions.length)){
+    if(!(drawSettings.matchCardinality.gte(drawSettings.distributions.length))){
         console.log("DrawCalc/matchCardinality-gt-distributions")
         return "DrawCalc/matchCardinality-gt-distributions"
     }
@@ -168,4 +179,4 @@ export function sanityCheckDrawSettings(drawSettings: DrawSettings) : string {
         }
     }
     return ""
-}
+} 

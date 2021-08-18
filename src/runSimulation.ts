@@ -1,5 +1,5 @@
-import { BigNumber, ethers } from "ethers";
-import { Draw, DrawResults, DrawSettings, DrawSimulationResult, DrawSimulationResults, User } from "../types/types"
+import { BigNumber, ethers, utils } from "ethers";
+import { Draw, DrawResults, DrawSettings, DrawSimulationResult, DrawSimulationResults, Prize, User } from "../types/types"
 import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "./DrawCalculator"
 
 
@@ -49,7 +49,7 @@ function runDrawNTimesSingleUser(n: number, drawSettings: DrawSettings, draw: Dr
 //  changes DrawSettings.matchCardinality holds everything else constant 
 function runDrawSingleUserChangeMatchCardinality(){
     debug(`running simulation...`)
-    const RUN_TIME = 100
+    
 
     const drawSettings : DrawSettings = {
         distributions: [ethers.utils.parseEther("0.3"),
@@ -78,24 +78,103 @@ function runDrawSingleUserChangeMatchCardinality(){
 
     // matchCardinality is uint16 (65,536) possibilities
     for(let i = 0; i < 65536; i++){
-        
         const drawSettingsThisRun :DrawSettings= {
             ...drawSettings,
             matchCardinality: BigNumber.from(i)
         }
-        if(sanityCheckDrawSettings(drawSettingsThisRun)!= ""){
-            // this settings cannot be set, skipping
+        debug(`trying for drawSettings.. ${JSON.stringify(drawSettingsThisRun)}`)
+
+        
+        let sanityCheckResult
+        try{
+            debug(`sanity checking drawSettings..`)
+            sanityCheckResult = sanityCheckDrawSettings(drawSettingsThisRun)
+        }
+        catch(e){
             debug(`skipping for cardinality ${i}`)
             continue
         }
-
+        if(sanityCheckResult != ""){
+            debug(`Invalid drawSettings skipping..`)
+            continue
+        }
         simResults.results.push(runDrawNTimesSingleUser(100, drawSettingsThisRun, draw, user))
 
     }
 
     // do something with results
+    console.log("simResults length: ", simResults.results.length)
+
 
 }
 
 
-runDrawSingleUserChangeMatchCardinality()
+function predictNumberOfWinnersForDraw(runs: number){
+
+    const drawSettings : DrawSettings = {
+        distributions: [ethers.utils.parseEther("0.3"),
+                        ethers.utils.parseEther("0.2"),
+                        ethers.utils.parseEther("0.1"),
+                        ethers.utils.parseEther("0.05")
+                    ],
+        pickCost: BigNumber.from(ethers.utils.parseEther("1")),
+        matchCardinality: BigNumber.from(6),
+        bitRangeValue: BigNumber.from(15),
+        bitRangeSize : BigNumber.from(4)
+    }
+    
+    const draw : Draw = {
+        prize: utils.parseEther("100"),
+        winningRandomNumber: BigNumber.from(ethers.utils.solidityKeccak256(["address"], [(ethers.Wallet.createRandom()).address]))
+    }
+    
+    const user : User = {
+        address: ethers.Wallet.createRandom().address,
+        balance: ethers.utils.parseEther("10"),
+        pickIndices: [BigNumber.from(1)]
+    } 
+
+    // sim results
+    let numberOfWinners = 0
+    let numberOfNonWinners = 0
+    let totalPrizeAwardable : BigNumber = BigNumber.from("0") // amount of prizes paid out in these claims
+    let prizeDistributionWinners = new Array<number>(drawSettings.distributions.length).fill(0);
+
+
+    for(let userIndex = 0; userIndex < runs; userIndex++){
+        const userThisRun: User = {
+            ...user, 
+            address: ethers.Wallet.createRandom().address
+        }
+
+        const result : DrawResults =  runDrawCalculatorForSingleDraw(drawSettings, draw, userThisRun)
+        if(result.totalValue.gt(BigNumber.from("0"))){
+            green(`there was a winner at address ${userThisRun.address}`)
+            numberOfWinners++
+            green(`adding ${utils.formatEther(result.totalValue)} to totalPrizeAwardable`)
+            totalPrizeAwardable = totalPrizeAwardable.add(result.totalValue)
+
+            // record which prize distribution index they were
+            for(const prize of result.prizes){
+                if(prize.distributionIndex){
+                    
+                    prizeDistributionWinners[prize.distributionIndex] = prizeDistributionWinners[prize.distributionIndex] + 1
+                    green(`recording winner at distributionIndex ${prize.distributionIndex}. There are now ${prizeDistributionWinners[prize.distributionIndex]} winners at this index`)
+                    
+                }
+            }
+        }
+        // else this address did not win -- record anyway
+        else {
+            numberOfNonWinners++
+        }
+    }
+
+    green(`SimResult:: there were ${numberOfWinners} winners for this draw, awarding ${utils.formatEther(totalPrizeAwardable)}.. the prize was ${utils.formatEther(draw.prize)}`)
+    yellow(`SimResult:: there were ${numberOfNonWinners} non-winners`)
+    console.table(prizeDistributionWinners)
+
+
+}
+
+predictNumberOfWinnersForDraw(1000)
