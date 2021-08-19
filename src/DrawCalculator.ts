@@ -93,15 +93,14 @@ export function calculatePrizeAmount(drawSettings: DrawSettings, draw: Draw, mat
     console.log(`distributionIndex: ${distributionIndex}, : (${drawSettings.matchCardinality.toNumber()} - ${matches} )`)
 
     if(distributionIndex < drawSettings.distributions.length){
-        // now calculate the expected prize amount for these settings
-        // totalPrize *  (distributions[index]/(range ^ index)) where index = matchCardinality - numberOfMatches
+        // user *may* be getting a prize
         const expectedPrizeAmount = calculatePrizeForPrizeDistributionIndex(distributionIndex, drawSettings, draw)
         return {
             value: expectedPrizeAmount,
             distributionIndex
         }
     }
-    //console.log("user did not qualify for a prize")
+    // user did not qualify for a prize
     return {
         value: BigNumber.from("0"),
         distributionIndex
@@ -110,7 +109,17 @@ export function calculatePrizeAmount(drawSettings: DrawSettings, draw: Draw, mat
 }
 
 export function calculatePrizeForPrizeDistributionIndex(prizeDistributionIndex: number, drawSettings: DrawSettings, draw: Draw): BigNumber {
+    // totalPrize *  (distributions[index]/(range ^ index)) where index = matchCardinality - numberOfMatches
+    const fractionOfPrize = calculateFractionOfPrize(prizeDistributionIndex, drawSettings)
+    let expectedPrizeAmount : BigNumber = (draw.prize).mul(fractionOfPrize)
+    expectedPrizeAmount = expectedPrizeAmount.div(ethers.constants.WeiPerEther)
 
+    console.log("expectedPrizeAmount ", utils.formatEther(expectedPrizeAmount))
+
+    return expectedPrizeAmount
+}
+
+export function calculateFractionOfPrize(prizeDistributionIndex: number, drawSettings: DrawSettings): BigNumber {
     const numberOfPrizes = Math.pow(drawSettings.bitRangeSize.toNumber(), prizeDistributionIndex)
     console.log("numberOfPrizes for index ", numberOfPrizes)
     
@@ -119,13 +128,7 @@ export function calculatePrizeForPrizeDistributionIndex(prizeDistributionIndex: 
     
     const fractionOfPrize: BigNumber= valueAtDistributionIndex.div(numberOfPrizes)
     console.log("fractionOfPrize: ", utils.formatEther(fractionOfPrize))
-    
-    let expectedPrizeAmount : BigNumber = (draw.prize).mul(fractionOfPrize)
-    expectedPrizeAmount = expectedPrizeAmount.div(ethers.constants.WeiPerEther)
-
-    console.log("expectedPrizeAmount ", utils.formatEther(expectedPrizeAmount))
-
-    return expectedPrizeAmount
+    return fractionOfPrize
 }
 
 // inverse of calculatePrizeAmount()
@@ -150,6 +153,35 @@ export function calculateNumberOfMatchesForPrize(drawSettings: DrawSettings, dra
     }
     // else there is no number of matches
     return 0;
+}
+
+export function calculatePrizeDistributedFromWinnerDistributionArray(prizeWinners: number[], prize: Prize, drawSettings: DrawSettings): BigNumber{
+    /* given sim result array calculate amount of prize paid out
+        example : prizeWinners [0,2,13,107,379] and distributions: [
+                                    ethers.utils.parseEther("0.3"),
+                                ethers.utils.parseEther("0.25"),
+                                ethers.utils.parseEther("0.2"),
+                                ethers.utils.parseEther("0.1"),
+                                ethers.utils.parseEther("0.05")
+                             ]
+        
+        return (0 * 0.3 * prize) + (2 * 0.25 * prize) + (13 * 0.2 * prize) + ...
+
+    */
+    let totalPayout : BigNumber = BigNumber.from("0")
+
+
+    for(let index = 0;  index < drawSettings.distributions.length; index++){
+        let numberOfPrizesAtIndex: number = Math.pow(drawSettings.bitRangeSize.toNumber(), index)
+        
+        let distributionIndexFraction = drawSettings.distributions[index].div(numberOfPrizesAtIndex)
+        let distributionIndexAmount = prize.value.mul(distributionIndexFraction).div(ethers.constants.WeiPerEther)
+
+        // now compare against what was passed in
+        totalPayout = totalPayout.add(BigNumber.from(prizeWinners[index]).mul(distributionIndexAmount))
+    }
+
+    return totalPayout    
 }
 
 

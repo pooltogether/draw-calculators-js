@@ -1,9 +1,9 @@
 import { BigNumber, ethers, utils } from "ethers";
-import { Draw, DrawResults, DrawSettings, DrawSimulationResult, DrawSimulationResults, Prize, User } from "../types/types"
-import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "./DrawCalculator"
+import { Draw, DrawResults, DrawSettings, DrawSimulationResult, DrawSimulationResults, Prize, User } from "../../types/types"
+import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "../DrawCalculator"
 
 
-const printUtils = require("./helpers/printUtils")
+const printUtils = require("../helpers/printUtils")
 const { dim, green, yellow } = printUtils
 
 const debug = require('debug')('pt:tsunami-sdk.ts')
@@ -112,15 +112,17 @@ function runDrawSingleUserChangeMatchCardinality(){
 function predictNumberOfWinnersForDraw(runs: number){
 
     const drawSettings : DrawSettings = {
-        distributions: [ethers.utils.parseEther("0.3"),
+        distributions: [
+                        ethers.utils.parseEther("0.3"),
+                        ethers.utils.parseEther("0.25"),
                         ethers.utils.parseEther("0.2"),
                         ethers.utils.parseEther("0.1"),
                         ethers.utils.parseEther("0.05")
                     ],
         pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-        matchCardinality: BigNumber.from(6),
-        bitRangeValue: BigNumber.from(15),
-        bitRangeSize : BigNumber.from(4)
+        matchCardinality: BigNumber.from(5),
+        bitRangeValue: BigNumber.from(7),
+        bitRangeSize : BigNumber.from(3)
     }
     
     const draw : Draw = {
@@ -131,7 +133,7 @@ function predictNumberOfWinnersForDraw(runs: number){
     const user : User = {
         address: ethers.Wallet.createRandom().address,
         balance: ethers.utils.parseEther("10"),
-        pickIndices: [BigNumber.from(1)]
+        pickIndices: [BigNumber.from(1)] // all users with just one pick
     } 
 
     // sim results
@@ -142,6 +144,8 @@ function predictNumberOfWinnersForDraw(runs: number){
 
 
     for(let userIndex = 0; userIndex < runs; userIndex++){
+        
+        // change the user address per run
         const userThisRun: User = {
             ...user, 
             address: ethers.Wallet.createRandom().address
@@ -158,7 +162,7 @@ function predictNumberOfWinnersForDraw(runs: number){
             for(const prize of result.prizes){
                 if(prize.distributionIndex){
                     
-                    prizeDistributionWinners[prize.distributionIndex] = prizeDistributionWinners[prize.distributionIndex] + 1
+                    prizeDistributionWinners[prize.distributionIndex] = prizeDistributionWinners[prize.distributionIndex] + 1 //increment 
                     green(`recording winner at distributionIndex ${prize.distributionIndex}. There are now ${prizeDistributionWinners[prize.distributionIndex]} winners at this index`)
                     
                 }

@@ -6,7 +6,7 @@
   "types": "dist/src/deploy.d.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node ./src/runSimulation.ts",
+    "dev": "ts-node ./src/sim/runSimulation.ts",
     "test": "ts-mocha ./test/**",
     "build": "yarn clean && tsc --project tsconfig.json && yalc push",
     "clean": "rm -rf dist/"
