@@ -4,7 +4,6 @@ export type DrawSettings  = {
     matchCardinality: BigNumber
     pickCost: BigNumber
     distributions: BigNumber[]
-    bitRangeValue: BigNumber
     bitRangeSize: BigNumber
 }
 
@@ -21,12 +20,19 @@ export type User = {
 
 export type DrawResults = {
     totalValue: BigNumber
-    prizes: Prize[]
+    prizes: PrizeAwardable[]
 }
 
-export type Prize = {
-    value: BigNumber
-    distributionIndex?: number
+// prize that a User can receive 
+export type PrizeAwardable = {
+    amount: BigNumber
+    distributionIndex: number
+    pick: BigNumber //populate with claim index
+}
+
+export type PickPrize = {
+    amount: BigNumber
+    distributionIndex: number
 }
 
 export type DrawSimulationResult = {
