@@ -50,8 +50,6 @@ export interface PickPrize {
 // https://compound.finance/docs/compound-js) we could make it all individual functions,
 // but then the user is just going to need to pass a lot more data all of the time.
 // Ex. passing provider, prize pool address, prize strat address, etc. every fn call.
-// - We can start stacking these calls (ex. getUsersCurrentDrawResults) for usability. Just
-// trying to write the bare minimum that we actually need to implement right now.
 // - We need to fetch strat & version (and/or provide the users some consts) BEFORE making an instance of Tsunami.
 // Otherwise we would need to fetch that data all the time or deal with some ugly mutations that
 // might interfere with Reacts state.
