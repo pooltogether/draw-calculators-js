@@ -1,5 +1,5 @@
 import { BigNumber, ethers, utils } from "ethers";
-import { Draw, DrawResults, DrawSettings, DrawSimulationResult, DrawSimulationResults, Prize, User } from "../../types/types"
+import { Draw, DrawResults, DrawSettings, DrawSimulationResult, DrawSimulationResults, User } from "../../types/types"
 import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "../DrawCalculator"
 
 
@@ -26,7 +26,6 @@ function predictNumberOfWinnersForDraw(numberofUsers: number){
                     ],
         pickCost,
         matchCardinality,
-        bitRangeValue: BigNumber.from(7),
         bitRangeSize : BigNumber.from(3)
     }
     

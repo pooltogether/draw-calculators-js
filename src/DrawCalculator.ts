@@ -59,17 +59,18 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
     for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality.toNumber(); matchIndex++){     // for(uint256 matchIndex = 0; matchIndex < _matchCardinality; matchIndex++){
         // const _matchIndexOffset: number = matchIndex * _drawSettings.bitRangeSize.toNumber()
         
-        debug(dim("winningRandomNumber: ", winningRandomNumber.toString()))
-        debug(dim("randomNumberThisPick: ", BigNumber.from(randomNumberThisPick).toString()))
+        debug("winningRandomNumber: ", winningRandomNumber.toString())
+        debug("randomNumberThisPick: ", BigNumber.from(randomNumberThisPick).toString())
         
         if(findBitMatchesAtIndex(BigNumber.from(randomNumberThisPick), winningRandomNumber, matchIndex, _drawSettings)){
-            debug(green(`match at index ${matchIndex}`))
+            debug(`match at index ${matchIndex}`)
             numberOfMatches++;
         }
     }
     debug(`\n DrawCalculator:: Found ${numberOfMatches} matches..`)
     const pickAmount = calculatePrizeAmount(_drawSettings, draw, numberOfMatches)
     if(pickAmount){
+        green(`user is receviing a prize`)
         return pickAmount
     }
     // else there is no prize   
@@ -80,7 +81,7 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
 export function calculatePrizeAmount(drawSettings: DrawSettings, draw: Draw, matches :number): PickPrize | undefined{ // returns the prize you would receive for drawSettings and number of matches
 
     const distributionIndex = drawSettings.matchCardinality.toNumber() - matches
-    console.log(`distributionIndex: ${distributionIndex}, : (${drawSettings.matchCardinality.toNumber()} - ${matches} )`)
+    debug(`distributionIndex: ${distributionIndex}, : (${drawSettings.matchCardinality.toNumber()} - ${matches} )`)
 
     if(distributionIndex < drawSettings.distributions.length){
         // user *may* be getting a prize
@@ -117,7 +118,7 @@ export function findBitMatchesAtIndex(word1: BigNumber, word2: BigNumber, matchI
 
     const bits1 = BigInt(word1DataHexString) & BigInt(mask)
     const bits2 = BigInt(word2DataHexString) & BigInt(mask)
-    debug(yellow(`DrawCalculator:: matching ${bits1.toString()} with ${bits2.toString()}`))
+    debug(`DrawCalculator:: matching ${bits1.toString()} with ${bits2.toString()}`)
     return bits1 == bits2
 }
 
@@ -127,20 +128,20 @@ export function calculatePrizeForPrizeDistributionIndex(prizeDistributionIndex: 
     let expectedPrizeAmount : BigNumber = (draw.prize).mul(fractionOfPrize)
     expectedPrizeAmount = expectedPrizeAmount.div(ethers.constants.WeiPerEther)
 
-    console.log("expectedPrizeAmount ", utils.formatEther(expectedPrizeAmount))
+    // console.log("expectedPrizeAmount ", utils.formatEther(expectedPrizeAmount))
 
     return expectedPrizeAmount
 }
 
 export function calculateFractionOfPrize(prizeDistributionIndex: number, drawSettings: DrawSettings): BigNumber {
     const numberOfPrizes = (BigNumber.from(2).pow(drawSettings.bitRangeSize)).pow(BigNumber.from(prizeDistributionIndex))
-    console.log("numberOfPrizes for index ", numberOfPrizes)
+    debug("numberOfPrizes for index ", numberOfPrizes)
     
     const valueAtDistributionIndex : BigNumber = drawSettings.distributions[prizeDistributionIndex]
-    console.log("valueAtDistributionIndex ", utils.formatEther(valueAtDistributionIndex.toString()))
+    debug("valueAtDistributionIndex ", utils.formatEther(valueAtDistributionIndex.toString()))
     
     const fractionOfPrize: BigNumber= valueAtDistributionIndex.div(numberOfPrizes)
-    console.log("fractionOfPrize: ", utils.formatEther(fractionOfPrize))
+    debug("fractionOfPrize: ", utils.formatEther(fractionOfPrize))
     return fractionOfPrize
 }
 
@@ -156,7 +157,7 @@ export function calculateNumberOfMatchesForPrize(drawSettings: DrawSettings, dra
 
             // uint256 numberOfPrizesForIndex = (2 ** uint256(_drawSettings.bitRangeSize)) ** _prizeDistributionIndex;
             const numPrizes = (BigNumber.from(2).pow(drawSettings.bitRangeSize)).pow(BigNumber.from(i))
-            console.log("numPrioze" , numPrizes.toString())
+            // console.log("numPrioze" , numPrizes.toString())
             const prizeFractionAtIndex = drawSettings.distributions[i].div(numPrizes)
             
             if(fractionOfPrizeReceived.eq(prizeFractionAtIndex)){              
@@ -189,10 +190,10 @@ export function calculatePrizeDistributedFromWinnerDistributionArray(prizeWinner
 
 
     for(let index = 0;  index < drawSettings.distributions.length; index++){
-        console.log("index ", index)
+        // console.log("index ", index)
         const numberOfPrizesAtIndex = (BigNumber.from(2).pow(drawSettings.bitRangeSize)).pow(BigNumber.from(index))
         
-        console.log("number of prizes at index", numberOfPrizesAtIndex)
+        // console.log("number of prizes at index", numberOfPrizesAtIndex)
         
         let distributionIndexFraction = drawSettings.distributions[index].div(numberOfPrizesAtIndex)
         let distributionIndexAmount = draw.prize.mul(distributionIndexFraction).div(ethers.constants.WeiPerEther)
