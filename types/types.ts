@@ -73,11 +73,12 @@ export interface PickPrize {
 
 /**
  * More nice to haves:
- * - Reelevant Token data
+ * - Relevant Token data
  *      - Ticket, supply, underlying
  *      - Name, symbol, decimals, total supply
  * - PT API static calls?
- *      - For thinks like USD value of a prize
+ *      - Get estimated USD value of a token
+ *      - Get estimated Prize could go here?
  *      - Cached data (did the user 0xabc win for draw # 14)
  * - Users ticket balances (not tsunami specific)
  *      - Fetches across multiple
@@ -148,7 +149,8 @@ export declare class Tsunami implements PrizePoolConfig {
     prizeStrategyAddress: string;
     // version: So we can determine which abi to use.
     version: TsunamiVersion;
-    contract: Contract;
+    prizePoolContract: Contract;
+    prizeStrategyContract: Contract;
 
     // Constructor
     constructor(provider: Provider, prizePoolConfig: PrizePoolConfig);
