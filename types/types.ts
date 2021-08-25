@@ -175,6 +175,12 @@ export declare class Tsunami implements PrizePoolConfig {
     static getPrizePoolConfig(prizePoolAddress: string): PrizePoolConfig;
     static getPrizeStrategyAddress(prizePoolAddress: string): string;
     static getPrizePoolVersion(prizePoolAddress: string): TsunamiVersion;
+    // Maybe a better name? Any more of these needed for backend sim testing?
+    static runDrawCalculatorForSingleDraw(
+        drawSettings: DrawSettings,
+        draw: Draw,
+        user: User,
+    ): DrawResults;
 
     // static getTokenFaucets: Might not be necessary for v0. Return token faucets straight from the contract.
     // Users might want historic token faucets that have expired one day, we'll need a db, KV,
