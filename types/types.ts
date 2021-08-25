@@ -62,6 +62,7 @@ export interface PickPrize {
  *
  * OR
  *
+ * // We can supply a const of configs.
  * const tsunamiPrizePoolConfig = await getPrizePoolConfig(prizePoolAddress)
  * const tsunamiPrizePool = new Tsunami(provider, {
  *  prizePoolAddress,
