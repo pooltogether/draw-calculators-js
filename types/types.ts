@@ -175,7 +175,7 @@ export declare class Tsunami implements PrizePoolConfig {
     static getPrizePoolConfig(prizePoolAddress: string): PrizePoolConfig;
     static getPrizeStrategyAddress(prizePoolAddress: string): string;
     static getPrizePoolVersion(prizePoolAddress: string): TsunamiVersion;
-    // Maybe a better name? Any more of these needed for backend sim testing?
+    // Maybe a better name? Any more of these needed for backend sim testing? Just export these fns themselves?
     static runDrawCalculatorForSingleDraw(
         drawSettings: DrawSettings,
         draw: Draw,
