@@ -148,6 +148,7 @@ export declare class Tsunami implements PrizePoolConfig {
     // TODO: getUsersTokenBalances(): TokenBalancesResponse
 
     // Static methods
+    static getClaimableDrawIds(): number[];
     static getPrizePoolConfig(prizePoolAddress: string): PrizePoolConfig;
     static getPrizeStrategyAddress(prizePoolAddress: string): string;
     static getPrizePoolVersion(prizePoolAddress: string): TsunamiVersion;
