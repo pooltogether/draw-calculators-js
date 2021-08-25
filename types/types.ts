@@ -72,7 +72,7 @@ export interface PickPrize {
  */
 
 /**
- * More nice to haves:
+ * More nice to haves - might be more relevant for a PoolTogether SDK rather than Tsunami SDK
  * - Relevant Token data
  *      - Ticket, supply, underlying
  *      - Name, symbol, decimals, total supply
@@ -81,7 +81,9 @@ export interface PickPrize {
  *      - Get estimated Prize could go here?
  *      - Cached data (did the user 0xabc win for draw # 14)
  * - Users ticket balances (not tsunami specific)
- *      - Fetches across multiple
+ *      - Fetches across multiple prize pools
+ * - Governance methods
+ *      - POOL methods
  */
 
 /**
@@ -99,7 +101,7 @@ interface Draw {
     id: number;
     prize: BigNumber;
     winningRandomNumber: BigNumber;
-    timestamp: any; // TODO: What interface will this be?
+    timestamp: any; // TODO: What type will this be?
 }
 
 /**
