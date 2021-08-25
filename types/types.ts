@@ -99,7 +99,7 @@ export enum TsunamiVersion {
  */
 interface Draw {
     id: number;
-    prize: BigNumber;
+    totalAwardAmount: BigNumber;
     winningRandomNumber: BigNumber;
     timestamp: any; // TODO: What type will this be?
 }
@@ -111,6 +111,10 @@ export enum PrizePeriodStates {
     active = 'active', // !canStartAward && !canCompleteAward
     canStartAward = 'canStartAward', // canStartAward
     canCompleteAward = 'canCompleteAward', // canCompleteAward
+}
+
+export interface PrizeDistribution extends Draw {
+    prizes: PickPrize[]; // Tiers of prizes. 0 index is grand prize.
 }
 
 /**
@@ -159,6 +163,7 @@ export declare class Tsunami implements PrizePoolConfig {
 
     // Methods - (requires an instance of Tsunami)
     getDraw(drawId: number): Draw;
+    getPrizeDistribution(drawId: number): PrizeDistribution; // Can I even get this for the current prize period?
     getCurrentPrizePeriod(): PrizePeriod;
     getUsersDrawResults(usersAddress: string, drawId: number): DrawResults;
     getUsersBalances(usersAddress: string): { [tokenAddress: string]: BigNumber };
