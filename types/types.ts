@@ -72,6 +72,18 @@ export interface PickPrize {
  */
 
 /**
+ * More nice to haves:
+ * - Reelevant Token data
+ *      - Ticket, supply, underlying
+ *      - Name, symbol, decimals, total supply
+ * - PT API static calls?
+ *      - For thinks like USD value of a prize
+ *      - Cached data (did the user 0xabc win for draw # 14)
+ * - Users ticket balances (not tsunami specific)
+ *      - Fetches across multiple
+ */
+
+/**
  * Enum for validating a supplied version of Tsunami.
  * Versions are used to match abis.
  */
@@ -141,19 +153,20 @@ export declare class Tsunami implements PrizePoolConfig {
     // Constructor
     constructor(provider: Provider, prizePoolConfig: PrizePoolConfig);
 
-    // Methods
+    // Methods - (requires an instance of Tsunami)
     getDraw(drawId: number): Draw;
     getCurrentPrizePeriod(): PrizePeriod;
     getUsersDrawResults(usersAddress: string, drawId: number): DrawResults;
-    // TODO: getUsersTokenBalances(): TokenBalancesResponse
+    getUsersBalances(usersAddress: string): { [tokenAddress: string]: BigNumber };
+    getUsersBalance(usersAddress: string, tokenAddress: string): BigNumber;
+    getClaimableDrawIds(): number[];
 
-    // Static methods
-    static getClaimableDrawIds(): number[];
+    // Static methods - (don't require an instance of Tsunami)
     static getPrizePoolConfig(prizePoolAddress: string): PrizePoolConfig;
     static getPrizeStrategyAddress(prizePoolAddress: string): string;
     static getPrizePoolVersion(prizePoolAddress: string): TsunamiVersion;
 
-    // static getTokenFaucets: Not necessary for v0. Return token faucets straight from the contract.
+    // static getTokenFaucets: Might not be necessary for v0. Return token faucets straight from the contract.
     // Users might want historic token faucets that have expired one day, we'll need a db, KV,
     // or to do some log digging.
     // getTokenFaucets: () => string[]
@@ -169,6 +182,8 @@ export declare class TsunamiPlayer {
     constructor(signer: Signer, tsunami: Tsunami);
 
     // Methods
+    getTokenBalances(): { [tokenAddress: string]: BigNumber };
+    getTokenBalance(tokenAddress: string): BigNumber;
     deposit(amount: BigNumber): Promise<TransactionResponse>;
     withdraw(amount: BigNumber): Promise<TransactionResponse>;
 
