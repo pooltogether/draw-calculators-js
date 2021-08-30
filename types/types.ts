@@ -1,4 +1,4 @@
-import { BigNumber, Contract } from 'ethers';
+import { BigNumber, Contract, Event } from 'ethers';
 import { Signer } from '@ethersproject/abstract-signer';
 import { Provider, TransactionResponse } from '@ethersproject/abstract-provider';
 
@@ -205,8 +205,11 @@ export declare class TsunamiPlayer {
     // Methods
     getTokenBalances(): { [tokenAddress: string]: BigNumber };
     getTokenBalance(tokenAddress: string): BigNumber;
+    getClaimedEvents(): Promise<Array<Event>>;
     getClaimableDraws(): Promise<Draw[]>;
     getClaimableDrawsById(drawIds: number[]): Promise<Draw[]>;
+    getClaimablePrizes(): Promise<ClaimablePickPrize[]>;
+    getPrizes(drawIds: number[]): Promise<ClaimablePickPrize[]>;
 
     // Transactions
     deposit(amount: BigNumber): Promise<TransactionResponse>;
