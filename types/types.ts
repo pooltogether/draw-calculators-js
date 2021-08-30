@@ -158,7 +158,7 @@ export declare class TsunamiPrizePool implements PrizePoolConfig {
     provider: Provider;
     prizePoolAddress: string;
     prizeStrategyAddress: string;
-    // version: So we can determine which abi to use.
+    // version: So we can determine which abi to use. might need strategy version too.
     version: TsunamiVersion;
     prizePoolContract: Contract;
     prizeStrategyContract: Contract;
@@ -168,7 +168,7 @@ export declare class TsunamiPrizePool implements PrizePoolConfig {
 
     // Methods - (requires an instance of Tsunami)
     getDraw(drawId: number): Draw;
-    getPrizeDistribution(drawId: number): PrizeDistribution; // Can I even get this for the current prize period?
+    getPrizeDistribution(drawId: number): PrizeDistribution;
     getCurrentPrizePeriod(): CurrentPrizePeriod;
     getUsersDrawResults(usersAddress: string, drawId: number): DrawResults;
     getUsersBalances(usersAddress: string): { [tokenAddress: string]: BigNumber };
