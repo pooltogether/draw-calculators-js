@@ -2,7 +2,10 @@
 import { BigNumber, ethers, utils } from "ethers";
 import { expect } from "chai"
 import { Draw, DrawSettings, PrizeAwardable, User } from "../types/types"
-import { runDrawCalculatorForSingleDraw, findBitMatchesAtIndex, calculateNumberOfMatchesForPrize, calculatePrizeAmount, calculatePrizeForPrizeDistributionIndex, calculateFractionOfPrize, calculatePrizeDistributedFromWinnerDistributionArray } from "../src/DrawCalculator"
+import { runDrawCalculatorForSingleDraw, findBitMatchesAtIndex, calculatePrizeAmount, 
+    calculatePrizeForPrizeDistributionIndex, calculateFractionOfPrize } from "../src/DrawCalculator"
+
+import {calculateNumberOfMatchesForPrize, calculateTotalPrizeDistributedFromWinnerDistributionArray} from "../src/helpers/calculatePrizeAmounts"
 
 describe('drawCalculator', () => {
     describe('runDrawCalculatorForSingleDraw()', () => {
@@ -296,7 +299,7 @@ describe('drawCalculator', () => {
 
             let winnerDistributionArray =  [0,2,13,107,379]
 
-            const totalPrizeDistributed = calculatePrizeDistributedFromWinnerDistributionArray(winnerDistributionArray, draw, drawSettings)
+            const totalPrizeDistributed = calculateTotalPrizeDistributedFromWinnerDistributionArray(winnerDistributionArray, draw, drawSettings)
             const expectedResult = utils.parseEther("12.864990234375")
             
             expect(totalPrizeDistributed).to.deep.equal(expectedResult)

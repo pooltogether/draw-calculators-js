@@ -27,7 +27,7 @@ export type DrawResults = {
 export type PrizeAwardable = {
     amount: BigNumber
     distributionIndex: number
-    pick: BigNumber //populate with claim index
+    pick: BigNumber //populate with winning claim index
 }
 
 export type PickPrize = {
@@ -35,13 +35,19 @@ export type PickPrize = {
     distributionIndex: number
 }
 
-export type DrawSimulationResult = {
-    draw: Draw // think all we need from this is the winningRandomNumber
-    user: User // need address - do we need pickIndices?
-    drawSettings: DrawSettings
-    results : DrawResults
+export type UserDrawResult = {
+    user: User,
+    drawResult: DrawResults
 }
 
-export type DrawSimulationResults = {
-    results: DrawSimulationResult[][]
-}
+
+// export type DrawSimulationResult = {
+//     draw: Draw // think all we need from this is the winningRandomNumber
+//     user: User // need address - do we need pickIndices?
+//     drawSettings: DrawSettings
+//     results : DrawResults
+// }
+
+// export type DrawSimulationResults = {
+//     results: DrawSimulationResult[][]
+// }

@@ -14,70 +14,60 @@
 
 */
 import { BigNumber, ethers, utils } from "ethers";
-import { Draw, DrawResults, DrawSettings, DrawSimulationResult, DrawSimulationResults, User } from "../../types/types"
+import { Draw, DrawResults, DrawSettings, PrizeAwardable, User, UserDrawResult } from "../../types/types"
 import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "../DrawCalculator"
-import {createRandomUsersSameBalance, readUsersFromFile} from "../helpers/createRandomUsers"
+import {createRandomUsersSameBalance, generateAndSaveUserAddresses, getRandomInt, readAddressesFromFile, readUsersFromFile} from "./utils/createRandomUsers"
 const debug = require('debug')('pt:tsunami-sdk-scenario1')
 
+const printUtils = require("../helpers/printUtils")
+const { dim, green, yellow } = printUtils
 
-type UserDrawResult = {
-    user: User,
-    drawResult: DrawResults
-}
 
-function runScenario1(numberOfPrizePeriods: number, numberOfUsers: number, balancePerUser: BigNumber){
+function runDrawCalculatorEqualBalances(numberOfPrizePeriods: number, numberOfUsers: number, balancePerUser: BigNumber, drawSettings: DrawSettings): Map<string, UserDrawResult[]>[]{
     // create 100,000 users with 1000 USD == 100,000,000 USD deposits
     const totalSupply = balancePerUser.mul(numberOfUsers) 
     debug("totalSupply: ", utils.formatEther(totalSupply))
-    const matchCardinality = BigNumber.from(5)
-    const bitRangeSize = BigNumber.from(3)
 
-    const probabilitySpace = (BigNumber.from(2).pow(bitRangeSize)).pow(matchCardinality)
+
+    const probabilitySpace = (BigNumber.from(2).pow(drawSettings.bitRangeSize)).pow(drawSettings.matchCardinality)
     debug("probabilitySpace: ", probabilitySpace.toString())
-    const pickCost = totalSupply.div(probabilitySpace)
+    
+    const pickCost = drawSettings.pickCost//totalSupply.div(probabilitySpace)
     console.log("pickCost: ", utils.formatEther(pickCost))
 
-    const numberOfPicks = BigNumber.from(10) // balancePerUser.div(pickCost)
-    console.log("numberOfPicks ", numberOfPicks.toString())
+    const numberOfPicksPerUser = balancePerUser.div(pickCost)
+    console.log("numberOfPicksPerUser ", numberOfPicksPerUser.toString())
     
-    const _picks = [...new Array<number>(numberOfPicks.toNumber()).keys()].map((num)=> BigNumber.from(num))
+    const _picks = [...new Array<number>(numberOfPicksPerUser.toNumber()).keys()].map((num)=> BigNumber.from(num))
 
-    const users : User[] = createRandomUsersSameBalance(numberOfUsers, balancePerUser, _picks)
-     
-    // const users: User[] = readUsersFromFile()
-    // console.log(BigNumber.from(users[0].balance.toString()))
-    // return
+    const addresses: string[] = readAddressesFromFile()
+    console.log(`read ${addresses.length} addresses from file..`)
+    // now create Users
+    const users : User[] = []
+    addresses.forEach((addressEntry: any) => {
+        users.push({
+            address: addressEntry.address,
+            balance: balancePerUser,
+            pickIndices: _picks
+        })
+    })
+
     
     // create weekly prize with $75,000 and randomWinningNumber (changing weekly)
     let draw : Draw = {
         prize: utils.parseEther("75000"),
-        winningRandomNumber: BigNumber.from(ethers.utils.solidityKeccak256(["address"], [(ethers.Wallet.createRandom()).address]))
+        winningRandomNumber: BigNumber.from(ethers.utils.solidityKeccak256(["address"], [(ethers.Wallet.createRandom()).address])) //initial random number
     }
     
     
-    const drawSettings : DrawSettings = {
-        distributions: [
-                        ethers.utils.parseEther("0.3333333"), // 25,000 / 75,000             
-                        ethers.utils.parseEther("0.0133333"), // 1,000 / 75,000
-                        ethers.utils.parseEther("0.0000666") // 5 / 75,000
-                    ],
-        pickCost,
-        matchCardinality,
-        bitRangeSize
+    let _drawSettings : DrawSettings = {
+        ...drawSettings,
+        pickCost
     }
     
-    let userResults = new Map() // <String, Array<UserDrawResult>> 
+    let drawResults = new Map() // <String, Array<UserDrawResult>> // prizePeriodId => UserDrawResult[]
+    let userResults = new Map() // <String, Array<UserDrawResult>> // address => UserDrawResult[]
 
-    /*
-    [
-        [{address: "blah", prizeAwardaable: ....}, ],
-        [],
-        [],
-        ...
-        ]
-    */
-
-    // run 52 times
     for(let currentPrizePeriod = 0; currentPrizePeriod < numberOfPrizePeriods; currentPrizePeriod++){
         
         draw = {
@@ -86,64 +76,113 @@ function runScenario1(numberOfPrizePeriods: number, numberOfUsers: number, balan
         }
         console.log(`calculating for run ${currentPrizePeriod}, randomNumberThisRun: ${draw.winningRandomNumber}`)
 
+        // could do the following bit in parallel -- create runPrizePeriod(prizePeriodId, winningRandomNumber, users)
+
         users.forEach(user => {
-            console.log("running for user with address: ", user.address)
-            const userResultThisRun : DrawResults = runDrawCalculatorForSingleDraw(drawSettings, draw, user) 
+            // console.log("running for user with address: ", user.address)
+            const userResultThisRun : DrawResults = runDrawCalculatorForSingleDraw(_drawSettings, draw, user) 
         
             // only populate with winning values
             if(userResultThisRun.totalValue.gt(BigNumber.from(0))){
-                console.log(`User ${user.address} won a prize at prizePeriod ${currentPrizePeriod} of value: ${utils.formatEther(userResultThisRun.totalValue)}`)
+                
                 const userDrawResult : UserDrawResult = {
                     user,
                     drawResult: userResultThisRun
                 }
-                // should this be a per user hash map (address => UserResult) ???
-                // OR store by prizePeriod
-                // userResults[currentPrizePeriod].push(userDrawResult)
-                const key = currentPrizePeriod.toString()
-                console.log("key is ", key)
-                let currentValues = userResults.get(key)
-                if(!currentPrizePeriod){
-                    currentValues = []
-                }
-                console.log("currentValues ", currentValues)
-                // userResults[key].push(userDrawResult)
-                userResults.set(key, currentValues.push(userDrawResult))
+                
+                // record into draw mapping
+                // console.log(`User ${user.address} won a prize at prizePeriod ${currentPrizePeriod} of value: ${utils.formatEther(userResultThisRun.totalValue)}`)
+
+                // add to overall results map
+                addUserDrawResultToMap(currentPrizePeriod.toString(), userDrawResult, drawResults)
+
+                // record into user-keyed mapping
+                addUserDrawResultToMap(user.address, userDrawResult, userResults)
+
             }         
         });
     }
 
-    return userResults
-
+    return [drawResults, userResults]
 }
 
 function run(){
-    const results = runScenario1(10, 5, utils.parseEther("1000"))
-    console.log(results)
-    results.forEach((result, index) => {
-        console.log(`prizePeriodId ${index} had ${result.length} winning addresses`)
-    });
+    const matchCardinality = BigNumber.from(5)
+    const bitRangeSize = BigNumber.from(4)
+    const pickCost = utils.parseEther("300")
 
+    const drawSettings: DrawSettings = {
+        matchCardinality,
+        bitRangeSize,
+        distributions: [
+                ethers.utils.parseEther("0.3333333"), // 25,000 / 75,000             
+                ethers.utils.parseEther("0.1066664"), // (1,000 / 75,000) * 8 ((2 ^ bitRangeSize) ^ distributionIndex
+                ethers.utils.parseEther("0.0042666") // 5 / 75,000 * 64 winners 
+        ],
+        pickCost
+    }
+
+    const overallResults : Map<string, UserDrawResult[]>[]  = runDrawCalculatorEqualBalances(52, 100000, utils.parseEther("1000"), drawSettings)
+    // parseAndPrintResults(overallResults)
+    parseAndPrintCSVResults(overallResults[0])
+    console.log("-----now printing user results----")
+    parseAndPrintCSVResults(overallResults[1])
 }
 run()
 
+function createAddresses(){
+    console.log("generating addresses..")
+    generateAndSaveUserAddresses(100000)
+    console.log("done generating addresses")
+}
+// createAddresses()
 
-// function runNTimes(runTimes: number){
 
-//     let userResults: UserResult [] = []
-
-//     for(let run = 0; run < runTimes; run++){
-//         let totalUserWins = 0
-//         let totalUserPrize = BigNumber.from(0)
-
-//         const userResultThisRun = runScenario1(52, 100000, utils.parseEther("1000"))
-        
-//         if(userResultThisRun.totalPrizesAwardable.gt(BigNumber.from(0))){
-//             totalUserWins++
-//             totalUserPrize = totalUserPrize.add(userResultThisRun.totalPrizesAwardable)
-//         }
-//         console.log(`the user ${userResultThisRun.user.address} won ${totalUserWins} times with a totalPrizeAwardable ${utils.formatEther(totalUserPrize)}`)
-//     }
+function addUserDrawResultToMap(key: string, value: UserDrawResult, map :Map<string, UserDrawResult[]>){
+    // add to overall results map
+    let currentValues : UserDrawResult[] | undefined = map.get(key)
     
-// }
-// runNTimes(10000)
+    if(!currentValues){
+        currentValues = new Array<UserDrawResult>()
+    }
+    currentValues.push(value)
+    map.set(key, currentValues)
+}
+
+
+function parseAndPrintCSVResults(results: Map<string, UserDrawResult[]>){
+    
+    console.log("-----printing csv values -------")
+    
+    results.forEach((winners, index) => {
+        let csvFormatString = `${index}`
+
+        // green(`prizePeriodId ${index} had ${winners.length} winners`)
+        
+        let totalPrizeAwardableForPeriod: BigNumber = BigNumber.from(0)
+        let prizeDistributions : Array<number> = new Array(3).fill(0) // of length prize distributions
+
+        winners.forEach((winner)=>{
+            totalPrizeAwardableForPeriod = totalPrizeAwardableForPeriod.add(winner.drawResult.totalValue)
+
+            // increment whatever prize distribution won
+            winner.drawResult.prizes.forEach((prize: PrizeAwardable) => {
+                prizeDistributions[prize.distributionIndex]++
+            });
+        })
+
+        // breakdown
+        // console.log(`Total prize awardable: ${utils.formatEther(totalPrizeAwardableForPeriod)}`)
+        csvFormatString = csvFormatString.concat(`,${utils.formatEther(totalPrizeAwardableForPeriod)}`)
+
+        prizeDistributions.forEach((numberOfPrizesAtIndex, index) => {
+            // console.log(`index ${index} had ${numberOfPrizesAtIndex} winners..`)
+            csvFormatString = csvFormatString.concat(`,${numberOfPrizesAtIndex}`)
+        });
+
+        // console.log(`\n`)
+        
+        console.log(csvFormatString)
+
+    });
+}
