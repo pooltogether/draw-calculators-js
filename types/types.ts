@@ -31,16 +31,17 @@ export interface DrawSettings {
 }
 
 export interface DrawResults {
-    totalAmount: BigNumber;
+    totalAmountUnformatted: BigNumber;
     prizes: ClaimablePickPrize[];
 }
 
 export interface ClaimablePickPrize extends PickPrize {
-    pick: BigNumber; // populate with claim index
+    pickIndex: number;
+    drawId: number;
 }
 
 export interface PickPrize {
-    amount: BigNumber;
+    amountUnformatted: BigNumber;
     distributionIndex: number;
 }
 
@@ -73,7 +74,7 @@ export interface PickPrize {
  */
 
 /**
- * More nice to haves - might be more relevant for a PoolTogether SDK rather than Tsunami SDK
+ * More nice to haves/thoughts - might be more relevant for a PoolTogether SDK or Governance SDK rather than inside Tsunami SDK
  * - Relevant Token data
  *      - Ticket, supply, underlying
  *      - Name, symbol, decimals, total supply
@@ -90,6 +91,8 @@ export interface PickPrize {
 /**
  * Enum for validating a supplied version of Tsunami.
  * Versions are used to match abis.
+ *
+ * Possibly unneccessary? I just want to catch versioning earlier rather than later.
  */
 export enum TsunamiVersion {
     '0.0.1' = '0.0.1',
@@ -98,11 +101,11 @@ export enum TsunamiVersion {
 /**
  * An instance of a draw
  */
-interface Draw {
+export interface Draw {
     id: number;
     totalAwardAmount: BigNumber;
     winningRandomNumber: BigNumber;
-    timestamp: any; // TODO: What type will this be?
+    timestamp: number;
 }
 
 /**
@@ -123,12 +126,13 @@ export interface PrizeDistribution extends Draw {
  * Currently I expect this to only be used for the current prize period as Draws are more
  * important when looking at historic data
  */
-interface PrizePeriod {
+export interface CurrentPrizePeriod {
     drawId: number; // TODO: nextDrawId from ClaimableDraw?
     // prizeEstimate: BigNumber TODO: ????
     state: PrizePeriodStates;
     // Passthrough data from chain reads
     _prizePeriodSeconds: number;
+    _prizePeriodRemainingSeconds: number;
     _prizePeriodStartedAt: number;
     _canStartAward: boolean;
     _canCompelteAward: boolean;
@@ -140,7 +144,7 @@ interface PrizePeriod {
 /**
  * Minimal config to be able to query all of the data needed for a Tsunami app
  */
-interface PrizePoolConfig {
+export interface PrizePoolConfig {
     prizePoolAddress: string;
     prizeStrategyAddress: string;
     version: TsunamiVersion;
@@ -149,7 +153,7 @@ interface PrizePoolConfig {
 /**
  * Main class for reading Tsunami Prize Pool Data.
  */
-export declare class Tsunami implements PrizePoolConfig {
+export declare class TsunamiPrizePool implements PrizePoolConfig {
     // Data
     provider: Provider;
     prizePoolAddress: string;
@@ -165,13 +169,14 @@ export declare class Tsunami implements PrizePoolConfig {
     // Methods - (requires an instance of Tsunami)
     getDraw(drawId: number): Draw;
     getPrizeDistribution(drawId: number): PrizeDistribution; // Can I even get this for the current prize period?
-    getCurrentPrizePeriod(): PrizePeriod;
+    getCurrentPrizePeriod(): CurrentPrizePeriod;
     getUsersDrawResults(usersAddress: string, drawId: number): DrawResults;
     getUsersBalances(usersAddress: string): { [tokenAddress: string]: BigNumber };
     getUsersBalance(usersAddress: string, tokenAddress: string): BigNumber;
     getClaimableDrawIds(): number[];
 
     // Static methods - (don't require an instance of Tsunami)
+    static createFromAddress(prizePoolAddress: string): TsunamiPrizePool;
     static getPrizePoolConfig(prizePoolAddress: string): PrizePoolConfig;
     static getPrizeStrategyAddress(prizePoolAddress: string): string;
     static getPrizePoolVersion(prizePoolAddress: string): TsunamiVersion;
@@ -193,15 +198,19 @@ export declare class Tsunami implements PrizePoolConfig {
  */
 export declare class TsunamiPlayer {
     signer: Signer;
-    tsunami: Tsunami;
+    tsunami: TsunamiPrizePool;
 
-    constructor(signer: Signer, tsunami: Tsunami);
+    constructor(signer: Signer, tsunami: TsunamiPrizePool);
 
     // Methods
     getTokenBalances(): { [tokenAddress: string]: BigNumber };
     getTokenBalance(tokenAddress: string): BigNumber;
+    getClaimableDraws(): Promise<Draw[]>;
+    getClaimableDrawsById(drawIds: number[]): Promise<Draw[]>;
+
+    // Transactions
     deposit(amount: BigNumber): Promise<TransactionResponse>;
     withdraw(amount: BigNumber): Promise<TransactionResponse>;
-
-    // getTokenBalances(): TokenBalancesResponse
+    claimDraws(draws: Draw[]): Promise<TransactionResponse>;
+    claimClaimableDraws(): Promise<TransactionResponse>;
 }
