@@ -168,6 +168,8 @@ export declare class TsunamiPrizePool implements PrizePoolConfig {
 
     // Methods - (requires an instance of Tsunami)
     getDraw(drawId: number): Draw;
+    getDraws(drawIds: number[]): Promise<Draw[]>;
+    getClaimableDraws(): Promise<Draw[]>;
     getPrizeDistribution(drawId: number): PrizeDistribution;
     getCurrentPrizePeriod(): CurrentPrizePeriod;
     getUsersDrawResults(usersAddress: string, drawId: number): DrawResults;
@@ -206,10 +208,8 @@ export declare class TsunamiPlayer {
     getTokenBalances(): { [tokenAddress: string]: BigNumber };
     getTokenBalance(tokenAddress: string): BigNumber;
     getClaimedEvents(): Promise<Array<Event>>;
-    getClaimableDraws(): Promise<Draw[]>;
-    getClaimableDrawsById(drawIds: number[]): Promise<Draw[]>;
-    getClaimablePrizes(): Promise<ClaimablePickPrize[]>;
-    getPrizes(drawIds: number[]): Promise<ClaimablePickPrize[]>;
+    getPrizes(drawIds: number[]): Promise<DrawResults>;
+    getClaimablePrizes(): Promise<DrawResults>;
 
     // Transactions
     deposit(amount: BigNumber): Promise<TransactionResponse>;
