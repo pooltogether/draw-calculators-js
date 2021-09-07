@@ -38,3 +38,5 @@ Networks.md
 *.dev.md
 
 dist/
+
+simData/
