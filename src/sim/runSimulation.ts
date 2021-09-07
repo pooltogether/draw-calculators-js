@@ -1,6 +1,6 @@
 import { BigNumber, ethers, utils } from "ethers";
 import { Draw, DrawResults, DrawSettings, DrawSimulationResult, DrawSimulationResults, User } from "../../types/types"
-import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "../DrawCalculator"
+import { runDrawCalculatorForSingleDraw, sanityCheckDrawSettings } from "../drawCalculator"
 
 
 const printUtils = require("../helpers/printUtils")

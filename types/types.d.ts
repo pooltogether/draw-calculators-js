@@ -5,11 +5,13 @@ export type DrawSettings  = {
     pickCost: BigNumber
     distributions: BigNumber[]
     bitRangeSize: BigNumber
+    prize: BigNumber
 }
 
 export type Draw = {
-    prize: BigNumber
     winningRandomNumber: BigNumber
+    //timestamp
+    //drawId
 }
 
 export type User = {
@@ -39,15 +41,3 @@ export type UserDrawResult = {
     user: User,
     drawResult: DrawResults
 }
-
-
-// export type DrawSimulationResult = {
-//     draw: Draw // think all we need from this is the winningRandomNumber
-//     user: User // need address - do we need pickIndices?
-//     drawSettings: DrawSettings
-//     results : DrawResults
-// }
-
-// export type DrawSimulationResults = {
-//     results: DrawSimulationResult[][]
-// }

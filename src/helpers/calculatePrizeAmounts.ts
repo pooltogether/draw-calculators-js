@@ -1,5 +1,5 @@
 import {BigNumber, ethers} from "ethers"
-import {sanityCheckDrawSettings} from "../DrawCalculator"
+import {sanityCheckDrawSettings} from "../drawCalculator"
 import {DrawSettings, Draw} from "../../types/types"
 
 // inverse of calculatePrizeAmount()
@@ -9,7 +9,7 @@ export function calculateNumberOfMatchesForPrize(drawSettings: DrawSettings, dra
     
     if(sanityResult == ""){
          
-        const fractionOfPrizeReceived: BigNumber = prizeReceived.mul(ethers.constants.WeiPerEther).div(draw.prize) // const expectedPrizeAmount : BigNumber = (draw.prize).mul(percentageOfPrize).div(ethers.constants.WeiPerEther)
+        const fractionOfPrizeReceived: BigNumber = prizeReceived.mul(ethers.constants.WeiPerEther).div(drawSettings.prize) // const expectedPrizeAmount : BigNumber = (draw.prize).mul(percentageOfPrize).div(ethers.constants.WeiPerEther)
         for(let i = 0; i < drawSettings.distributions.length; i++){
 
             // uint256 numberOfPrizesForIndex = (2 ** uint256(_drawSettings.bitRangeSize)) ** _prizeDistributionIndex;
@@ -54,7 +54,7 @@ export function calculateTotalPrizeDistributedFromWinnerDistributionArray(prizeW
         // console.log("number of prizes at index", numberOfPrizesAtIndex)
         
         let distributionIndexFraction = drawSettings.distributions[index].div(numberOfPrizesAtIndex)
-        let distributionIndexAmount = draw.prize.mul(distributionIndexFraction).div(ethers.constants.WeiPerEther)
+        let distributionIndexAmount = drawSettings.prize.mul(distributionIndexFraction).div(ethers.constants.WeiPerEther)
 
         // now compare against what was passed in
         totalPayout = totalPayout.add(BigNumber.from(prizeWinners[index]).mul(distributionIndexAmount))
@@ -102,7 +102,8 @@ function calculateDrawSettingsForPrizeDistribution(prizeDistributions: BigNumber
         distributions: prizeDistributions,
         pickCost: BigNumber.from(ethers.utils.parseEther("1")),
         matchCardinality: resultingMatchCardinality,
-        bitRangeSize : resultingBitRangeSize
+        bitRangeSize : resultingBitRangeSize,
+        prize: ethers.utils.parseEther("100")
     }
     // call sanityCheckDrawSettings here again?
 
