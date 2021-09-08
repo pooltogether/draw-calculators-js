@@ -1,17 +1,20 @@
 {
-  "name": "@pooltogether/tsunami-js-sdk",
-  "version": "1.0.0-beta.1",
-  "description": "PoolTogether Tsunami SDK",
+  "name": "@pooltogether/draw-calculator-js-sdk",
+  "version": "1.0.0-beta.6",
+  "description": "PoolTogether Draw Calculator SDK",
   "main": "dist/src/index.js",
-  "types": "dist/src/deploy.d.ts",
+  "types": "types/types.d.ts",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node ./src/sim/runSimulation.ts",
-    "test": "ts-mocha ./test/**",
-    "build": "yarn clean && tsc --project tsconfig.json && yalc push",
+    "sim": "ts-node ./src/sim/runSim.ts",
+    "test": "yarn clean && ts-mocha ./test/**",
+    "build": "yarn clean && tsc --project tsconfig.json",
     "clean": "rm -rf dist/"
   },
-  "dependencies": {},
+  "dependencies": {
+    "chalk": "^4.1.2",
+    "debug": "^4.3.2"
+  },
   "devDependencies": {
     "@types/chai": "^4.2.21",
     "@types/expect": "^24.3.0",
@@ -20,6 +23,7 @@
     "chalk": "^4.1.2",
     "debug": "^4.3.2",
     "ethers": "5.4.4",
+    "immutable": "^4.0.0-rc.14",
     "mocha": "^9.0.3",
     "prettier": "2.2.1",
     "ts-generator": "0.1.1",
@@ -29,6 +33,6 @@
     "yalc": "^1.0.0-pre.53"
   },
   "files": [
-    "dist/"
+    "dist/**/*"
   ]
 }

@@ -6,10 +6,31 @@ The SDK provides the ability to simulate multiple draw settings and inputs, but 
 
 ### API
 ```javascript
-runDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): DrawResults
+runTsunamiDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): DrawResults
+```
+returns the prize amount for that user, if any.
+
+```javascript
+prepareClaimForUserFromDrawResult(user: User, drawResult: DrawResults): Claim
+```
+prepares a `Claim` for a user. It is intended to be called with the result of`runTsunamiDrawCalculatorForSingleDraw()`
+
+----
+
+```javascript
+runTsunamiDrawCalculatorForDraws(drawSettings: DrawSettings[], draw: Draw[], user: User): DrawResults[]
+```
+returns the prize amount for that user, if any.
+
+```javascript
+prepareClaimsForUserFromDrawResults(user: User, drawResult: DrawResults[]): Claim
 ```
 
-returns the prize amount for that user, if any.
+Are wrapped versions of the singular`runTsunamiDrawCalculatorForSingleDraw()` and `prepareClaimForUserFromDrawResult()` functions that take multiple draws and draw settings.
+
+```
+
+
 
 Types:
 ```javascript
@@ -18,14 +39,14 @@ type DrawSettings  = {
     matchCardinality: BigNumber
     pickCost: BigNumber
     distributions: BigNumber[]
-    bitRangeValue: BigNumber
     bitRangeSize: BigNumber
+    prize: BigNumber // this is the awardable amount from the prize pool
 }
 
-// Draw is historical information about the draw
+// Draw is historical information about the draw -- obtainable from the DrawHistory
 type Draw = {
-    prize: BigNumber // this is the awardable amount from the prize pool
-    winningRandomNumber: BigNumber // random number returned from the RNG
+    drawId: BigNumber
+    winningRandomNumber: BigNumber // random number returned from the RNG service
 }
 
 // User inputs

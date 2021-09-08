@@ -1,8 +1,16 @@
 
 import { BigNumber, ethers, utils } from "ethers";
 import { expect } from "chai"
-import { Draw, DrawSettings, PrizeAwardable, User } from "../types/types"
-import { runDrawCalculatorForSingleDraw, findBitMatchesAtIndex, calculateNumberOfMatchesForPrize, calculatePrizeAmount, calculatePrizeForPrizeDistributionIndex, calculateFractionOfPrize, calculatePrizeDistributedFromWinnerDistributionArray } from "../src/DrawCalculator"
+import { Claim, Draw, DrawSettings, PrizeAwardable, User } from "../src/types"
+import { runTsunamiDrawCalculatorForSingleDraw } from "../src/tsunamiDrawCalculator"
+import { prepareClaimForUserFromDrawResult } from "../src/prepareClaims"
+
+import {calculateNumberOfMatchesForPrize, calculateTotalPrizeDistributedFromWinnerDistributionArray} from "../src/helpers/calculatePrizeAmounts"
+import { run } from "mocha";
+import { calculateFractionOfPrize } from "../src/helpers/calculateFractionOfPrize";
+import { calculatePrizeAmount } from "../src/helpers/calculatePrizeAmount";
+import { findBitMatchesAtIndex } from "../src/helpers/findBitMatchesAtIndex";
+import { calculatePrizeForDistributionIndex } from "../src/helpers/calculatePrizeForDistributionIndex";
 
 describe('drawCalculator', () => {
     describe('runDrawCalculatorForSingleDraw()', () => {
@@ -21,12 +29,13 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.1")],
                 pickCost: ethers.utils.parseEther("1"),
                 matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4)
+                bitRangeSize : BigNumber.from(4),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
 
             
             const exampleDraw : Draw = {
-                prize: BigNumber.from(utils.parseEther("100")),
+                drawId: BigNumber.from(1),
                 winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
             }
             
@@ -36,7 +45,7 @@ describe('drawCalculator', () => {
                 pickIndices: [BigNumber.from(1)]
             } 
             // console.time("singleRun")
-            const results = runDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
+            const results = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
         
             // console.timeEnd("singleRun")
             const prizeReceived = utils.parseEther("1.25")
@@ -59,11 +68,12 @@ describe('drawCalculator', () => {
                     ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(4)
+                bitRangeSize : BigNumber.from(4),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
             
             const exampleDraw : Draw = {
-                prize: utils.parseEther("100"),
+                drawId: BigNumber.from(1),
                 winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
             }
             
@@ -73,7 +83,7 @@ describe('drawCalculator', () => {
                 pickIndices: [BigNumber.from(1)]
             } 
             
-            const results = runDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
+            const results = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
             
             const prizeReceived = utils.parseEther("1.25")
             expect(results.totalValue).to.deep.equal(prizeReceived)
@@ -88,11 +98,12 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4)
+                bitRangeSize : BigNumber.from(4),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
             
             const exampleDraw : Draw = {
-                prize: utils.parseEther("100"),
+                drawId: BigNumber.from(1),
                 winningRandomNumber: BigNumber.from("9818474807567937660714483746420294115396450454986178514367709522842585653685")
             }
             
@@ -111,11 +122,12 @@ describe('drawCalculator', () => {
                     ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(4)
+                bitRangeSize : BigNumber.from(4),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
             
             const exampleDraw : Draw = {
-                prize: utils.parseEther("100"),
+                drawId: BigNumber.from(1),
                 winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
             }
             
@@ -133,11 +145,12 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4)
+                bitRangeSize : BigNumber.from(4),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
             
             const exampleDraw : Draw = {
-                prize: utils.parseEther("100"),
+                drawId: BigNumber.from(1),
                 winningRandomNumber: BigNumber.from("9818474807567937660714483746420294115396450454986178514367709522842585653685")
             }
     
@@ -155,7 +168,8 @@ describe('drawCalculator', () => {
                 distributions: [],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(8)
+                bitRangeSize : BigNumber.from(8),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
 
             const result = findBitMatchesAtIndex(
@@ -173,7 +187,8 @@ describe('drawCalculator', () => {
                 distributions: [],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(6)
+                bitRangeSize : BigNumber.from(6),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
 
             const result = findBitMatchesAtIndex(BigNumber.from(61676),
@@ -190,7 +205,8 @@ describe('drawCalculator', () => {
                 distributions: [],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(8)
+                bitRangeSize : BigNumber.from(8),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
 
             const result = findBitMatchesAtIndex(
@@ -208,7 +224,8 @@ describe('drawCalculator', () => {
                 distributions: [],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(8)
+                bitRangeSize : BigNumber.from(8),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
 
             const result = findBitMatchesAtIndex(
@@ -236,15 +253,16 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4)
+                bitRangeSize : BigNumber.from(4),
+                prize: BigNumber.from(utils.parseEther("100")),
             }            
             const exampleDraw : Draw = {
-                prize: utils.parseEther("100"),
+                drawId: BigNumber.from(1),
                 winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
             }
             
             //calculatePrizeForPrizeDistributionIndex(prizeDistributionIndex: number, drawSettings: DrawSettings, draw: Draw)
-            const prizeReceivable = calculatePrizeForPrizeDistributionIndex(1, exampleDrawSettings, exampleDraw)
+            const prizeReceivable = calculatePrizeForDistributionIndex(1, exampleDrawSettings, exampleDraw)
             const prize = utils.parseEther("1.25")
             expect(prizeReceivable).to.deep.equal(prize)
         })
@@ -260,7 +278,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4)
+                bitRangeSize : BigNumber.from(4),
+                prize: BigNumber.from(utils.parseEther("100")),
             }            
             // distributionIndex = matchCardinality - numberOfMatches = 3 - 2 = 1
             // distributions[1] = 0.2e18 = prizeAtIndex
@@ -287,20 +306,57 @@ describe('drawCalculator', () => {
                             ],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
                 matchCardinality: BigNumber.from(5),
-                bitRangeSize : BigNumber.from(3)
+                bitRangeSize : BigNumber.from(3),
+                prize: BigNumber.from(utils.parseEther("100")),
             }
             const draw : Draw = {
-                prize: utils.parseEther('100'),
+                drawId: BigNumber.from(1),
                 winningRandomNumber: BigNumber.from(0) // not used
             }                       
 
             let winnerDistributionArray =  [0,2,13,107,379]
 
-            const totalPrizeDistributed = calculatePrizeDistributedFromWinnerDistributionArray(winnerDistributionArray, draw, drawSettings)
+            const totalPrizeDistributed = calculateTotalPrizeDistributedFromWinnerDistributionArray(winnerDistributionArray, draw, drawSettings)
             const expectedResult = utils.parseEther("12.864990234375")
             
             expect(totalPrizeDistributed).to.deep.equal(expectedResult)
 
+        })
+
+    })
+
+    describe('prepareClaimForUser()', () => {
+        it('returns correct claim struct for user', async()=>{
+            
+            const exampleDrawSettings : DrawSettings = {
+                distributions: [ethers.utils.parseEther("0.3"),
+                                ethers.utils.parseEther("0.2"),
+                                ethers.utils.parseEther("0.1")],
+                pickCost: ethers.utils.parseEther("1"),
+                matchCardinality: BigNumber.from(3),
+                bitRangeSize : BigNumber.from(4),
+                prize: BigNumber.from(utils.parseEther("100")),
+            }
+
+            const drawId = BigNumber.from(2)
+            const winningPickIndices = BigNumber.from(1)
+            
+            const exampleDraw : Draw = {
+                drawId,
+                winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
+            }                 
+
+            const exampleUser : User = {
+                address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+                balance: ethers.utils.parseEther("10"),
+                pickIndices: [BigNumber.from(0), winningPickIndices] // pickIndices[0] should be stripped out as it is non-winning
+            }
+            
+            const drawResult = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
+
+            const claimResult: Claim = prepareClaimForUserFromDrawResult(exampleUser, drawResult)
+            expect(claimResult.drawIds).to.deep.equal([drawId])
+            expect(claimResult.data).to.deep.equal([[winningPickIndices]])
         })
 
     })
