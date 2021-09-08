@@ -9,9 +9,8 @@ export type DrawSettings  = {
 }
 
 export type Draw = {
+    drawId: BigNumber
     winningRandomNumber: BigNumber
-    //timestamp
-    //drawId
 }
 
 export type User = {
@@ -21,6 +20,7 @@ export type User = {
 }
 
 export type DrawResults = {
+    drawId: BigNumber
     totalValue: BigNumber
     prizes: PrizeAwardable[]
 }
@@ -29,7 +29,7 @@ export type DrawResults = {
 export type PrizeAwardable = {
     amount: BigNumber
     distributionIndex: number
-    pick: BigNumber //populate with winning claim index
+    pick: BigNumber //populate with claim index
 }
 
 export type PickPrize = {
@@ -37,7 +37,14 @@ export type PickPrize = {
     distributionIndex: number
 }
 
+export type Claim = {
+    userAddress: string
+    drawIds: BigNumber[]
+    data: BigNumber[][]
+}
+
 export type UserDrawResult = {
-    user: User,
+    user: User
+    // drawId: BigNumber
     drawResult: DrawResults
 }

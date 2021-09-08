@@ -1,6 +1,6 @@
 import {BigNumber, ethers} from "ethers"
-import {sanityCheckDrawSettings} from "../drawCalculator"
-import {DrawSettings, Draw} from "../../types/types"
+import {sanityCheckDrawSettings} from "./sanityCheckDrawSettings"
+import {DrawSettings, Draw} from "../types"
 
 // inverse of calculatePrizeAmount()
 export function calculateNumberOfMatchesForPrize(drawSettings: DrawSettings, draw: Draw, prizeReceived: BigNumber): number { // returns number of matches to receive that prize

@@ -1,5 +1,5 @@
 import { BigNumber, ethers, utils } from "ethers"
-import { User } from "../../../types/types"
+import { User } from "../../types"
 import {writeFileSync, readFileSync, mkdirSync} from "fs"
 
 export function createRandomUsersSameBalance(numberOfUsers: number, balancePerUser: BigNumber, _picks: BigNumber[]){
@@ -74,3 +74,5 @@ export function readUsersFromFile(): User[]{
 export function getRandomInt(max: number) : number {
     return Math.floor(Math.random() * max)
 }
+// todo: function that calculates/displays the uniformity of a user array
+// calculates the occrance of each hex character in a position of the address

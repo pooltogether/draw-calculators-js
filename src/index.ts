@@ -1,6 +1,3 @@
-import { runDrawCalculatorForSingleDraw, calculatePrizeAmount } from './drawCalculator';
-
-module.exports = {
-    runDrawCalculatorForSingleDraw,
-    calculatePrizeAmount,
-};
+export * from './tsunamiDrawCalculator';
+export * from './prepareClaims';
+export * from './types'
