@@ -1,6 +1,6 @@
 {
   "name": "@pooltogether/draw-calculator-js-sdk",
-  "version": "1.0.0-beta.2",
+  "version": "1.0.0-beta.3",
   "description": "PoolTogether Draw Calculator SDK",
   "main": "dist/src/index.js",
   "types": "types/types.d.ts",
@@ -8,7 +8,7 @@
   "scripts": {
     "sim": "ts-node ./src/sim/runSim.ts",
     "test": "yarn clean && ts-mocha ./test/**",
-    "build": "yarn clean && tsc --project tsconfig.json && yalc push",
+    "build": "yarn clean && tsc --project tsconfig.json",
     "clean": "rm -rf dist/"
   },
   "dependencies": {},
