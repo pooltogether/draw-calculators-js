@@ -1,9 +1,9 @@
 
 import { BigNumber, ethers, utils } from "ethers";
 import { expect } from "chai"
-import { Claim, Draw, DrawSettings, PrizeAwardable, User } from "../src/types"
-import { runTsunamiDrawCalculatorForSingleDraw } from "../src/tsunamiDrawCalculator"
-import { prepareClaimForUserFromDrawResult } from "../src/prepareClaims"
+import { Claim, Draw, DrawResults, DrawSettings, PrizeAwardable, User } from "../src/types"
+import { runTsunamiDrawCalculatorForDraws, runTsunamiDrawCalculatorForSingleDraw } from "../src/tsunamiDrawCalculator"
+import { prepareClaimForUserFromDrawResult, prepareClaimsForUserFromDrawResults } from "../src/prepareClaims"
 
 import {calculateNumberOfMatchesForPrize, calculateTotalPrizeDistributedFromWinnerDistributionArray} from "../src/helpers/calculatePrizeAmounts"
 import { run } from "mocha";
@@ -325,7 +325,7 @@ describe('drawCalculator', () => {
 
     })
 
-    describe('prepareClaimForUser()', () => {
+    describe('prepareClaimForUserFromDrawResult()', () => {
         it('returns correct claim struct for user', async()=>{
             
             const exampleDrawSettings : DrawSettings = {
@@ -358,6 +358,61 @@ describe('drawCalculator', () => {
             expect(claimResult.drawIds).to.deep.equal([drawId])
             expect(claimResult.data).to.deep.equal([[winningPickIndices]])
         })
+    })
 
+    describe('prepareClaimsForUserFromDrawResults()', () => {
+        it('returns correct claim struct for user', async()=>{
+            
+            const exampleDrawSettings1 : DrawSettings = {
+                distributions: [ethers.utils.parseEther("0.3"),
+                                ethers.utils.parseEther("0.2"),
+                                ethers.utils.parseEther("0.1")],
+                pickCost: ethers.utils.parseEther("1"),
+                matchCardinality: BigNumber.from(3),
+                bitRangeSize : BigNumber.from(4),
+                prize: BigNumber.from(utils.parseEther("100")),
+            }
+
+            const exampleDrawSettings2 : DrawSettings = {
+                distributions: [ethers.utils.parseEther("0.3"),
+                                ethers.utils.parseEther("0.2"),
+                                ethers.utils.parseEther("0.1")],
+                pickCost: ethers.utils.parseEther("1"),
+                matchCardinality: BigNumber.from(3),
+                bitRangeSize : BigNumber.from(10), // set very high so matching unlikely
+                prize: BigNumber.from(utils.parseEther("100")),
+            }
+
+            const drawIds= [BigNumber.from(2), BigNumber.from(3)]
+            const winningPickIndices = BigNumber.from(1)
+            
+            const exampleDraw1 : Draw = {
+                drawId: drawIds[0],
+                winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
+            }   
+            const exampleDraw2 : Draw = {
+                drawId: drawIds[1],
+                winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
+            }                 
+
+            const exampleUser : User = {
+                address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+                balance: ethers.utils.parseEther("10"),
+                pickIndices: [BigNumber.from(0), winningPickIndices] // pickIndices[0] should be stripped out as it is non-winning
+            }
+            
+            const drawResults: DrawResults[] = runTsunamiDrawCalculatorForDraws(
+                [exampleDrawSettings1, exampleDrawSettings2],
+                [exampleDraw1, exampleDraw2],
+                exampleUser)
+
+            expect(drawResults.length).to.equal(1) // only wins exampleDraw1
+            
+            const claimResult: Claim = prepareClaimsForUserFromDrawResults(exampleUser, drawResults)
+            
+            expect(claimResult.drawIds).to.deep.equal([drawIds[0]])
+            expect(claimResult.data).to.deep.equal([[winningPickIndices]])
+        })
     })
 })
+

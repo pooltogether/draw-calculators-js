@@ -8,6 +8,8 @@ const { dim, green, yellow } = printUtils
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
+
+// main entry point for tsunami draw calculations
 export function runTsunamiDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): DrawResults {
     
     const sanityCheckDrawSettingsResult = sanityCheckDrawSettings(drawSettings)
@@ -55,7 +57,7 @@ export function runTsunamiDrawCalculatorForSingleDraw(drawSettings: DrawSettings
     return results
 }
 
-
+// multiple version of runTsunamiDrawCalculatorForSingleDraw
 export function runTsunamiDrawCalculatorForDraws(drawSettings: DrawSettings[], draws: Draw[], user: User): DrawResults[] {
     const results: DrawResults[] = []
     draws.forEach((draw, index) => {

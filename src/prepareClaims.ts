@@ -32,7 +32,6 @@ export function prepareClaimsForUserFromDrawResults(user: User, drawResults: Dra
     }
     //for each draw run the runDrawCalculatorForSingleDraw, if there is a winner add to result
     for(const [index, drawResult] of drawResults.entries()){  
-        
         if(drawResult.totalValue.gt(BigNumber.from(0))){
             claim.drawIds.push(drawResult.drawId)
             // now add the pickIndices data
