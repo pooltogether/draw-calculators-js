@@ -13,6 +13,11 @@ export type Draw = {
     winningRandomNumber: BigNumber
 }
 
+export type Pick = {
+    index: number,
+    hash: string
+}
+
 export type User = {
     address: string
     balance: BigNumber
