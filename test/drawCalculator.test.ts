@@ -28,8 +28,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.2"),
                                 ethers.utils.parseEther("0.1")],
                 pickCost: ethers.utils.parseEther("1"),
-                matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4),
+                matchCardinality: 3,
+                bitRangeSize: 4,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
 
@@ -67,8 +67,8 @@ describe('drawCalculator', () => {
                     ethers.utils.parseEther("0.1"),
                     ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(4),
+                matchCardinality: 4,
+                bitRangeSize: 4,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
             
@@ -97,8 +97,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.2"),
                                 ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4),
+                matchCardinality: 3,
+                bitRangeSize: 4,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
             
@@ -121,8 +121,8 @@ describe('drawCalculator', () => {
                     ethers.utils.parseEther("0.1"),
                     ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(4),
+                matchCardinality: 4,
+                bitRangeSize: 4,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
             
@@ -144,8 +144,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.2"),
                                 ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4),
+                matchCardinality: 3,
+                bitRangeSize: 4,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
             
@@ -167,8 +167,8 @@ describe('drawCalculator', () => {
             const exampleDrawSettings : DrawSettings = {
                 distributions: [],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(8),
+                matchCardinality: 4,
+                bitRangeSize: 8,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
 
@@ -186,8 +186,8 @@ describe('drawCalculator', () => {
             const exampleDrawSettings : DrawSettings = {
                 distributions: [],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(6),
+                matchCardinality: 4,
+                bitRangeSize: 6,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
 
@@ -204,8 +204,8 @@ describe('drawCalculator', () => {
             const exampleDrawSettings : DrawSettings = {
                 distributions: [],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(8),
+                matchCardinality: 4,
+                bitRangeSize: 8,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
 
@@ -223,8 +223,8 @@ describe('drawCalculator', () => {
             const exampleDrawSettings : DrawSettings = {
                 distributions: [],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize : BigNumber.from(8),
+                matchCardinality: 4,
+                bitRangeSize: 8,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
 
@@ -252,8 +252,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.2"),
                                 ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4),
+                matchCardinality: 3,
+                bitRangeSize: 4,
                 prize: BigNumber.from(utils.parseEther("100")),
             }            
             const exampleDraw : Draw = {
@@ -277,8 +277,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.2"),
                                 ethers.utils.parseEther("0.1")],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4),
+                matchCardinality: 3,
+                bitRangeSize: 4,
                 prize: BigNumber.from(utils.parseEther("100")),
             }            
             // distributionIndex = matchCardinality - numberOfMatches = 3 - 2 = 1
@@ -305,8 +305,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.05")
                             ],
                 pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(5),
-                bitRangeSize : BigNumber.from(3),
+                matchCardinality: 5,
+                bitRangeSize: 3,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
             const draw : Draw = {
@@ -333,8 +333,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.2"),
                                 ethers.utils.parseEther("0.1")],
                 pickCost: ethers.utils.parseEther("1"),
-                matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4),
+                matchCardinality: 3,
+                bitRangeSize: 4,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
 
@@ -368,8 +368,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.2"),
                                 ethers.utils.parseEther("0.1")],
                 pickCost: ethers.utils.parseEther("1"),
-                matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(4),
+                matchCardinality: 3,
+                bitRangeSize: 4,
                 prize: BigNumber.from(utils.parseEther("100")),
             }
 
@@ -378,8 +378,8 @@ describe('drawCalculator', () => {
                                 ethers.utils.parseEther("0.2"),
                                 ethers.utils.parseEther("0.1")],
                 pickCost: ethers.utils.parseEther("1"),
-                matchCardinality: BigNumber.from(3),
-                bitRangeSize : BigNumber.from(10), // set very high so matching unlikely
+                matchCardinality: 3,
+                bitRangeSize: 10, // set very high so matching unlikely
                 prize: BigNumber.from(utils.parseEther("100")),
             }
 

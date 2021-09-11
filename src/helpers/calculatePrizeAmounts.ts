@@ -18,7 +18,7 @@ export function calculateNumberOfMatchesForPrize(drawSettings: DrawSettings, dra
             const prizeFractionAtIndex = drawSettings.distributions[i].div(numPrizes)
             
             if(fractionOfPrizeReceived.eq(prizeFractionAtIndex)){              
-                return drawSettings.matchCardinality.toNumber() - (drawSettings.distributions.length - i - 1) //constdrawSettings.matchCardinality.toNumber() - distributionIndex = matches 
+                return drawSettings.matchCardinality - (drawSettings.distributions.length - i - 1) //constdrawSettings.matchCardinality - distributionIndex = matches 
             }          
         } 
     }
