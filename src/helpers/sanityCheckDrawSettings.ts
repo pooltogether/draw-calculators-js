@@ -4,11 +4,11 @@ import { DrawSettings } from "../types"
 // checks that the drawSettings are appropriate 
 export function sanityCheckDrawSettings(drawSettings: DrawSettings) : string {
 
-    if(!(drawSettings.matchCardinality.gte(drawSettings.distributions.length))){
+    if(!(drawSettings.matchCardinality >= drawSettings.distributions.length)){
         console.log("DrawCalc/matchCardinality-gt-distributions")
         return "DrawCalc/matchCardinality-gt-distributions"
     }
-    else if(drawSettings.bitRangeSize.gte(Math.floor((256 / drawSettings.matchCardinality.toNumber())))){
+    else if(drawSettings.bitRangeSize >= Math.floor((256 / drawSettings.matchCardinality))){
         return "DrawCalc/bitRangeSize-too-large"
     }
     else if(drawSettings.pickCost.lte(0)){

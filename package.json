@@ -1,6 +1,6 @@
 {
   "name": "@pooltogether/draw-calculator-js-sdk",
-  "version": "1.0.0-beta.9",
+  "version": "1.0.0-beta.12",
   "description": "PoolTogether Draw Calculator SDK",
   "main": "dist/src/index.js",
   "types": "types/types.d.ts",

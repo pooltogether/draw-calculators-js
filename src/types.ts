@@ -1,16 +1,21 @@
 import { BigNumber } from "ethers";
 
 export type DrawSettings  = {
-    matchCardinality: BigNumber
+    matchCardinality: number
     pickCost: BigNumber
     distributions: BigNumber[]
-    bitRangeSize: BigNumber
+    bitRangeSize: number
     prize: BigNumber
 }
 
 export type Draw = {
     drawId: BigNumber
     winningRandomNumber: BigNumber
+}
+
+export type Pick = {
+    index: number,
+    hash: string
 }
 
 export type User = {

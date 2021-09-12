@@ -113,8 +113,8 @@ async function runDrawCalculatorEqualBalances(numberOfPrizePeriods: number, numb
 }
 
 async function run(){
-    const matchCardinality = BigNumber.from(6)
-    const bitRangeSize = BigNumber.from(4)
+    const matchCardinality = 6
+    const bitRangeSize = 4
     const pickCost = utils.parseEther("25")
 
     const drawSettings: DrawSettings = {

@@ -10,7 +10,7 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
     
     let numberOfMatches = 0
 
-    for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality.toNumber(); matchIndex++){     // for(uint256 matchIndex = 0; matchIndex < _matchCardinality; matchIndex++){
+    for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality; matchIndex++){     // for(uint256 matchIndex = 0; matchIndex < _matchCardinality; matchIndex++){
         
         debug("winningRandomNumber: ", winningRandomNumber.toString())
         debug("randomNumberThisPick: ", BigNumber.from(randomNumberThisPick).toString())

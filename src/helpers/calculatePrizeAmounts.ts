@@ -18,7 +18,7 @@ export function calculateNumberOfMatchesForPrize(drawSettings: DrawSettings, dra
             const prizeFractionAtIndex = drawSettings.distributions[i].div(numPrizes)
             
             if(fractionOfPrizeReceived.eq(prizeFractionAtIndex)){              
-                return drawSettings.matchCardinality.toNumber() - (drawSettings.distributions.length - i - 1) //constdrawSettings.matchCardinality.toNumber() - distributionIndex = matches 
+                return drawSettings.matchCardinality - (drawSettings.distributions.length - i - 1) //constdrawSettings.matchCardinality - distributionIndex = matches 
             }          
         } 
     }
@@ -61,51 +61,4 @@ export function calculateTotalPrizeDistributedFromWinnerDistributionArray(prizeW
     }
 
     return totalPayout    // note: this can be greater than the prize.value passed in!
-}
-
-// TODO: WIP
-function calculateDrawSettingsForPrizeDistribution(prizeDistributions: BigNumber[]) : DrawSettings {
-    /*
-        matching loop runs matchCardinality times. 
-        // Note: it would be more gas efficient to increase the bitRangeSize before increasing the matchCardinality (as the matching loop would run less)
-
-        The probability of 1 pick matching 1 number across the matchCardinality = (1 / (2 ^ bitRangeSize) - 1) * matchCardinality
-
-        e.x: 
-            bitRangeSize = 4, matchCardinality = 5, -> (1 / 2 ^ 4 -1) * 5 = 0.3333
-            bitRangeSize = 8, matchCardinality = 5, -> (1 / 2 ^ 8 -1) * 5 = 0.0196
-            
-
-        The probability of 1 pick matching ALL numbers across the matchCardinality  = ((1 / (2 ^ bitRangeSize) - 1) * matchCardinality) ^ matchCardinality
-
-        e.x.:
-            bitRangeSize = 4, matchCardinality = 5, -> (1 / 2 ^ 4 -1) * 5 = (0.3333 ^ 5) = 4.115e-3
-            bitRangeSize = 8, matchCardinality = 5, -> (1 / 2 ^ 8 -1) * 5 = 0.0196 = 2.8925e-9
-
-        // set a sample prize distribution [0.3, 0.2, 0.1, 0.05] and prize 100 Eth
-
-        what bitRangeSize and matchCardinality do we set so that all the full prize amount is consumed?
-
-        // correct to say that all probabilities across each distribution added together == 1 will give correct payout??
-
-        // 
-        
-    */
-
-    let resultingMatchCardinality: BigNumber = BigNumber.from("0")
-    let resultingBitRangeSize: BigNumber = BigNumber.from("0")
-    
-    // now calculate values for matchCardinality and bitRangeSize
-
-
-    const drawSettings : DrawSettings = {
-        distributions: prizeDistributions,
-        pickCost: BigNumber.from(ethers.utils.parseEther("1")),
-        matchCardinality: resultingMatchCardinality,
-        bitRangeSize : resultingBitRangeSize,
-        prize: ethers.utils.parseEther("100")
-    }
-    // call sanityCheckDrawSettings here again?
-
-    return drawSettings
 }
