@@ -19,7 +19,7 @@ export function sanityCheckDrawSettings(drawSettings: DrawSettings) : string {
         for(let i = 0; i < drawSettings.distributions.length; i++){
             sum = sum.add(drawSettings.distributions[i])
         }
-        if(sum.gte(ethers.utils.parseEther("1"))){
+        if(sum.gt(ethers.utils.parseEther("1"))){
             return "DrawCalc/distributions-gt-100%"
         }
     }
