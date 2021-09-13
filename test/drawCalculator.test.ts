@@ -137,75 +137,41 @@ describe('drawCalculator', () => {
 
     describe('findBitMatchesAtIndex()', () => {
         it('Can findBitMatchesAtIndex', async () => {
-            const exampleDrawSettings : TsunamiDrawSettings = {
-                distributions: [],
-                numberOfPicks: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize: BigNumber.from(8),
-                prize: BigNumber.from(utils.parseEther("100")),
-            }
-
             const result = findBitMatchesAtIndex(
                 BigNumber.from(61676),
                 BigNumber.from(61612),
                 1,
-                exampleDrawSettings
+                8
             )
             expect(result).to.be.true
         
         })
 
         it('Can NOT findBitMatchesAtIndex', async () => {
-            const exampleDrawSettings : TsunamiDrawSettings = {
-                distributions: [],
-                numberOfPicks: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize: BigNumber.from(6),
-                prize: BigNumber.from(utils.parseEther("100")),
-            }
-
             const result = findBitMatchesAtIndex(BigNumber.from(61676),
             BigNumber.from(61612),
             1,
-            exampleDrawSettings)
+            6)
             expect(result).to.be.false
         
         })    
         
         it('Can findBitMatchesAtIndex', async () => {
-
-            const exampleDrawSettings : TsunamiDrawSettings = {
-                distributions: [],
-                numberOfPicks: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize: BigNumber.from(8),
-                prize: BigNumber.from(utils.parseEther("100")),
-            }
-
             const result = findBitMatchesAtIndex(
             BigNumber.from("24703804328475188150699190457572086651745971796997325887553663750514688469872"),
             BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728"),
             1,
-            exampleDrawSettings)
+            8)
             expect(result).to.be.true
         
         }) 
 
         it('Can NOT findBitMatchesAtIndex', async () => {
-
-            const exampleDrawSettings : TsunamiDrawSettings = {
-                distributions: [],
-                numberOfPicks: BigNumber.from(ethers.utils.parseEther("1")),
-                matchCardinality: BigNumber.from(4),
-                bitRangeSize: BigNumber.from(8),
-                prize: BigNumber.from(utils.parseEther("100")),
-            }
-
             const result = findBitMatchesAtIndex(
             BigNumber.from("24703804328475188150699190457572086651745971796997325887553663750514688469872"),
             BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728"),
             2,
-            exampleDrawSettings)
+            8)
             expect(result).to.be.false
         
         }) 
