@@ -9,15 +9,18 @@ const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 export function calculatePickFraction(randomNumberThisPick: string, winningRandomNumber: BigNumber, _drawSettings: TsunamiDrawSettings, draw: Draw): PickPrize | undefined {
     
     let numberOfMatches = 0
+    let bigRando = BigNumber.from(randomNumberThisPick)
 
     for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality.toNumber(); matchIndex++){     // for(uint256 matchIndex = 0; matchIndex < _matchCardinality; matchIndex++){
         
         debug("winningRandomNumber: ", winningRandomNumber.toString())
-        debug("randomNumberThisPick: ", BigNumber.from(randomNumberThisPick).toString())
+        debug("randomNumberThisPick: ", bigRando.toString())
         // attempt to match numbers
-        if(findBitMatchesAtIndex(BigNumber.from(randomNumberThisPick), winningRandomNumber, matchIndex, _drawSettings)){
+        if(findBitMatchesAtIndex(bigRando, winningRandomNumber, matchIndex, _drawSettings.bitRangeSize)){
             debug(`match at index ${matchIndex}`)
             numberOfMatches++;
+        } else {
+            matchIndex = _drawSettings.matchCardinality
         }
     }
     debug(`\n DrawCalculator:: Found ${numberOfMatches} matches..`)
