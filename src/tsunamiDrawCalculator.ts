@@ -1,5 +1,5 @@
 import { BigNumber } from "ethers";
-import { Draw, DrawResults, DrawSettings, User, Pick} from "./types"
+import { Draw, DrawResults, TsunamiDrawSettings, User, Pick} from "./types"
 import { sanityCheckDrawSettings } from "./helpers/sanityCheckDrawSettings";
 import { computePicks } from "./computePicks";
 import { computeDrawResults } from "./computeDrawResults";
@@ -7,12 +7,13 @@ import { computeDrawResults } from "./computeDrawResults";
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
 // main entry point for tsunami draw calculations
-export function runTsunamiDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): DrawResults {
+export function runTsunamiDrawCalculatorForSingleDraw(drawSettings: TsunamiDrawSettings, draw: Draw, user: User): DrawResults {
     const sanityCheckDrawSettingsResult = sanityCheckDrawSettings(drawSettings)
     if(sanityCheckDrawSettingsResult != ""){
         throw new Error(`DrawSettings invalid: ${sanityCheckDrawSettingsResult}`)
     }
     const totalUserPicks = user.balance.div(drawSettings.pickCost) // uint256 totalUserPicks = balance / _drawSettings.pickCost;
+    
     debug(`totalUserPicks ${totalUserPicks}`)
     user.pickIndices.find((value) => {
         if (value >= totalUserPicks) {
@@ -25,7 +26,7 @@ export function runTsunamiDrawCalculatorForSingleDraw(drawSettings: DrawSettings
 }
 
 // multiple version of runTsunamiDrawCalculatorForSingleDraw
-export function runTsunamiDrawCalculatorForDraws(drawSettings: DrawSettings[], draws: Draw[], user: User): DrawResults[] {
+export function runTsunamiDrawCalculatorForDraws(drawSettings: TsunamiDrawSettings[], draws: Draw[], user: User): DrawResults[] {
     const results: DrawResults[] = []
     draws.forEach((draw, index) => {
         const drawResults = runTsunamiDrawCalculatorForSingleDraw(drawSettings[index], draws[index], user)

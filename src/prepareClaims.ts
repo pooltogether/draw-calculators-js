@@ -1,9 +1,10 @@
 import { BigNumber } from "ethers"
 import { User, DrawResults, Claim } from "./types"
 
-// for a given User and DrawResult, prepares the input for the ClaimableDraw claim() call
+// for a given User and DrawResult, prepares the input for the contract ClaimableDraw::claim() call
+// called with result of runTsunamiDrawCalculatorForSingleDraw()
 export function prepareClaimForUserFromDrawResult(user: User, drawResult: DrawResults) : Claim {
-    // function claim(address _user, uint32[][] calldata _drawIds, IDrawCalculator[] calldata _drawCalculators, bytes[] calldata _data) 
+    
     let claim : Claim = {
         userAddress: user.address,
         drawIds: [],

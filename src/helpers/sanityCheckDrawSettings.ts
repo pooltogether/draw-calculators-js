@@ -1,8 +1,8 @@
 import { BigNumber, ethers } from "ethers"
-import { DrawSettings } from "../types"
+import { TsunamiDrawSettings } from "../types"
 
 // checks that the drawSettings are appropriate 
-export function sanityCheckDrawSettings(drawSettings: DrawSettings) : string {
+export function sanityCheckDrawSettings(drawSettings: TsunamiDrawSettings) : string {
 
     if(!(drawSettings.matchCardinality >= drawSettings.distributions.length)){
         console.log("DrawCalc/matchCardinality-gt-distributions")

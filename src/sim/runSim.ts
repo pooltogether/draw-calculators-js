@@ -14,7 +14,7 @@
 
 */
 import { BigNumber, ethers, utils } from "ethers";
-import { Draw, DrawResults, DrawSettings, PrizeAwardable, User, UserDrawResult } from "../types"
+import { Draw, DrawResults, TsunamiDrawSettings, PrizeAwardable, User, UserDrawResult } from "../types"
 import { runTsunamiDrawCalculatorForSingleDraw } from "../tsunamiDrawCalculator"
 import {createRandomUsersSameBalance, generateAndSaveUserAddresses, getRandomInt, readAddressesFromFile, readUsersFromFile} from "./utils/createRandomUsers"
 import {writeFileSync, readFileSync, mkdirSync} from "fs"
@@ -27,7 +27,7 @@ const printUtils = require("../helpers/printUtils")
 const { dim, green, yellow } = printUtils
 
 
-async function runDrawCalculatorEqualBalances(numberOfPrizePeriods: number, numberOfUsers: number, balancePerUser: BigNumber, drawSettings: DrawSettings): Promise<Map<string, UserDrawResult[]>[]>{
+async function runDrawCalculatorEqualBalances(numberOfPrizePeriods: number, numberOfUsers: number, balancePerUser: BigNumber, drawSettings: TsunamiDrawSettings): Promise<Map<string, UserDrawResult[]>[]>{
     // create 100,000 users with 1000 USD == 100,000,000 USD deposits
     const totalSupply = balancePerUser.mul(numberOfUsers) 
     debug("totalSupply: ", utils.formatEther(totalSupply))
@@ -55,7 +55,7 @@ async function runDrawCalculatorEqualBalances(numberOfPrizePeriods: number, numb
         })
     })
 
-    let _drawSettings : DrawSettings = {
+    let _drawSettings : TsunamiDrawSettings = {
         ...drawSettings,
         pickCost
     }
@@ -117,7 +117,7 @@ async function run(){
     const bitRangeSize = 4
     const pickCost = utils.parseEther("25")
 
-    const drawSettings: DrawSettings = {
+    const drawSettings: TsunamiDrawSettings = {
         matchCardinality,
         bitRangeSize,
         distributions: [
@@ -150,7 +150,7 @@ function addResultToMap(key: string, value: UserDrawResult, map :Map<string, Use
 }
 
 
-function parseAndSaveCSVResults(results: Map<string, UserDrawResult[]>, drawSettings: DrawSettings, fileName: string){
+function parseAndSaveCSVResults(results: Map<string, UserDrawResult[]>, drawSettings: TsunamiDrawSettings, fileName: string){
     
     let saveCSVString = JSON.stringify(drawSettings) + "\n"
 

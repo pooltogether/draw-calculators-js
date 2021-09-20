@@ -1,6 +1,6 @@
 // takes {prizePeriod, winningRandomNumer, users}
 import { BigNumber } from 'ethers';
-import { Draw, DrawResults, DrawSettings, User, UserDrawResult } from '../../types';
+import { Draw, DrawResults, TsunamiDrawSettings, User, UserDrawResult } from '../../types';
 import { runTsunamiDrawCalculatorForSingleDraw } from '../../tsunamiDrawCalculator';
 import { Map } from "immutable"
 
@@ -10,7 +10,7 @@ const parsedProcessArgs = JSON.parse(process.argv[2])
 const users: User[] = parsedProcessArgs.users
 const currentPrizePeriod = parsedProcessArgs.prizePeriod
 const draw: Draw = parsedProcessArgs.draw
-const drawSettings: DrawSettings = parsedProcessArgs.drawSettings
+const drawSettings: TsunamiDrawSettings = parsedProcessArgs.drawSettings
 
 function runDrawCalculator(){
     let drawResults = Map<string, Array<UserDrawResult>>()

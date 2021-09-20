@@ -1,10 +1,10 @@
 import { BigNumber } from "ethers"
-import { DrawSettings } from "../types"
+import { TsunamiDrawSettings } from "../types"
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
 //SOLIDITY SIG: function _findBitMatchesAtIndex(uint256 word1, uint256 word2, uint256 indexOffset, uint8 _bitRangeMaskValue) 
-export function findBitMatchesAtIndex(word1: BigNumber, word2: BigNumber, matchIndex: number, _drawSettings: DrawSettings): boolean {
+export function findBitMatchesAtIndex(word1: BigNumber, word2: BigNumber, matchIndex: number, _drawSettings: TsunamiDrawSettings): boolean {
 
     const indexOffset: number = matchIndex * _drawSettings.bitRangeSize
     const word1DataHexString: string = word1.toHexString()
