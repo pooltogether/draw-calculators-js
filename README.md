@@ -3,19 +3,36 @@
 ## How to use
 This library includes a stateless Typescript model of the Solidity TsunamiDrawCalculator. It is intended to be uses as a tool to easily check if a User has won a prize for a particular draw. This could also be calculated on-chain through the `TsunamiDrawCalculator::calculate()` view function but this library is much faster.
 
-To use: 
+To create a `claim` do the following:
+
 1. Run `yarn add @pooltogether/draw-calculator-js` in your project to install the package.
 1. Import the desired functions and types: `import {runTsunamiDrawCalculatorForSingleDraw, Draw, TsunamiDrawSettings, generatePicks, prepareClaimForUserFromDrawResult } from "@pooltogether/draw-calculator-js"`
-1. To create a `claim` do the following:
+
+Starting with a particular drawId, fetch the Draw information from the DrawHistory contract:
+
+```js
+const drawHistory = new ethers.Contract(address, drawHistoryAbi, signerOrProvider)
+const exampleDraw = await drawHistory.functions.getDraw(drawId) // rpc call
+
+where: 
+type Draw = {
+    drawId: BigNumber
+    winningRandomNumber: BigNumber
+    timestamp: BigNumber
+}
+```
+
+Next fetch the TsunamiDrawSettings from the TsunamiDrawSettingsHistory contract:
 
 ```javascript
 // get TsunamiDrawSettings from the Tsunami Draw Calculator contract for a particular drawId
 const drawId = 119
-
-const drawSettingsHistoryContract = new ethers.Contract( address , drawSettingHistoryAbi , signerOrProvider )
+const drawSettingsHistoryContract = new ethers.Contract(address, drawSettingHistoryAbi, signerOrProvider)
 const drawSettings = await drawSettingsHistoryContract.functions.getDrawSettings(drawId) // read-only rpc call
 ```
+
 where: 
+
 ```js
 type TsunamiDrawSettings = {
     matchCardinality: BigNumber;
@@ -27,28 +44,17 @@ type TsunamiDrawSettings = {
     drawEndTimestampOffset?: BigNumber; // optional for this lib
     maxPicksPerUser: BigNumber;
 }
-
-// populate the Draw type for a particular drawId from the Draw History contract
-const drawHistory = new ethers.Contract( address , drawHistoryAbi , signerOrProvider )
-const draw = await drawHistory.functions.getDraw(drawId) // rpc call
-
-where: 
-type Draw = {
-    drawId: BigNumber
-    winningRandomNumber: BigNumber
-    timestamp: BigNumber
-}
 ```
 
 Next, get the users balance using the convenient `getNormalizedBalancesForDrawIds(address _user, uint32[] calldata _drawIds)` view method
-on the draw calculator which returns an array of balances for those timestamps.
+on the TsunamiDrawCalculator contract which returns an array of balances for those timestamps.
 
 ```js
-const drawCalculator = new ethers.Contract( address , drawCalculatorAbi , signerOrProvider )
+const drawCalculator = new ethers.Contract(address, drawCalculatorAbi, signerOrProvider)
 const balances = await drawCalculator.functions.getNormalizedBalancesForDrawIds(_user, [drawId]) // read-only rpc call
 ```
 
-Generate the pickIndices input using the generatePicks(drawSettings: TsunamiDrawSettings, user: User) : Pick[] helper function in this library.
+Generate the pickIndices input using the `generatePicks(drawSettings: TsunamiDrawSettings, user: User) : Pick[]` helper function in this library.
 
 ```js
 const picks : Pick[] = generatePicks(drawSettings, user) 
@@ -66,7 +72,8 @@ Run the Tsunami Draw Calculator locally to see the user has any prizes to claim:
 const results: DrawResults = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
 ```
 
-Finally, forwarding these `DrawResults` to `prepareClaimForUserFromDrawResult(user: User, drawResult: DrawResults)` to generate the data for the on-chain ClaimableDraw `claim()` call:
+Finally, to claim a prize, forward these `DrawResults` to `prepareClaimForUserFromDrawResult(user: User, drawResult: DrawResults)` to generate the data for the on-chain ClaimableDraw `claim()` call:
+
 ```js
 const claim: Claim = prepareClaimForUserFromDrawResult(user, result)
 
