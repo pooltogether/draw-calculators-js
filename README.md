@@ -1,7 +1,7 @@
-# PoolTogether Draw Calculator JS SDK
+# PoolTogether Draw Calculator JS
 
 ## How to use
-This SDK includes a stateless Typescript model of the Solidity TsunamiDrawCalculator. It is intended to be uses as a tool to easily check if a User has won a prize for a particular draw. This could also be discovered through the `TsunamiDrawCalculator::calculate()` view function but this SDK is much faster.
+This library includes a stateless Typescript model of the Solidity TsunamiDrawCalculator. It is intended to be uses as a tool to easily check if a User has won a prize for a particular draw. This could also be discovered through the `TsunamiDrawCalculator::calculate()` view function but this SDK is much faster.
 
 The SDK also provides the ability to simulate multiple draw settings and inputs.  
 

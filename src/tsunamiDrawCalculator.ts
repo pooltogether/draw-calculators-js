@@ -3,6 +3,7 @@ import { Draw, DrawResults, TsunamiDrawSettings, User, Pick} from "./types"
 import { sanityCheckDrawSettings } from "./helpers/sanityCheckDrawSettings";
 import { computePicks } from "./computePicks";
 import { computeDrawResults } from "./computeDrawResults";
+import { calculateNumberOfPicksForUser } from "./helpers/calculateNumberOfPicksForUser"
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
@@ -12,7 +13,7 @@ export function runTsunamiDrawCalculatorForSingleDraw(drawSettings: TsunamiDrawS
     if(sanityCheckDrawSettingsResult != ""){
         throw new Error(`DrawSettings invalid: ${sanityCheckDrawSettingsResult}`)
     }
-    const totalUserPicks = user.balance.div(drawSettings.pickCost) // uint256 totalUserPicks = balance / _drawSettings.pickCost;
+    const totalUserPicks = calculateNumberOfPicksForUser(drawSettings, user.normalizedBalance)
     
     debug(`totalUserPicks ${totalUserPicks}`)
     user.pickIndices.find((value) => {

@@ -16,11 +16,11 @@ export function calculatePickFraction(randomNumberThisPick: string, winningRando
         debug("winningRandomNumber: ", winningRandomNumber.toString())
         debug("randomNumberThisPick: ", bigRando.toString())
         // attempt to match numbers
-        if(findBitMatchesAtIndex(bigRando, winningRandomNumber, matchIndex, _drawSettings.bitRangeSize)){
+        if(findBitMatchesAtIndex(bigRando, winningRandomNumber, matchIndex, _drawSettings.bitRangeSize.toNumber())){
             debug(`match at index ${matchIndex}`)
             numberOfMatches++;
         } else {
-            matchIndex = _drawSettings.matchCardinality
+            matchIndex = _drawSettings.matchCardinality.toNumber()
         }
     }
     debug(`\n DrawCalculator:: Found ${numberOfMatches} matches..`)

@@ -6,8 +6,8 @@ export type TsunamiDrawSettings  = {
     distributions: BigNumber[];
     bitRangeSize: BigNumber;
     prize: BigNumber;
-    drawStartTimestampOffset: BigNumber;
-    drawEndTimestampOffset: BigNumber;
+    drawStartTimestampOffset?: BigNumber;
+    drawEndTimestampOffset?: BigNumber;
     maxPicksPerUser: BigNumber;
 }
 
@@ -23,7 +23,7 @@ export type Pick = {
 
 export type User = {
     address: string
-    balance: BigNumber
+    normalizedBalance: BigNumber
     pickIndices: BigNumber[]
 }
 

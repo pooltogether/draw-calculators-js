@@ -29,6 +29,7 @@ describe('drawCalculator', () => {
                 matchCardinality: BigNumber.from(3),
                 bitRangeSize: BigNumber.from(4),
                 prize: BigNumber.from(utils.parseEther("100")),
+                maxPicksPerUser: BigNumber.from(1000),
             }
 
             
@@ -39,7 +40,7 @@ describe('drawCalculator', () => {
             
             const exampleUser : User = {
                 address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-                balance: ethers.utils.parseEther("10"),
+                normalizedBalance: ethers.utils.parseEther("10"),
                 pickIndices: [BigNumber.from(1)]
             } 
             // console.time("singleRun")
@@ -68,6 +69,7 @@ describe('drawCalculator', () => {
                 matchCardinality: BigNumber.from(4),
                 bitRangeSize: BigNumber.from(4),
                 prize: BigNumber.from(utils.parseEther("100")),
+                maxPicksPerUser: BigNumber.from(1000),
             }
             
             const exampleDraw : Draw = {
@@ -77,7 +79,7 @@ describe('drawCalculator', () => {
             
             const exampleUser : User = {
                 address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-                balance: ethers.utils.parseEther("10"),
+                normalizedBalance: ethers.utils.parseEther("10"),
                 pickIndices: [BigNumber.from(1)]
             } 
             
@@ -98,6 +100,7 @@ describe('drawCalculator', () => {
                 matchCardinality: BigNumber.from(3),
                 bitRangeSize: BigNumber.from(4),
                 prize: BigNumber.from(utils.parseEther("100")),
+                maxPicksPerUser: BigNumber.from(1000),
             }
             
             const exampleDraw : Draw = {
@@ -122,6 +125,7 @@ describe('drawCalculator', () => {
                 matchCardinality: BigNumber.from(4),
                 bitRangeSize: BigNumber.from(4),
                 prize: BigNumber.from(utils.parseEther("100")),
+                maxPicksPerUser: BigNumber.from(1000),
             }
             
             const exampleDraw : Draw = {
@@ -194,6 +198,7 @@ describe('drawCalculator', () => {
                 matchCardinality: BigNumber.from(3),
                 bitRangeSize: BigNumber.from(4),
                 prize: BigNumber.from(utils.parseEther("100")),
+                maxPicksPerUser: BigNumber.from(1000),
             }            
             const exampleDraw : Draw = {
                 drawId: BigNumber.from(1),
@@ -219,6 +224,7 @@ describe('drawCalculator', () => {
                 matchCardinality: BigNumber.from(3),
                 bitRangeSize: BigNumber.from(4),
                 prize: BigNumber.from(utils.parseEther("100")),
+                maxPicksPerUser: BigNumber.from(1000),
             }            
             // distributionIndex = matchCardinality - numberOfMatches = 3 - 2 = 1
             // distributions[1] = 0.2e18 = prizeAtIndex
@@ -243,6 +249,7 @@ describe('drawCalculator', () => {
                 matchCardinality: BigNumber.from(3),
                 bitRangeSize: BigNumber.from(4),
                 prize: BigNumber.from(utils.parseEther("100")),
+                maxPicksPerUser: BigNumber.from(1000),
             }
 
             const drawId = BigNumber.from(2)
@@ -255,7 +262,7 @@ describe('drawCalculator', () => {
 
             const exampleUser : User = {
                 address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-                balance: ethers.utils.parseEther("10"),
+                normalizedBalance: ethers.utils.parseEther("10"),
                 pickIndices: [BigNumber.from(0), winningPickIndices] // pickIndices[0] should be stripped out as it is non-winning
             }
             
@@ -278,6 +285,7 @@ describe('drawCalculator', () => {
                 matchCardinality: BigNumber.from(3),
                 bitRangeSize: BigNumber.from(4),
                 prize: BigNumber.from(utils.parseEther("100")),
+                maxPicksPerUser: BigNumber.from(1000),
             }
 
             const exampleDrawSettings2 : TsunamiDrawSettings = {
@@ -288,6 +296,7 @@ describe('drawCalculator', () => {
                 matchCardinality: BigNumber.from(3),
                 bitRangeSize: BigNumber.from(10), // set very high so matching unlikely
                 prize: BigNumber.from(utils.parseEther("100")),
+                maxPicksPerUser: BigNumber.from(1000),
             }
 
             const drawIds= [BigNumber.from(2), BigNumber.from(3)]
@@ -304,7 +313,7 @@ describe('drawCalculator', () => {
 
             const exampleUser : User = {
                 address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-                balance: ethers.utils.parseEther("10"),
+                normalizedBalance: ethers.utils.parseEther("10"),
                 pickIndices: [BigNumber.from(0), winningPickIndices] // pickIndices[0] should be stripped out as it is non-winning
             }
             

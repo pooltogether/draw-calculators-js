@@ -50,7 +50,7 @@ async function runDrawCalculatorEqualBalances(numberOfPrizePeriods: number, numb
     addresses.forEach((addressEntry: any) => {
         users.push({
             address: addressEntry.address,
-            balance: balancePerUser,
+            normalizedBalance: balancePerUser,
             pickIndices: _picks
         })
     })

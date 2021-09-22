@@ -1,7 +1,7 @@
 import { Command } from 'commander'
 import { computeDrawResults, generatePicks } from '.'
-import { ethers } from 'ethers'
-import { DrawSettings, Draw } from './types'
+import { BigNumber, ethers } from 'ethers'
+import { TsunamiDrawSettings, Draw } from './types'
 import chalk from 'chalk'
 
 const dim = function (...args: any[]) { console.log(chalk.dim(...args)) }
@@ -34,12 +34,13 @@ program
     }
     dim(`There are ${numPrizes} total prizes`)
 
-    const drawSettings: DrawSettings = {
-      matchCardinality: parseInt(options.cardinality),
-      bitRangeSize: parseInt(options.bitRange),
+    const drawSettings: TsunamiDrawSettings = {
+      matchCardinality: BigNumber.from(options.cardinality),
+      bitRangeSize: BigNumber.from(options.bitRange),
       distributions,
       prize: ethers.utils.parseEther('100'),
-      pickCost: ethers.BigNumber.from(1)
+      numberOfPicks: ethers.BigNumber.from(1),
+      maxPicksPerUser: ethers.BigNumber.from(1000),
     }
 
     const draw: Draw = {
