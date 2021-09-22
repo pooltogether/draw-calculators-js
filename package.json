@@ -1,44 +1,47 @@
 {
-  "name": "@pooltogether/draw-calculator-js-sdk",
-  "version": "1.0.0-beta.12",
-  "description": "PoolTogether Draw Calculator SDK",
-  "main": "dist/src/index.js",
-  "types": "types/types.d.ts",
-  "license": "MIT",
-  "scripts": {
-    "sim": "ts-node ./src/sim/runSim.ts",
-    "test": "yarn clean && ts-mocha ./test/**",
-    "build": "yarn clean && tsc --project tsconfig.json",
-    "clean": "rm -rf dist/",
-    "prepare": "yarn build",
-    "docs": "typedoc --out docs src/index.ts",
-    "cli": "ts-node ./src/cli.ts"
-  },
-  "dependencies": {
-    "chalk": "^4.1.2",
-    "debug": "^4.3.2"
-  },
-  "devDependencies": {
-    "@types/chai": "^4.2.21",
-    "@types/expect": "^24.3.0",
-    "@types/mocha": "^9.0.0",
-    "chai": "^4.3.4",
-    "chalk": "^4.1.2",
-    "commander": "^8.2.0",
-    "debug": "^4.3.2",
-    "ethers": "5.4.4",
-    "immutable": "^4.0.0-rc.14",
-    "mocha": "^9.0.3",
-    "prettier": "2.2.1",
-    "ts-generator": "0.1.1",
-    "ts-mocha": "^8.0.0",
-    "ts-node": "9.1.1",
-    "typedoc": "^0.22.4",
-    "typedoc-plugin-markdown": "^3.11.0",
-    "typescript": "4.2.3",
-    "yalc": "^1.0.0-pre.53"
-  },
-  "files": [
-    "dist/**/*"
-  ]
+    "name": "@pooltogether/draw-calculator-js-sdk",
+    "version": "1.0.0-beta.12",
+    "description": "PoolTogether Draw Calculator SDK",
+    "main": "dist/src/index.js",
+    "types": "types/types.d.ts",
+    "license": "MIT",
+    "scripts": {
+        "sim": "ts-node ./src/sim/runSim.ts",
+        "test": "tsdx test",
+        "start": "tsdx watch --onSuccess \"yalc push\"",
+        "reinstall": "rm -rf node_modules && yarn install",
+        "build": "tsdx build",
+        "clean": "rm -rf dist/",
+        "prepare": "yarn build",
+        "docs": "typedoc --out docs src/index.ts",
+        "cli": "ts-node ./src/cli.ts"
+    },
+    "dependencies": {
+        "chalk": "^4.1.2",
+        "debug": "^4.3.2",
+        "tsdx": "^0.14.1"
+    },
+    "devDependencies": {
+        "@types/chai": "^4.2.21",
+        "@types/expect": "^24.3.0",
+        "@types/mocha": "^9.0.0",
+        "chai": "^4.3.4",
+        "chalk": "^4.1.2",
+        "commander": "^8.2.0",
+        "debug": "^4.3.2",
+        "ethers": "5.4.4",
+        "immutable": "^4.0.0-rc.14",
+        "mocha": "^9.0.3",
+        "prettier": "2.2.1",
+        "ts-generator": "0.1.1",
+        "ts-mocha": "^8.0.0",
+        "ts-node": "9.1.1",
+        "typedoc": "^0.22.4",
+        "typedoc-plugin-markdown": "^3.11.0",
+        "typescript": "4.2.3",
+        "yalc": "^1.0.0-pre.53"
+    },
+    "files": [
+        "dist/**/*"
+    ]
 }
