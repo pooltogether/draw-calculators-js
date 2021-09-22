@@ -2,7 +2,7 @@
 This library includes a stateless Typescript model of the Solidity TsunamiDrawCalculator. It is intended to be uses as a tool to easily check if a User has won a prize for a particular draw. This could also be calculated on-chain through the `TsunamiDrawCalculator::calculate()` view function but this library is much faster.
 
 ## How to use
-To create a `claim` or calculate winnings for an address:
+To create a claim or calculate winnings for an address:
 1. Run `yarn add @pooltogether/draw-calculator-js` in your project to install the package.
 1. Import the desired functions and types: `import {runTsunamiDrawCalculatorForSingleDraw, Draw, TsunamiDrawSettings, generatePicks, prepareClaimForUserFromDrawResult } from "@pooltogether/draw-calculator-js"`
 
@@ -113,6 +113,6 @@ and
 prepareClaimsForUserFromDrawResults(user: User, drawResult: DrawResults[]): Claim
 ```
 
-## Types:
+## Types
 A full breakdown of the types can be found [here](./src/types.ts)
 
