@@ -15,16 +15,16 @@ export function findBitMatchesAtIndex(word1: BigNumber, word2: BigNumber, matchI
     debug(word2DataHexString)
 
     const bitRangeMaxInt = (Math.pow(2, bitRangeSize) - 1)
-    debug(`Max int: `, bitRangeMaxInt.toString(16))
+    // debug(`Max int: `, bitRangeMaxInt.toString(16))
     const mask : BigInt = BigInt(bitRangeMaxInt) << BigInt(indexOffset.toString())
 
-    debug(mask.toString(16))
+    // debug(mask.toString(16))
     
     const bits1 = BigInt(word1DataHexString) & BigInt(mask)
-    debug(`bits1: `, bits1.toString(16))
+    // debug(`bits1: `, bits1.toString(16))
     const bits2 = BigInt(word2DataHexString) & BigInt(mask)
-    debug(`bits2: `, bits2.toString(16))
+    // debug(`bits2: `, bits2.toString(16))
     const match = bits1 == bits2
-    debug(`DrawCalculator:: matching ${bits1.toString(16)} with ${bits2.toString(16)}: ${match}`)
+    debug(`DrawCalculator:: matching ${bits1.toString()} with ${bits2.toString()}: ${match}`)
     return match
 }

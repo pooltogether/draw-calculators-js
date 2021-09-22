@@ -3,26 +3,32 @@ import {
   PrizeAwardable,
   TsunamiDrawSettings,
   Draw,
-  DrawResults
+  DrawResults,
+  PickPrize
 } from './types'
-import { calculatePickFraction } from "./helpers/calculatePickFraction"
+import { calculatePickPrize } from "./helpers/calculatePickPrize"
 import { ethers } from 'ethers'
 
 export function computeDrawResults(drawSettings: TsunamiDrawSettings, draw: Draw, picks: Pick[]): DrawResults {
+  // intialize the results object
   const results: DrawResults = {
     prizes: [],
     totalValue: ethers.constants.Zero,
     drawId: draw.drawId
   }
+  
+  // run matching enegine for each pick
   for (let i = 0; i < picks.length; i++) {
     const pick = picks[i]
-    const pickPrize = calculatePickFraction(pick.hash, draw.winningRandomNumber, drawSettings, draw)
+    const pickPrize: PickPrize | undefined= calculatePickPrize(pick.hash, draw.winningRandomNumber, drawSettings, draw)
+    
+    // if there is a prize for that pick, add it to the results
     if (pickPrize) {
       const prizeAwardable : PrizeAwardable = {
           ...pickPrize,
           pick: ethers.BigNumber.from(pick.index)
       }
-      results.totalValue = results.totalValue.add(prizeAwardable.amount)  // prize += calculatePickFraction(randomNumberThisPick, winningRandomNumber, _drawSettings);
+      results.totalValue = results.totalValue.add(prizeAwardable.amount)
       results.prizes.push(prizeAwardable)
     }
   }

@@ -1,7 +1,7 @@
 
 import { BigNumber, ethers, utils } from "ethers";
 import { expect } from "chai"
-import { Claim, Draw, DrawResults, TsunamiDrawSettings, PrizeAwardable, User } from "../src/types"
+import { Claim, Draw, DrawResults, TsunamiDrawSettings, User } from "../src/types"
 import { runTsunamiDrawCalculatorForDraws, runTsunamiDrawCalculatorForSingleDraw } from "../src/tsunamiDrawCalculator"
 import { prepareClaimForUserFromDrawResult, prepareClaimsForUserFromDrawResults } from "../src/prepareClaims"
 
@@ -10,16 +10,17 @@ import { calculatePrizeAmount } from "../src/helpers/calculatePrizeAmount";
 import { findBitMatchesAtIndex } from "../src/helpers/findBitMatchesAtIndex";
 import { calculatePrizeForDistributionIndex } from "../src/helpers/calculatePrizeForDistributionIndex";
 
-describe('drawCalculator', () => {
+
+describe.only('drawCalculator', () => {
     describe('runDrawCalculatorForSingleDraw()', () => {
         
-        it('Single DrawCalculator run 2 matches', async () => {
-            // distributionIndex = matchCardinality - numberOfMatches = 3 - 2 = 1
-            // distributions[1] = 0.2e18 = prizeAtIndex
-            // const numberOfPrizes = 2 ^ (bitRangeSize ^ distributionIndex) = 2 ^ (4 ^ 1) = 16
-            // fractionOfPrize = prizeAtIndex / numberOfPrizes = 0.2e18 / 16 = 1.25e16
-            // prizeAwardable = prize * fractionOfPrize = 100e18 * 1.25e16 = 1.25e36
-            // div by 1e18 = 1.25e18
+        it.only('Single DrawCalculator run 1 matches', async () => {
+            // distributionIndex = matchCardinality - numberOfMatches = 3 - 1 = 2
+            // distributions[2] = 0.1e18 = prizeAtIndex
+            // const numberOfPrizes = 2 ^ (bitRangeSize ^ distributionIndex) - ((2 ^ bitRangeSize) ^ distributionIndex - 1) = (2 ^ (4 ^ 2)) - (2 ^ 4 ^ (2- 1) = 240
+            // fractionOfPrize = prizeAtIndex / numberOfPrizes = 0.1e18 / 240 = 4.166666666666667e14
+            // prizeAwardable = prize * fractionOfPrize = 100e18 * 4.166666666666667e14 = 4.166666666666667e34
+            // div by 1e18 = 4.166666666666667e16 = 0.0416666666666667e18
             
             const exampleDrawSettings : TsunamiDrawSettings = {
                 distributions: [ethers.utils.parseEther("0.3"),
@@ -32,7 +33,6 @@ describe('drawCalculator', () => {
                 maxPicksPerUser: BigNumber.from(1000),
             }
 
-            
             const exampleDraw : Draw = {
                 drawId: BigNumber.from(1),
                 winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
@@ -43,12 +43,10 @@ describe('drawCalculator', () => {
                 normalizedBalance: ethers.utils.parseEther("10"),
                 pickIndices: [BigNumber.from(1)]
             } 
-            // console.time("singleRun")
+            
             const results = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
-        
-            // console.timeEnd("singleRun")
-            const prizeReceived = utils.parseEther("1.25")
-            expect(results.totalValue).to.deep.equal(prizeReceived)
+            const expectedPrize = BigNumber.from("0x94079cd1a42a68") // const prizeReceived = utils.parseEther("0.041666666666666667")
+            expect(results.totalValue).to.deep.equal(expectedPrize)
         })
     
         it('Second single DrawCalculator run 3 matches', async () => {
