@@ -11,7 +11,7 @@ const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 export function runTsunamiDrawCalculatorForSingleDraw(drawSettings: TsunamiDrawSettings, draw: Draw, user: User): DrawResults {
     const sanityCheckDrawSettingsResult = sanityCheckDrawSettings(drawSettings)
     if(sanityCheckDrawSettingsResult != ""){
-        throw new Error(`DrawSettings invalid: ${sanityCheckDrawSettingsResult}`)
+        throw new Error(`TsunamiDrawSettings invalid: ${sanityCheckDrawSettingsResult}`)
     }
     const totalUserPicks = calculateNumberOfPicksForUser(drawSettings, user.normalizedBalance)
     

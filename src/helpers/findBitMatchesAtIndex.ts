@@ -1,5 +1,4 @@
 import { BigNumber } from "ethers"
-import { TsunamiDrawSettings } from "../types"
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 

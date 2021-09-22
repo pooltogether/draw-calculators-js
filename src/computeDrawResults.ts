@@ -1,14 +1,14 @@
 import {
   Pick,
   PrizeAwardable,
-  DrawSettings,
+  TsunamiDrawSettings,
   Draw,
   DrawResults
 } from './types'
 import { calculatePickFraction } from "./helpers/calculatePickFraction"
 import { ethers } from 'ethers'
 
-export function computeDrawResults(drawSettings: DrawSettings, draw: Draw, picks: Pick[]): DrawResults {
+export function computeDrawResults(drawSettings: TsunamiDrawSettings, draw: Draw, picks: Pick[]): DrawResults {
   const results: DrawResults = {
     prizes: [],
     totalValue: ethers.constants.Zero,

@@ -42,3 +42,9 @@ dist/
 simData/
 
 docs
+
+# yalc
+.yalc/
+yalc.lock
+yalc-error.log
+

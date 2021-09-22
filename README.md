@@ -7,11 +7,11 @@ The SDK also provides the ability to simulate multiple draw settings and inputs.
 
 To use: 
 1. Run `yarn add @pooltogether/draw-calculator-js-sdk` in your project to install the package.
-1. Import the desired functions and types: `import {runTsunamiDrawCalculatorForSingleDraw, Draw, DrawSettings } from "@pooltogether/draw-calculator-js-sdk/dist/src"`
+1. Import the desired functions and types: `import {runTsunamiDrawCalculatorForSingleDraw, Draw, TsunamiDrawSettings } from "@pooltogether/draw-calculator-js-sdk/dist/src"`
 1. Call the function:
 ```javascript
-// get DrawSettings from the Tsunami Draw Calculator contract for a particular drawId
-const exampleDrawSettings : DrawSettings = {
+// get TsunamiDrawSettings from the Tsunami Draw Calculator contract for a particular drawId
+const exampleDrawSettings : TsunamiDrawSettings = {
     distributions: [ethers.utils.parseEther("0.3"),
                     ethers.utils.parseEther("0.2"),
                     ethers.utils.parseEther("0.1")],
@@ -40,7 +40,7 @@ const results: DrawResults = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSe
 
 ### API
 ```javascript
-runTsunamiDrawCalculatorForSingleDraw(drawSettings: DrawSettings, draw: Draw, user: User): DrawResults
+runTsunamiDrawCalculatorForSingleDraw(drawSettings: TsunamiDrawSettings, draw: Draw, user: User): DrawResults
 ```
 returns the prize amount for that user, if any.
 
@@ -53,7 +53,7 @@ prepares a `Claim` for a user. It is intended to be called with the result of`ru
 Versions of the singular`runTsunamiDrawCalculatorForSingleDraw()` and `prepareClaimForUserFromDrawResult()` functions that take multiple draws and draw settings are also available:
 
 ```javascript
-runTsunamiDrawCalculatorForDraws(drawSettings: DrawSettings[], draw: Draw[], user: User): DrawResults[]
+runTsunamiDrawCalculatorForDraws(drawSettings: TsunamiDrawSettings[], draw: Draw[], user: User): DrawResults[]
 ```
 and 
 ```javascript
@@ -64,8 +64,8 @@ prepareClaimsForUserFromDrawResults(user: User, drawResult: DrawResults[]): Clai
 A full breakdown of the types can be found [here](./src/types.ts)
 
 ```javascript
-// DrawSettings are a protocol level setting (currently set by contract owner)
-type DrawSettings  = {
+// TsunamiDrawSettings are a protocol level setting (currently set by contract owner)
+type TsunamiDrawSettings  = {
     matchCardinality: BigNumber
     pickCost: BigNumber
     distributions: BigNumber[]

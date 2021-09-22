@@ -205,7 +205,7 @@ describe('drawCalculator', () => {
                 winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
             }
             
-            //calculatePrizeForPrizeDistributionIndex(prizeDistributionIndex: number, drawSettings: DrawSettings, draw: Draw)
+            //calculatePrizeForPrizeDistributionIndex(prizeDistributionIndex: number, drawSettings: TsunamiDrawSettings, draw: Draw)
             const prizeReceivable = calculatePrizeForDistributionIndex(1, exampleDrawSettings, exampleDraw)
             const prize = utils.parseEther("1.25")
             expect(prizeReceivable).to.deep.equal(prize)

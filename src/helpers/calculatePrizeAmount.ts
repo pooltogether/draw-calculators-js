@@ -3,7 +3,7 @@ import { calculatePrizeForDistributionIndex } from "./calculatePrizeForDistribut
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
-// calculates the absolute amount of Prize in Wei for the Draw and DrawSettings
+// calculates the absolute amount of Prize in Wei for the Draw and TsunamiDrawSettings
 export function calculatePrizeAmount(drawSettings: TsunamiDrawSettings, draw: Draw, matches :number): PickPrize | undefined{ // returns the prize you would receive for drawSettings and number of matches
 
     const distributionIndex = drawSettings.matchCardinality.toNumber() - matches

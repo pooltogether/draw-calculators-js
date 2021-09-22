@@ -1,20 +1,24 @@
 {
+    "include": ["src", "types", ".yalc"],
     "compilerOptions": {
-        "target": "es6",
-        "module": "commonjs",
-        "strict": true,
-        "esModuleInterop": true,
-        "moduleResolution": "node",
-        "forceConsistentCasingInFileNames": true,
-        "resolveJsonModule": true,
-        "outDir": "dist",
+        "target": "ESNext",
+        "module": "esnext",
+        "lib": ["dom", "esnext"],
+        "importHelpers": true,
         "declaration": true,
-        "downlevelIteration": true,
-        "allowJs": true
-    },
-    "include": [
-        "./test",
-        "types/**/*",
-        "src/**/*"
-    ]
+        "sourceMap": true,
+        "rootDir": "./src",
+        "strict": true,
+        "noImplicitReturns": true,
+        "noFallthroughCasesInSwitch": true,
+        "resolveJsonModule": true,
+        "noUnusedLocals": true,
+        "moduleResolution": "node",
+        "baseUrl": "./",
+        "paths": {
+            "*": ["src/*", "node_modules/*"]
+        },
+        "jsx": "react",
+        "esModuleInterop": true
+    }
 }
