@@ -91,7 +91,7 @@ await claimableDrawContract.functions.claim(claim.userAddress, claim.drawIds, cl
 ```
 
 
-### API
+## API Guide
 ```javascript
 runTsunamiDrawCalculatorForSingleDraw(drawSettings: TsunamiDrawSettings, draw: Draw, user: User): DrawResults
 ```
@@ -113,6 +113,6 @@ and
 prepareClaimsForUserFromDrawResults(user: User, drawResult: DrawResults[]): Claim
 ```
 
-### Types:
+## Types:
 A full breakdown of the types can be found [here](./src/types.ts)
 
