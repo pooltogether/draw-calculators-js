@@ -2,8 +2,8 @@
     "name": "@pooltogether/draw-calculator-js-sdk",
     "version": "1.0.0-beta.12",
     "description": "PoolTogether Draw Calculator SDK",
-    "main": "dist/src/index.js",
-    "types": "types/types.d.ts",
+    "main": "dist/index.js",
+    "typings": "dist/index.d.ts",
     "license": "MIT",
     "scripts": {
         "sim": "ts-node ./src/sim/runSim.ts",
