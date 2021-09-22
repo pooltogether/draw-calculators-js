@@ -1,58 +1,60 @@
-import { BigNumber } from "ethers";
+import { BigNumber } from 'ethers';
 
-export type TsunamiDrawSettings  = {
-    matchCardinality: BigNumber;
+export type DrawSettings = {
+    matchCardinality: number;
+    pickCost: BigNumber;
+    distributions: number[];
+    bitRangeSize: number;
+    maxPicksPerUser: number;
     numberOfPicks: BigNumber;
-    distributions: BigNumber[];
-    bitRangeSize: BigNumber;
     prize: BigNumber;
-    drawStartTimestampOffset: BigNumber;
-    drawEndTimestampOffset: BigNumber;
-    maxPicksPerUser: BigNumber;
-}
+    drawStartTimestampOffset: number;
+    drawEndTimestampOffset: number;
+};
 
 export type Draw = {
-    drawId: BigNumber
-    winningRandomNumber: BigNumber
-}
+    drawId: number;
+    winningRandomNumber: BigNumber;
+    timestamp: number;
+};
 
 export type Pick = {
-    index: number,
-    hash: string
-}
+    index: number;
+    hash: string;
+};
 
 export type User = {
-    address: string
-    balance: BigNumber
-    pickIndices: BigNumber[]
-}
+    address: string;
+    balance: BigNumber;
+    pickIndices: BigNumber[];
+};
 
 export type DrawResults = {
-    drawId: BigNumber
-    totalValue: BigNumber
-    prizes: PrizeAwardable[]
-}
+    drawId: number;
+    totalValue: BigNumber;
+    prizes: PrizeAwardable[];
+};
 
-// prize that a User can receive 
+// prize that a User can receive
 export type PrizeAwardable = {
-    amount: BigNumber
-    distributionIndex: number
-    pick: BigNumber //populate with claim index
-}
+    amount: BigNumber;
+    distributionIndex: number;
+    pick: BigNumber; //populate with claim index
+};
 
 export type PickPrize = {
-    amount: BigNumber
-    distributionIndex: number
-}
+    amount: BigNumber;
+    distributionIndex: number;
+};
 
 export type Claim = {
-    userAddress: string
-    drawIds: BigNumber[]
-    data: BigNumber[][]
-}
+    userAddress: string;
+    drawIds: number[];
+    data: BigNumber[][];
+};
 
 export type UserDrawResult = {
-    user: User
+    user: User;
     // drawId: BigNumber
-    drawResult: DrawResults
-}
+    drawResult: DrawResults;
+};
