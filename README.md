@@ -1,4 +1,8 @@
 # PoolTogether Draw Calculator JS
+
+[![npm version](https://badge.fury.io/js/@pooltogether%2Fdraw-calculator-js.svg)](https://badge.fury.io/js/@pooltogether%2Fdraw-calculator-js)
+[![TypeScript definitions on DefinitelyTyped](//definitelytyped.org/badges/standard.svg)](http://definitelytyped.org)
+
 This library includes a stateless Typescript model of the Solidity TsunamiDrawCalculator. It is intended to be uses as a tool to easily check if a User has won a prize for a particular draw. This could also be calculated on-chain through the `TsunamiDrawCalculator::calculate()` view function but this library is much faster.
 
 ## How to use
@@ -6,11 +10,11 @@ To create a claim or calculate winnings for an address:
 1. Run `yarn add @pooltogether/draw-calculator-js` in your project to install the package.
 1. Import the desired functions and types: `import {runTsunamiDrawCalculatorForSingleDraw, Draw, TsunamiDrawSettings, generatePicks, prepareClaimForUserFromDrawResult } from "@pooltogether/draw-calculator-js"`
 
-Starting with a particular drawId, fetch the Draw information from the DrawHistory contract:
+Starting with a particular `drawId`, fetch the Draw information from the DrawHistory contract:
 
 ```js
 const drawHistory = new ethers.Contract(address, drawHistoryAbi, signerOrProvider)
-const exampleDraw = await drawHistory.functions.getDraw(drawId) // rpc call
+const exampleDraw = await drawHistory.functions.getDraw(drawId) // read-only rpc call
 
 where: 
 type Draw = {
@@ -90,6 +94,7 @@ const claimableDrawContract = new ethers.Contract( address , claimableDrawAbi , 
 await claimableDrawContract.functions.claim(claim.userAddress, claim.drawIds, claim.data) //write rpc call
 ```
 
+Congratulation you have now claimed a 
 
 ## API Guide
 ```javascript

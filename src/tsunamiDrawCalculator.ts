@@ -4,6 +4,7 @@ import { sanityCheckDrawSettings } from "./helpers/sanityCheckDrawSettings";
 import { computePicks } from "./computePicks";
 import { computeDrawResults } from "./computeDrawResults";
 import { calculateNumberOfPicksForUser } from "./helpers/calculateNumberOfPicksForUser"
+import { filterPicksByValue } from "helpers/filterResultsByValue";
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
@@ -29,7 +30,11 @@ export function runTsunamiDrawCalculatorForSingleDraw(drawSettings: TsunamiDrawS
     const picks: Pick[] = computePicks(user.address, user.pickIndices)
 
     // run the draw calculator matching engine against these picks
-    const results = computeDrawResults(drawSettings, draw, picks)
+    let results: DrawResults = computeDrawResults(drawSettings, draw, picks)
+
+    // sort the picks by value and filter out if some picks beyond the maxUserPicks
+    results = filterPicksByValue(results, drawSettings)
+
     return results
 }
 
