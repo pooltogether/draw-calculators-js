@@ -2,7 +2,7 @@ import { BigNumber, constants } from "ethers";
 import { TsunamiDrawSettings } from "../types";
 
 
-export function calculateNumberOfPicksForUser(drawSettings: TsunamiDrawSettings, normalizedBalance: BigNumber) : BigNumber {
-    const numberOfPicksForDraw = drawSettings.numberOfPicks;
-    return numberOfPicksForDraw.mul(normalizedBalance).div(constants.WeiPerEther)
+export function calculateNumberOfPicksForUser(drawSettings: TsunamiDrawSettings, normalizedBalance: BigNumber) : number {
+    const numberOfPicksForDraw = BigNumber.from(drawSettings.numberOfPicks);
+    return (numberOfPicksForDraw.mul(normalizedBalance).div(constants.WeiPerEther)).toNumber()
 }

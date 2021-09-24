@@ -6,7 +6,7 @@ const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
 export function calculateFractionOfPrize(prizeDistributionIndex: number, drawSettings: TsunamiDrawSettings): BigNumber {
     
-    const numberOfPrizes = calculateNumberOfPrizesForIndex(drawSettings.bitRangeSize.toNumber(), prizeDistributionIndex)
+    const numberOfPrizes = calculateNumberOfPrizesForIndex(drawSettings.bitRangeSize, prizeDistributionIndex)
 
     debug("numberOfPrizes for index ", numberOfPrizes)
     

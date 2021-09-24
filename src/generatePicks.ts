@@ -6,7 +6,7 @@ export function generatePicks(drawSettings: TsunamiDrawSettings, user: User) : P
   let numberOfPicks = calculateNumberOfPicksForUser(drawSettings, user.normalizedBalance)
   
   let picks: Pick[] = []
-  for (let pickIndex = 0; pickIndex < numberOfPicks.toNumber(); pickIndex++) {
+  for (let pickIndex = 0; pickIndex < numberOfPicks; pickIndex++) {
     picks.push(computePick(user.address, pickIndex))
   }
   return picks

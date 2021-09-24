@@ -11,12 +11,12 @@ export function calculatePickPrize(randomNumberThisPick: string, winningRandomNu
     let numberOfMatches = 0
     let bigRando = BigNumber.from(randomNumberThisPick)
 
-    for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality.toNumber(); matchIndex++){     // for(uint256 matchIndex = 0; matchIndex < _matchCardinality; matchIndex++){
+    for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality; matchIndex++){     // for(uint256 matchIndex = 0; matchIndex < _matchCardinality; matchIndex++){
         
         debug("winningRandomNumber: ", winningRandomNumber.toString())
         debug("randomNumberThisPick: ", bigRando.toString())
         // attempt to match numbers
-        if(!findBitMatchesAtIndex(bigRando, winningRandomNumber, matchIndex, _drawSettings.bitRangeSize.toNumber())){
+        if(!findBitMatchesAtIndex(bigRando, winningRandomNumber, matchIndex, _drawSettings.bitRangeSize)){
             // no more continuous matches -- break out of matching loop
             break
         } 

@@ -56,20 +56,7 @@ const drawCalculator = new ethers.Contract(address, drawCalculatorAbi, signerOrP
 const balances = await drawCalculator.functions.getNormalizedBalancesForDrawIds(_user, [drawId]) // read-only rpc call
 ```
 
-Generate the pickIndices input using the `generatePicks(drawSettings: TsunamiDrawSettings, user: User) : Pick[]` helper function in this library.
-
-```js
-const picks : Pick[] = generatePicks(drawSettings, user) 
-
-// populate the User type (with Ticket balance for that drawId timestamp and appropriate pickIndices)
-const exampleUser : User = {
-    address: _user,
-    balance: balances[0],
-    pickIndices: picks
-} 
-```
-
-Run the Tsunami Draw Calculator locally to see the user has any prizes to claim:
+Run the Tsunami Draw Calculator library locally to see the user has any prizes to claim:
 ```js
 const results: DrawResults = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
 ```

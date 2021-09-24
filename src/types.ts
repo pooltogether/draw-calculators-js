@@ -1,14 +1,14 @@
 import { BigNumber } from "ethers";
 
 export type TsunamiDrawSettings  = {
-    matchCardinality: BigNumber;
-    numberOfPicks: BigNumber;
+    matchCardinality: number;
+    numberOfPicks: number;
     distributions: BigNumber[];
-    bitRangeSize: BigNumber;
+    bitRangeSize: number;
     prize: BigNumber;
-    drawStartTimestampOffset?: BigNumber;
-    drawEndTimestampOffset?: BigNumber;
-    maxPicksPerUser: BigNumber;
+    drawStartTimestampOffset?: number;
+    drawEndTimestampOffset?: number;
+    maxPicksPerUser: number;
 }
 
 export type Draw = {
@@ -24,7 +24,7 @@ export type Pick = {
 export type User = {
     address: string
     normalizedBalance: BigNumber
-    pickIndices: BigNumber[]
+    picks?: Pick[] // optional as user may not have picks (under floor)
 }
 
 export type DrawResults = {
