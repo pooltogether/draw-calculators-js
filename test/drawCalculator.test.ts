@@ -52,7 +52,7 @@ describe.only('tsunamiDrawCalculator()', () => {
         
         const exampleUser : User = {
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            normalizedBalance: ethers.utils.parseEther("0.1"),
+            normalizedBalance: ethers.utils.parseEther("0.2"),
         } 
         
         const winningNumber = utils.solidityKeccak256(['address'], [exampleUser.address]);
@@ -61,6 +61,7 @@ describe.only('tsunamiDrawCalculator()', () => {
           [winningNumber, 1],
         );
 
+        console.log("winning number ", winningRandomNumber)
         const exampleDrawSettings : TsunamiDrawSettings = {
             distributions: [ethers.utils.parseEther("0.4"),
                             ethers.utils.parseEther("0.2"),
@@ -79,10 +80,8 @@ describe.only('tsunamiDrawCalculator()', () => {
         }
         
         const results = tsunamiDrawCalculator([exampleDrawSettings], [exampleDraw], exampleUser)
-        console.log(results)
-        // console.log(results[0].totalValue)
-        // const prizeReceived = utils.parseEther("1.25")
-        // expect(results.totalValue).to.deep.equal(prizeReceived)
+        const prizeReceived = utils.parseEther("40")
+        expect(results[0].totalValue).to.deep.equal(prizeReceived)
     })
 })
 
