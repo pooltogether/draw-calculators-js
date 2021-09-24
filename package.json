@@ -1,6 +1,6 @@
 {
     "name": "@pooltogether/draw-calculator-js",
-    "version": "1.0.0-beta.15",
+    "version": "1.0.0-beta.16",
     "description": "PoolTogether Draw Calculator",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",
@@ -21,7 +21,6 @@
         "debug": "^4.3.2"
     },
     "devDependencies": {
-        "tsdx": "^0.14.1",
         "@types/chai": "^4.2.21",
         "@types/expect": "^24.3.0",
         "@types/mocha": "^9.0.0",
@@ -36,6 +35,7 @@
         "ts-generator": "0.1.1",
         "ts-mocha": "^8.0.0",
         "ts-node": "9.1.1",
+        "tsdx": "^0.14.1",
         "typedoc": "^0.22.4",
         "typedoc-plugin-markdown": "^3.11.0",
         "typescript": "4.2.3",
