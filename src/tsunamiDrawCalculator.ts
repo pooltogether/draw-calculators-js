@@ -2,7 +2,7 @@ import { BigNumber } from "ethers";
 import { Draw, DrawResults, TsunamiDrawSettings, User } from "./types"
 import { sanityCheckDrawSettings } from "./helpers/sanityCheckDrawSettings";
 import { computeDrawResults } from "./computeDrawResults";
-import { filterPicksByValue } from "./helpers/filterResultsByValue";
+import { filterResultsByValue } from "./helpers/filterResultsByValue";
 import { generatePicks } from "./generatePicks";
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
@@ -33,7 +33,7 @@ function runTsunamiDrawCalculatorForSingleDraw(drawSettings: TsunamiDrawSettings
     let results: DrawResults = computeDrawResults(drawSettings, draw, user.picks)
 
     // sort the picks by value and filter out if some picks beyond the maxUserPicks
-    results = filterPicksByValue(results, drawSettings)
+    results = filterResultsByValue(results, drawSettings.maxPicksPerUser)
 
     return results
 }
