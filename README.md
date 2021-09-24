@@ -81,7 +81,7 @@ const claimableDrawContract = new ethers.Contract( address , claimableDrawAbi , 
 await claimableDrawContract.functions.claim(claim.userAddress, claim.drawIds, claim.data) //write rpc call
 ```
 
-Congratulation you have now claimed a 
+Congratulations you have now claimed a prize!
 
 ## API Guide
 ```javascript

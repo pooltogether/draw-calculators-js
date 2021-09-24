@@ -11,7 +11,7 @@ export function calculatePickPrize(randomNumberThisPick: string, winningRandomNu
     let numberOfMatches = 0
     let bigRando = BigNumber.from(randomNumberThisPick)
 
-    for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality; matchIndex++){     // for(uint256 matchIndex = 0; matchIndex < _matchCardinality; matchIndex++){
+    for(let matchIndex = 0; matchIndex < _drawSettings.matchCardinality; matchIndex++){ 
         
         debug("winningRandomNumber: ", winningRandomNumber.toString())
         debug("randomNumberThisPick: ", bigRando.toString())

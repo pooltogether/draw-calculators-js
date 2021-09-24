@@ -2,8 +2,8 @@
 import { BigNumber, ethers, utils } from "ethers";
 import { expect } from "chai"
 import { Claim, Draw, DrawResults, TsunamiDrawSettings, User } from "../src/types"
-import { runTsunamiDrawCalculatorForDraws, runTsunamiDrawCalculatorForSingleDraw } from "../src/tsunamiDrawCalculator"
-import { prepareClaimForUserFromDrawResult, prepareClaimsForUserFromDrawResults } from "../src/prepareClaims"
+import { tsunamiDrawCalculator } from "../src/tsunamiDrawCalculator"
+import { prepareClaims } from "../src/prepareClaims"
 
 import { calculateFractionOfPrize } from "../src/helpers/calculateFractionOfPrize";
 import { calculatePrizeAmount } from "../src/helpers/calculatePrizeAmount";
@@ -12,7 +12,7 @@ import { findBitMatchesAtIndex } from "../src/helpers/findBitMatchesAtIndex";
 import { calculatePrizeForDistributionIndex } from "../src/helpers/calculatePrizeForDistributionIndex";
 
 
-describe.only('runDrawCalculatorForSingleDraw()', () => {
+describe.only('tsunamiDrawCalculator()', () => {
     
     it('Single DrawCalculator run 1 matches', async () => {
         // distributionIndex = matchCardinality - numberOfMatches = 3 - 1 = 2
@@ -43,33 +43,23 @@ describe.only('runDrawCalculatorForSingleDraw()', () => {
             normalizedBalance: ethers.utils.parseEther("0.2"),
         }
         
-        const results = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
+        const results = tsunamiDrawCalculator([exampleDrawSettings], [exampleDraw], exampleUser)
         const expectedPrize = BigNumber.from("0x94079cd1a42a68") // const prizeReceived = utils.parseEther("0.041666666666666667")
-        expect(results.totalValue).to.deep.equal(expectedPrize)
+        expect(results[0].totalValue).to.deep.equal(expectedPrize)
     })
 
-    it.only('Second single DrawCalculator run 3 matches', async () => {
+    it.only('all matches', async () => {
         
-        // distributionIndex = matchCardinality - numberOfMatches = 4 - 3 = 1
-        // distributions[1] = 0.2e18 = prizeAtIndex
-        // const numberOfPrizes = 2 ^ (bitRangeSize ^ distributionIndex) = 2 ^ (4 ^ 1) = 16
-        // fractionOfPrize = prizeAtIndex / numberOfPrizes = 0.2e18 / 16 = 1.25e16
-        // prizeAwardable = prize * fractionOfPrize = 100e18 * 1.25e16 = 1.25e36
-        // div by 1e18 = 1.25e18
+        const exampleUser : User = {
+            address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
+            normalizedBalance: ethers.utils.parseEther("0.1"),
+        } 
         
-        
-        // const exampleDrawSettings : TsunamiDrawSettings = {
-        //     distributions: [
-        //         ethers.utils.parseEther("0.4"),
-        //         ethers.utils.parseEther("0.2"),
-        //         ethers.utils.parseEther("0.1"),
-        //         ethers.utils.parseEther("0.1")],
-        //     numberOfPicks: BigNumber.from(ethers.utils.parseEther("1")),
-        //     matchCardinality: BigNumber.from(4),
-        //     bitRangeSize: BigNumber.from(4),
-        //     prize: BigNumber.from(utils.parseEther("100")),
-        //     maxPicksPerUser: BigNumber.from(1000),
-        // }
+        const winningNumber = utils.solidityKeccak256(['address'], [exampleUser.address]);
+        const winningRandomNumber = utils.solidityKeccak256(
+          ['bytes32', 'uint256'],
+          [winningNumber, 1],
+        );
 
         const exampleDrawSettings : TsunamiDrawSettings = {
             distributions: [ethers.utils.parseEther("0.4"),
@@ -85,16 +75,12 @@ describe.only('runDrawCalculatorForSingleDraw()', () => {
         
         const exampleDraw : Draw = {
             drawId: BigNumber.from(1),
-            winningRandomNumber: BigNumber.from("8781184742215173699638593792190316559257409652205547100981219837421219359728")
+            winningRandomNumber: BigNumber.from(winningRandomNumber)
         }
         
-        const exampleUser : User = {
-            address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            normalizedBalance: ethers.utils.parseEther("0.1"),
-        } 
-        
-        const results = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
+        const results = tsunamiDrawCalculator([exampleDrawSettings], [exampleDraw], exampleUser)
         console.log(results)
+        // console.log(results[0].totalValue)
         // const prizeReceived = utils.parseEther("1.25")
         // expect(results.totalValue).to.deep.equal(prizeReceived)
     })
@@ -328,9 +314,9 @@ describe('prepareClaimForUserFromDrawResult()', () => {
             normalizedBalance: ethers.utils.parseEther("10"),
         }
         
-        const drawResult = runTsunamiDrawCalculatorForSingleDraw(exampleDrawSettings, exampleDraw, exampleUser)
+        const drawResult = tsunamiDrawCalculator([exampleDrawSettings], [exampleDraw], exampleUser)
 
-        const claimResult: Claim = prepareClaimForUserFromDrawResult(exampleUser, drawResult)
+        const claimResult: Claim = prepareClaims(exampleUser, drawResult)
         expect(claimResult.drawIds).to.deep.equal([drawId])
         expect(claimResult.data).to.deep.equal([[winningPickIndices]])
     })
@@ -398,14 +384,14 @@ describe('prepareClaimsForUserFromDrawResults()', () => {
             normalizedBalance: ethers.utils.parseEther("10"),
         }
         
-        const drawResults: DrawResults[] = runTsunamiDrawCalculatorForDraws(
+        const drawResults: DrawResults[] = tsunamiDrawCalculator(
             [exampleDrawSettings1, exampleDrawSettings2],
             [exampleDraw1, exampleDraw2],
             exampleUser)
 
         expect(drawResults.length).to.equal(1) // only wins exampleDraw1
         
-        const claimResult: Claim = prepareClaimsForUserFromDrawResults(exampleUser, drawResults)
+        const claimResult: Claim = prepareClaims(exampleUser, drawResults)
         
         expect(claimResult.drawIds).to.deep.equal([drawIds[0]])
         expect(claimResult.data).to.deep.equal([[winningPickIndices]])

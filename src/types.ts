@@ -14,6 +14,7 @@ export type TsunamiDrawSettings  = {
 export type Draw = {
     drawId: BigNumber
     winningRandomNumber: BigNumber
+    timestamp?: number
 }
 
 export type Pick = {

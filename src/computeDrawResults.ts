@@ -20,7 +20,7 @@ export function computeDrawResults(drawSettings: TsunamiDrawSettings, draw: Draw
   // run matching enegine for each pick
   for (let i = 0; i < picks.length; i++) {
     const pick = picks[i]
-    const pickPrize: PickPrize | undefined= calculatePickPrize(pick.hash, draw.winningRandomNumber, drawSettings, draw)
+    const pickPrize: PickPrize | undefined = calculatePickPrize(pick.hash, draw.winningRandomNumber, drawSettings, draw)
     
     // if there is a prize for that pick, add it to the results
     if (pickPrize) {
