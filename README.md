@@ -58,20 +58,24 @@ const exampleUser: User = {
     normalizedBalances: [balance]
 }
 
-const results: DrawResults = runDrawCalculator(prizeDistribution, draw, exampleUser)
+const results: DrawResults = drawCalculator([prizeDistribution], [draw], exampleUser)
 ```
 
-Finally, to claim a prize, forward these `DrawResults` to `prepareClaims(user: User, drawResult: DrawResults[])` to generate the data for the on-chain ClaimableDraw `claim()` call:
+Finally, to claim a prize, forward these `DrawResults` to `prepareClaims(user: User, drawResult: DrawResults[])` to generate the data for the on-chain DrawPrize `claim()` call:
 
 ```js
-const claim: Claim = prepareClaimForUserFromDrawResult(user, [result])
+const claim: Claim = prepareClaims(user, [results])
 ```
 
-The on-chain call to `ClaimableDraw::claim(address _user, uint32[] calldata _drawIds, bytes calldata _data)` can then be populated and called with this data:
+The on-chain call to `DrawPrize::claim(address _user, uint32[] calldata _drawIds, bytes calldata _data)` can then be populated and called with this data:
 
 ```js
-const claimableDrawContract = new ethers.Contract(address, claimableDrawAbi, signerOrProvider)
-await claimableDrawContract.functions.claim(claim.userAddress, claim.drawIds, claim.data) //write rpc call
+const drawPrizeContract = new ethers.Contract(address, drawPrizeAbi, signerOrProvider)
+
+const encoder = ethers.utils.defaultAbiCoder;
+const claimPickIndices = encoder.encode(['uint256[][]'], [claim.data]);
+
+await drawPrizeContract.functions.claim(claim.userAddress, claim.drawIds, claim.data) //write rpc call
 
 ```
 
