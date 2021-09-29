@@ -1,12 +1,12 @@
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { calculateNumberOfPicksForUser } from './helpers/calculateNumberOfPicksForUser'
 import { computePick } from './helpers/computePick'
-import { Pick, PrizeDistribution, User } from "./types"
+import { Pick, PrizeDistribution } from "./types"
 
-export function generatePicks(prizeDistribution: PrizeDistribution, user: User) : Pick[] {
-  let numberOfPicks = calculateNumberOfPicksForUser(prizeDistribution, user.normalizedBalance)
+export function generatePicks(prizeDistribution: PrizeDistribution, address: string, normalizedBalance: BigNumber) : Pick[] {
+  let numberOfPicks = calculateNumberOfPicksForUser(prizeDistribution, normalizedBalance)
   
-  const usersAddressHashed = ethers.utils.solidityKeccak256(['address'], [user.address])
+  const usersAddressHashed = ethers.utils.solidityKeccak256(['address'], [address])
 
   let picks: Pick[] = []
 

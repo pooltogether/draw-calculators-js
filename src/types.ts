@@ -26,7 +26,7 @@ export type Pick = {
 
 export type User = {
     address: string
-    normalizedBalance: BigNumber
+    normalizedBalances: BigNumber[]
     picks?: Pick[] // optional as user may not have picks (under floor)
 }
 

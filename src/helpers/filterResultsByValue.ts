@@ -1,10 +1,13 @@
 import { BigNumber } from "ethers";
 import { DrawResults, PrizeAwardable } from "types";
 
+const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
 export function filterResultsByValue(drawResults: DrawResults, maxPicksPerUser: number) : DrawResults{
     // if the user has more winning picks than max pick per user for the draw, we sort by value and remove the lowest value picks
     if(drawResults.prizes.length > maxPicksPerUser){
+        
+        debug(`user has more claims (${drawResults.prizes.length}) than the max picks per user (${maxPicksPerUser}). Sorting..`)
         // sort by value
         const descendingSortedPrizes : PrizeAwardable[]= drawResults.prizes.sort(
             function(a : PrizeAwardable, b: PrizeAwardable) : number {

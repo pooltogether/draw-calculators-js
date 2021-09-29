@@ -17,7 +17,7 @@ describe.only('drawCalculator()', () => {
     it('Single DrawCalculator run 1 matches', async () => {
         // distributionIndex = matchCardinality - numberOfMatches = 3 - 1 = 2
         // distributions[2] = 0.1e18 = prizeAtIndex
-        // const numberOfPrizes = 2 ^ (bitRangeSize ^ distributionIndex) - ((2 ^ bitRangeSize) ^ distributionIndex - 1) = (2 ^ (4 ^ 2)) - (2 ^ 4 ^ (2- 1) = 240
+        // const numberOfPrizes = 2 ^ (bitRangeSize ^ distributionIndex) - ((2 ^ bitRangeSize) ^ distributionIndex - 1) = 
         // fractionOfPrize = prizeAtIndex / numberOfPrizes = 0.1e18 / 240 = 4.166666666666667e14
         // prizeAwardable = prize * fractionOfPrize = 100e18 * 4.166666666666667e14 = 4.166666666666667e34
         // div by 1e18 = 4.166666666666667e16 = 0.0416666666666667e18
@@ -40,11 +40,11 @@ describe.only('drawCalculator()', () => {
         
         const exampleUser : User = {
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            normalizedBalance: ethers.utils.parseEther("0.2"),
+            normalizedBalances: [ethers.utils.parseEther("0.2")],
         }
         
         const results = drawCalculator([exampleDrawSettings], [exampleDraw], exampleUser)
-        const expectedPrize = BigNumber.from("0x94079cd1a42a68") // const prizeReceived = utils.parseEther("0.041666666666666667")
+        const expectedPrize = BigNumber.from("0x94a62bef705e30") // const prizeReceived = utils.parseEther("0.041666666666666667")
         expect(results[0].totalValue).to.deep.equal(expectedPrize)
     })
 
@@ -52,7 +52,7 @@ describe.only('drawCalculator()', () => {
         
         const exampleUser : User = {
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            normalizedBalance: ethers.utils.parseEther("0.2"),
+            normalizedBalances: [ethers.utils.parseEther("0.2")],
         } 
         
         const winningNumber = utils.solidityKeccak256(['address'], [exampleUser.address]);
@@ -310,7 +310,7 @@ describe('prepareClaimForUserFromDrawResult()', () => {
 
         const exampleUser : User = {
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            normalizedBalance: ethers.utils.parseEther("10"),
+            normalizedBalances: [ethers.utils.parseEther("10")],
         }
         
         const drawResult = drawCalculator([exampleDrawSettings], [exampleDraw], exampleUser)
@@ -380,7 +380,7 @@ describe('prepareClaimsForUserFromDrawResults()', () => {
 
         const exampleUser : User = {
             address: "0xf39Fd6e51aad88F6F4ce6aB8827279cffFb92266",
-            normalizedBalance: ethers.utils.parseEther("10"),
+            normalizedBalances: [ethers.utils.parseEther("10")],
         }
         
         const drawResults: DrawResults[] = drawCalculator(

@@ -2,13 +2,9 @@ import { BigNumber, ethers } from "ethers"
 import { PrizeDistribution } from "../types"
 
 // checks that the PrizeDistribution are appropriate 
-export function sanityCheckDrawSettings(prizeDistribution: PrizeDistribution) : string {
+export function sanityCheckPrizeDistribution(prizeDistribution: PrizeDistribution) : string {
 
-    if(!(prizeDistribution.matchCardinality >= prizeDistribution.distributions.length)){
-        console.log("DrawCalc/matchCardinality-gt-distributions")
-        return "DrawCalc/matchCardinality-gt-distributions"
-    }
-    else if(prizeDistribution.bitRangeSize >= Math.floor((256 / prizeDistribution.matchCardinality))){
+    if(prizeDistribution.bitRangeSize >= Math.floor((256 / prizeDistribution.matchCardinality))){
         return "DrawCalc/bitRangeSize-too-large"
     }
     else{
