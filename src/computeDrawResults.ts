@@ -1,7 +1,7 @@
 import {
   Pick,
   PrizeAwardable,
-  TsunamiDrawSettings,
+  PrizeDistribution,
   Draw,
   DrawResults,
   PickPrize
@@ -9,7 +9,7 @@ import {
 import { calculatePickPrize } from "./helpers/calculatePickPrize"
 import { ethers } from 'ethers'
 
-export function computeDrawResults(drawSettings: TsunamiDrawSettings, draw: Draw, picks: Pick[]): DrawResults {
+export function computeDrawResults(drawSettings: PrizeDistribution, draw: Draw, picks: Pick[]): DrawResults {
   // intialize the results object
   const results: DrawResults = {
     prizes: [],

@@ -1,10 +1,10 @@
 import { BigNumber, utils } from "ethers"
-import { TsunamiDrawSettings } from "../types"
+import { PrizeDistribution } from "../types"
 import { calculateNumberOfPrizesForIndex } from "./calculateNumberOfPrizesForIndex"
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator')
 
-export function calculateFractionOfPrize(prizeDistributionIndex: number, drawSettings: TsunamiDrawSettings): BigNumber {
+export function calculateFractionOfPrize(prizeDistributionIndex: number, drawSettings: PrizeDistribution): BigNumber {
     
     const numberOfPrizes = calculateNumberOfPrizesForIndex(drawSettings.bitRangeSize, prizeDistributionIndex)
 

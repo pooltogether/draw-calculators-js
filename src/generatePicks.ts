@@ -1,10 +1,10 @@
 import { ethers } from 'ethers'
 import { calculateNumberOfPicksForUser } from './helpers/calculateNumberOfPicksForUser'
 import { computePick } from './helpers/computePick'
-import { Pick, TsunamiDrawSettings, User } from "./types"
+import { Pick, PrizeDistribution, User } from "./types"
 
-export function generatePicks(drawSettings: TsunamiDrawSettings, user: User) : Pick[] {
-  let numberOfPicks = calculateNumberOfPicksForUser(drawSettings, user.normalizedBalance)
+export function generatePicks(prizeDistribution: PrizeDistribution, user: User) : Pick[] {
+  let numberOfPicks = calculateNumberOfPicksForUser(prizeDistribution, user.normalizedBalance)
   
   const usersAddressHashed = ethers.utils.solidityKeccak256(['address'], [user.address])
 
