@@ -6,7 +6,7 @@ import { DrawResults } from "../src/types";
 
 
 describe('filterResultsByValue()', () => {
-  it('should slice to the correct amount', () => {
+  it('should slice to the correct amount, filters out prizes[0]', () => {
     const results: DrawResults = 
             {
                 drawId: BigNumber.from(1), 
@@ -16,13 +16,23 @@ describe('filterResultsByValue()', () => {
                         amount: BigNumber.from(1),
                         distributionIndex: 1,
                         pick: BigNumber.from(1)
+                    },
+                    {
+                      amount: BigNumber.from(2),
+                      distributionIndex: 1,
+                      pick: BigNumber.from(1)
+                    },
+                    {
+                      amount: BigNumber.from(3),
+                      distributionIndex: 1,
+                      pick: BigNumber.from(1)
                     }
                 ]
             }
     const filteredResults = filterResultsByValue(results, 2)
-    expect(filteredResults.prizes.length).to.equal(1)
-
-
+    expect(filteredResults.prizes.length).to.equal(2)
+    console.log(filteredResults)
+    // expect(filteredResults.prizes[0]).to.equal(results.prizes[1])
   })
 })
 

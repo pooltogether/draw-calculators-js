@@ -8,8 +8,11 @@ export function prepareClaims(user: User, drawResults: DrawResults[]) : Claim {
         drawIds: [],
         data: []
     }
+    if(drawResults.length == 0) {
+        return claim
+    }
     //for each draw run the runDrawCalculatorForSingleDraw, if there is a winner add to result
-    for(const [, drawResult] of drawResults.entries()){  
+    drawResults.forEach(drawResult => {
         if(drawResult.totalValue.gt(BigNumber.from(0))){
             claim.drawIds.push(drawResult.drawId)
             // now add the pickIndices data
@@ -19,7 +22,7 @@ export function prepareClaims(user: User, drawResults: DrawResults[]) : Claim {
             }
             claim.data.push(winningPicks) 
         }
-    }
+    }); 
     return claim
 
 }
