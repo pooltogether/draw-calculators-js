@@ -1,3 +1,11 @@
+<p align="center">
+  <a href="https://github.com/pooltogether/pooltogether--brand-assets">
+    <img src="https://github.com/pooltogether/pooltogether--brand-assets/blob/977e03604c49c63314450b5d432fe57d34747c66/logo/pooltogether-logo--purple-gradient.png?raw=true" alt="PoolTogether Brand" style="max-width:100%;" width="200">
+  </a>
+</p>
+
+<br />
+
 # PoolTogether Draw Calculator JS
 
 [![npm version](https://badge.fury.io/js/@pooltogether%2Fdraw-calculator-js.svg)](https://badge.fury.io/js/@pooltogether%2Fdraw-calculator-js)
@@ -5,7 +13,16 @@
 
 This library includes a stateless Typescript model of the Solidity DrawCalculator. It is intended to be uses as a tool to easily check if a User has won a prize for a particular draw. This could also be calculated on-chain through the `DrawCalculator::calculate()` view function but this library is much faster.
 
-## How to use
+# Setup
+
+This project is available as an NPM package:
+
+```bash
+$ yarn add @pooltogether/draw-calculator-js
+```
+
+
+# How to use
 To create a claim or calculate winnings for an address:
 1. Run `yarn add @pooltogether/draw-calculator-js` in your project to install the package.
 1. Import the desired functions and types: `import {runDrawCalculator, Draw, PrizeDistribution, generatePicks, prepareClaims } from "@pooltogether/draw-calculator-js"`
@@ -18,7 +35,7 @@ const drawId: number = await drawHistory.getNewestDraw() // can go back cardinal
 const draw: Draw = await drawHistory.functions.getDraw(drawId) // read-only rpc call
 ```
 
-Next fetch the PrizeDistribution for the drawId from the PrizeDistributionHistory contract:
+Next fetch the PrizeDistribution for the `drawId` from the PrizeDistributionHistory contract:
 
 ```javascript
 // get PrizeDistribution from the  DrawCalculatorHistory contract for a particular drawId
@@ -60,8 +77,17 @@ await claimableDrawContract.functions.claim(claim.userAddress, claim.drawIds, cl
 
 Congratulations you have now claimed a prize!
 
-## API Guide
+# API Guide
 todo.
-## Types
+# Types
 A full breakdown of the types can be found [here](./src/types.ts)
 
+# Testing
+Unit tests can be run using:
+```bash
+$ yarn test
+```
+
+
+# Development
+Fork/clone this repo. Create a pull request with the changes you would like to make. Unit tests must be passing. 
