@@ -1,7 +1,7 @@
 import { filterResultsByValue } from "../src/helpers/filterResultsByValue";
-import { BigNumber, ethers, utils } from 'ethers'
+import { BigNumber } from 'ethers'
 import { expect } from "chai"
-import { DrawResults, TsunamiDrawSettings } from "../src/types";
+import { DrawResults } from "../src/types";
 
 
 

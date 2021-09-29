@@ -1,6 +1,6 @@
 import { BigNumber } from "ethers";
 
-export type TsunamiDrawSettings  = {
+export type PrizeDistribution  = {
     matchCardinality: number;
     numberOfPicks: number;
     distributions: BigNumber[];
@@ -12,9 +12,11 @@ export type TsunamiDrawSettings  = {
 }
 
 export type Draw = {
-    drawId: BigNumber
-    winningRandomNumber: BigNumber
-    timestamp?: number
+    drawId: BigNumber;
+    winningRandomNumber: BigNumber;
+    timestamp?: number;
+    beaconPeriodStartedAt?: number;
+    beaconPeriodSeconds?: number;
 }
 
 export type Pick = {

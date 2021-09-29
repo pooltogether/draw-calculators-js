@@ -1,5 +1,5 @@
 // Core functions
-export * from './tsunamiDrawCalculator';
+export * from './drawCalculator';
 export * from './prepareClaims';
 
 // Types
