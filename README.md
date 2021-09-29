@@ -25,7 +25,7 @@ $ yarn add @pooltogether/draw-calculator-js
 # How to use
 To create a claim or calculate winnings for an address:
 1. Run `yarn add @pooltogether/draw-calculator-js` in your project to install the package.
-1. Import the desired functions and types: `import {runDrawCalculator, Draw, PrizeDistribution, generatePicks, prepareClaims } from "@pooltogether/draw-calculator-js"`
+1. Import the desired functions and types: `import {drawCalculator, Draw, PrizeDistribution, generatePicks, prepareClaims } from "@pooltogether/draw-calculator-js"`
 
 Starting with a particular `drawId` and `userAddress`, fetch the Draw information from the DrawHistory contract:
 
@@ -44,22 +44,23 @@ const prizeDistribution = await prizeDistributionHistoryContract.functions.getPr
 ```
 
 Next, get the users balance using the convenient `getNormalizedBalancesForDrawIds(address _user, uint32[] calldata _drawIds)` view method
-on the DrawCalculator contract which returns an array of balances for those timestamps.
-
+on the DrawCalculator contract which returns an array of balances for drawIds:
+W
 ```js
 const drawCalculator: Contract = new ethers.Contract(address, drawCalculatorAbi, signerOrProvider)
-const balance = await drawCalculator.functions.getNormalizedBalancesForDrawIds(userAddress, [drawId]) // read-only rpc call
+const balances = await drawCalculator.functions.getNormalizedBalancesForDrawIds(userAddress, [drawId]) // read-only rpc call
 ```
 
 Run this `draw-calculator-js` library locally to see the user has any prizes to claim:
 ```js
 const exampleUser: User = {
     address: userAddress // user address we want to calculate for
-    normalizedBalances: [balance]
+    normalizedBalances: balances
 }
 
 const results: DrawResults = drawCalculator([prizeDistribution], [draw], exampleUser)
 ```
+The `results.totalValue` field should indicate the total amount of prize available for `userAddress` for the `drawId`.
 
 Finally, to claim a prize, forward these `DrawResults` to `prepareClaims(user: User, drawResult: DrawResults[])` to generate the data for the on-chain DrawPrize `claim()` call:
 
