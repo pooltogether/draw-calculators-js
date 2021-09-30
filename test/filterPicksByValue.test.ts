@@ -9,7 +9,7 @@ describe('filterResultsByValue()', () => {
   it('should slice to the correct amount, filters out prizes[0]', () => {
     const results: DrawResults = 
             {
-                drawId: BigNumber.from(1), 
+                drawId: 1, 
                 totalValue: BigNumber.from(1),
                 prizes:[
                     {

@@ -1,3 +1,4 @@
+import { parseUnits } from "@ethersproject/units"
 import { BigNumber, utils } from "ethers"
 import { PrizeDistribution } from "../types"
 import { calculateNumberOfPrizesForIndex } from "./calculateNumberOfPrizesForIndex"
@@ -10,10 +11,12 @@ export function calculateFractionOfPrize(prizeDistributionIndex: number, drawSet
 
     debug("numberOfPrizes for index ", numberOfPrizes)
     
-    const valueAtDistributionIndex : BigNumber = drawSettings.distributions[prizeDistributionIndex]
+    const valueAtDistributionIndex = drawSettings.distributions[prizeDistributionIndex]
     debug("valueAtDistributionIndex ", utils.formatEther(valueAtDistributionIndex.toString()))
+
+    const valueAtDistributionIndexUnformatted = parseUnits(String(valueAtDistributionIndex), 9)
     
-    const fractionOfPrize: BigNumber= valueAtDistributionIndex.div(numberOfPrizes)
+    const fractionOfPrize = valueAtDistributionIndexUnformatted.div(numberOfPrizes)
     debug("fractionOfPrize: ", utils.formatEther(fractionOfPrize))
     return fractionOfPrize
 }
