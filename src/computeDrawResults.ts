@@ -17,7 +17,7 @@ export function computeDrawResults(drawSettings: PrizeDistribution, draw: Draw, 
     drawId: draw.drawId
   }
   
-  // run matching enegine for each pick
+  // run matching engine for each pick
   for (let i = 0; i < picks.length; i++) {
     const pick = picks[i]
     const pickPrize: PickPrize | undefined = calculatePickPrize(pick.hash, draw.winningRandomNumber, drawSettings, draw)
