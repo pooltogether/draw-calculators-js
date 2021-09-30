@@ -1,8 +1,6 @@
 import { Draw, DrawResults, PrizeDistribution, User } from './types';
 import { calculateDrawResults } from './calculateDrawResults';
 
-const debug = require('debug')('pt:tsunami-sdk-drawCalculator');
-
 // main entry point for tsunami draw calculations
 export function batchCalculateDrawResults(
     prizeDistribution: PrizeDistribution[],
