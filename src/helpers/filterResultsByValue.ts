@@ -11,10 +11,13 @@ export function filterResultsByValue(drawResults: DrawResults, maxPicksPerUser: 
         // sort by value
         const descendingSortedPrizes : PrizeAwardable[]= drawResults.prizes.sort(
             function(a : PrizeAwardable, b: PrizeAwardable) : number {
-                return (a.amount.sub(b.amount)).toNumber() // what if this is too large for toNumber?
+                const subbedValue = a.amount.sub(b.amount)
+                if (subbedValue.isZero()) return 0
+                if (subbedValue.isNegative()) return -1
+                return 1
             })
         // remove the lowest value picks up to the max picks per user
-        const sortedDescendingSortedPrizes = descendingSortedPrizes.slice(0, maxPicksPerUser)
+        const sortedDescendingSortedPrizes = descendingSortedPrizes.slice(0, maxPicksPerUser).filter(prizeAwardable => !prizeAwardable.amount.isZero())
         // sum the sorted values
         const newTotalValue : BigNumber = descendingSortedPrizes.reduce((accumulator, currentValue) => accumulator.add(currentValue.amount), BigNumber.from(0))
         return {

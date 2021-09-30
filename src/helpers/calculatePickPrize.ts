@@ -24,7 +24,7 @@ export function calculatePickPrize(randomNumberThisPick: string, winningRandomNu
     }
     debug(`\n DrawCalculator:: Found ${numberOfMatches} matches..`)
     
-    const pickAmount = calculatePrizeAmount(prizeDistribution, draw, numberOfMatches)
+    const pickAmount = calculatePrizeAmount(prizeDistribution, numberOfMatches)
     
     if(pickAmount){
         debug(`user is receiving a prize! ${utils.formatEther(pickAmount.amount)}`)
