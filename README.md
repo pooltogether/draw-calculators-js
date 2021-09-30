@@ -8,7 +8,7 @@
 
 # PoolTogether Draw Calculator JS
 
-![Tests](https://github.com/pooltogether/draw-calculator-js/actions/workflows/main.yml/badge.svg)
+[![Coveralls](https://github.com/pooltogether/draw-calculators-js/actions/workflows/main.yml/badge.svg)](https://github.com/pooltogether/draw-calculators-js/actions/workflows/main.yml)
 [![npm version](https://badge.fury.io/js/@pooltogether%2Fdraw-calculator-js.svg)](https://badge.fury.io/js/@pooltogether%2Fdraw-calculator-js)
 [![TypeScript definitions on DefinitelyTyped](https://definitelytyped.org/badges/standard.svg)](https://definitelytyped.org)
 
