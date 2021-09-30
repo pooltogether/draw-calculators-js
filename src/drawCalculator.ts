@@ -19,7 +19,7 @@ export function drawCalculator(prizeDistribution: PrizeDistribution[], draws: Dr
     return results
 }
 
-function runDrawCalculatorForSingleDraw(prizeDistribution: PrizeDistribution, draw: Draw, user: User, drawIndex: number): DrawResults {
+export function runDrawCalculatorForSingleDraw(prizeDistribution: PrizeDistribution, draw: Draw, user: User, drawIndex: number = 0): DrawResults {
     // first check PrizeDistribution passed is sane
     const sanityCheckPrizeDistrbutionResult = sanityCheckPrizeDistribution(prizeDistribution)
     if(sanityCheckPrizeDistrbutionResult != ""){
