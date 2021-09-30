@@ -13,7 +13,7 @@ import { calculatePrizeForDistributionIndex } from '../src/helpers/calculatePriz
 const formatDistributionNumber = (distribution: string) =>
     utils.parseUnits(distribution, 9).toNumber();
 
-describe.only('batchCalculateDrawResults()', () => {
+describe('batchCalculateDrawResults()', () => {
     it('Single DrawCalculator run 1 matches', async () => {
         // distributionIndex = matchCardinality - numberOfMatches = 3 - 1 = 2
         // distributions[2] = 0.1e18 = prizeAtIndex
@@ -47,7 +47,11 @@ describe.only('batchCalculateDrawResults()', () => {
             normalizedBalances: [ethers.utils.parseEther('0.2')],
         };
 
-        const results = batchCalculateDrawResults([exampleDrawSettings], [exampleDraw], exampleUser);
+        const results = batchCalculateDrawResults(
+            [exampleDrawSettings],
+            [exampleDraw],
+            exampleUser,
+        );
         const expectedPrize = BigNumber.from('0x94a62bef705e30'); // const prizeReceived = utils.parseEther("0.041666666666666667")
         expect(results[0].totalValue).to.deep.equal(expectedPrize);
     });
@@ -84,7 +88,11 @@ describe.only('batchCalculateDrawResults()', () => {
             winningRandomNumber: BigNumber.from(winningRandomNumber),
         };
 
-        const results = batchCalculateDrawResults([exampleDrawSettings], [exampleDraw], exampleUser);
+        const results = batchCalculateDrawResults(
+            [exampleDrawSettings],
+            [exampleDraw],
+            exampleUser,
+        );
         const prizeReceived = utils.parseEther('40');
         expect(results[0].totalValue).to.deep.equal(prizeReceived);
     });
@@ -308,7 +316,11 @@ describe('prepareClaimForUserFromDrawResult()', () => {
             normalizedBalances: [ethers.utils.parseEther('10')],
         };
 
-        const drawResult = batchCalculateDrawResults([exampleDrawSettings], [exampleDraw], exampleUser);
+        const drawResult = batchCalculateDrawResults(
+            [exampleDrawSettings],
+            [exampleDraw],
+            exampleUser,
+        );
 
         const claimResult: Claim = prepareClaims(exampleUser, drawResult);
         expect(claimResult.drawIds).to.deep.equal([drawId]);
