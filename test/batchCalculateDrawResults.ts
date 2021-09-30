@@ -1,7 +1,7 @@
 import { BigNumber, ethers, utils } from 'ethers';
 import { expect } from 'chai';
 import { Claim, Draw, DrawResults, PrizeDistribution, User } from '../src/types';
-import { batchCalculateDraws } from '../src/batchCalculateDraws';
+import { batchCalculateDrawResults } from '../src/batchCalculateDrawResults';
 import { prepareClaims } from '../src/prepareClaims';
 
 import { calculateFractionOfPrize } from '../src/helpers/calculateFractionOfPrize';
@@ -13,7 +13,7 @@ import { calculatePrizeForDistributionIndex } from '../src/helpers/calculatePriz
 const formatDistributionNumber = (distribution: string) =>
     utils.parseUnits(distribution, 9).toNumber();
 
-describe.only('batchCalculateDraws()', () => {
+describe.only('batchCalculateDrawResults()', () => {
     it('Single DrawCalculator run 1 matches', async () => {
         // distributionIndex = matchCardinality - numberOfMatches = 3 - 1 = 2
         // distributions[2] = 0.1e18 = prizeAtIndex
@@ -47,7 +47,7 @@ describe.only('batchCalculateDraws()', () => {
             normalizedBalances: [ethers.utils.parseEther('0.2')],
         };
 
-        const results = batchCalculateDraws([exampleDrawSettings], [exampleDraw], exampleUser);
+        const results = batchCalculateDrawResults([exampleDrawSettings], [exampleDraw], exampleUser);
         const expectedPrize = BigNumber.from('0x94a62bef705e30'); // const prizeReceived = utils.parseEther("0.041666666666666667")
         expect(results[0].totalValue).to.deep.equal(expectedPrize);
     });
@@ -84,7 +84,7 @@ describe.only('batchCalculateDraws()', () => {
             winningRandomNumber: BigNumber.from(winningRandomNumber),
         };
 
-        const results = batchCalculateDraws([exampleDrawSettings], [exampleDraw], exampleUser);
+        const results = batchCalculateDrawResults([exampleDrawSettings], [exampleDraw], exampleUser);
         const prizeReceived = utils.parseEther('40');
         expect(results[0].totalValue).to.deep.equal(prizeReceived);
     });
@@ -308,7 +308,7 @@ describe('prepareClaimForUserFromDrawResult()', () => {
             normalizedBalances: [ethers.utils.parseEther('10')],
         };
 
-        const drawResult = batchCalculateDraws([exampleDrawSettings], [exampleDraw], exampleUser);
+        const drawResult = batchCalculateDrawResults([exampleDrawSettings], [exampleDraw], exampleUser);
 
         const claimResult: Claim = prepareClaims(exampleUser, drawResult);
         expect(claimResult.drawIds).to.deep.equal([drawId]);
@@ -385,7 +385,7 @@ describe('prepareClaimsForUserFromDrawResults()', () => {
             normalizedBalances: [ethers.utils.parseEther('10')],
         };
 
-        const drawResults: DrawResults[] = batchCalculateDraws(
+        const drawResults: DrawResults[] = batchCalculateDrawResults(
             [exampleDrawSettings1, exampleDrawSettings2],
             [exampleDraw1, exampleDraw2],
             exampleUser,

@@ -1,6 +1,6 @@
 // Core functions
-export * from './batchCalculateDraws';
-export * from './calculateDraw';
+export * from './batchCalculateDrawResults';
+export * from './calculateDrawResults';
 export * from './prepareClaims';
 
 // Types

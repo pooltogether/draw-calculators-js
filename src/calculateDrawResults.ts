@@ -7,7 +7,7 @@ import { filterResultsByValue } from './helpers/filterResultsByValue';
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator');
 
-export function calculateDraw(
+export function calculateDrawResults(
     prizeDistribution: PrizeDistribution,
     draw: Draw,
     user: User,
