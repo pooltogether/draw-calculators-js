@@ -58,7 +58,7 @@ const exampleUser: User = {
     normalizedBalances: balances
 }
 
-const results: DrawResults = drawCalculator([prizeDistribution], [draw], exampleUser)
+const results: DrawResults = batchCalculateDraws([prizeDistribution], [draw], exampleUser)
 ```
 The `results.totalValue` field should indicate the total amount of prize available for `userAddress` for the `drawId`.
 
