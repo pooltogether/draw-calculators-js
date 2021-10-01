@@ -85,11 +85,11 @@ The on-chain call to `DrawPrize::claim(address _user, uint32[] calldata _drawIds
 
 ```js
 const drawPrizeContract = new ethers.Contract(address, drawPrizeAbi, signerOrProvider);
-
-const encoder = ethers.utils.defaultAbiCoder;
-const claimPickIndices = encoder.encode(['uint256[][]'], [claim.data]);
-
-await drawPrizeContract.functions.claim(claim.userAddress, claim.drawIds, claim.data); //write rpc call
+await drawPrizeContract.functions.claim(
+    claim.userAddress,
+    claim.drawIds,
+    claim.encodedWinningPickIndices,
+); //write rpc call
 ```
 
 Congratulations you have now claimed a prize!
