@@ -68,6 +68,7 @@ describe('prepareClaims()', () => {
         expect(claimResult.drawIds).to.deep.equal([drawIds[0]]);
 
         const expectedData = defaultAbiCoder.encode(['uint256[][]'], [[[winningPickIndices]]]);
-        expect(claimResult.data).to.deep.equal(expectedData);
+        expect(claimResult.encodedWinningPickIndices).to.deep.equal(expectedData);
+        expect(claimResult.winningPickIndices).to.deep.equal([[winningPickIndices]]);
     });
 });

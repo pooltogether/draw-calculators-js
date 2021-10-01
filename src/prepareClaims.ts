@@ -8,9 +8,9 @@ export function prepareClaims(user: User, drawResults: DrawResults[]): Claim {
     let claim: Claim = {
         userAddress: user.address,
         drawIds: [],
-        data: '',
+        encodedWinningPickIndices: '',
+        winningPickIndices: [],
     };
-    let claimData: BigNumber[][] = [];
     if (drawResults.length == 0) {
         return claim;
     }
@@ -23,11 +23,14 @@ export function prepareClaims(user: User, drawResults: DrawResults[]): Claim {
             for (const prizeAwardable of drawResult.prizes) {
                 winningPicks.push(prizeAwardable.pick);
             }
-            claimData.push(winningPicks);
+            claim.winningPickIndices.push(winningPicks);
         }
     });
 
-    claimData = claimData.map((data) => data.sort(sortByBigNumber));
-    claim.data = defaultAbiCoder.encode(['uint256[][]'], [claimData]);
+    claim.winningPickIndices = claim.winningPickIndices.map((data) => data.sort(sortByBigNumber));
+    claim.encodedWinningPickIndices = defaultAbiCoder.encode(
+        ['uint256[][]'],
+        [claim.winningPickIndices],
+    );
     return claim;
 }
