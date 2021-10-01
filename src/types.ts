@@ -51,7 +51,7 @@ export type PickPrize = {
 export type Claim = {
     userAddress: string;
     drawIds: number[];
-    data: BigNumber[][];
+    data: string;
 };
 
 export type UserDrawResult = {

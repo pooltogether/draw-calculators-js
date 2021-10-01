@@ -1,5 +1,6 @@
 import { BigNumber } from 'ethers';
-import { DrawResults, PrizeAwardable } from 'types';
+import { DrawResults, PrizeAwardable } from '../types';
+import { sortByBigNumber } from './sortByBigNumber';
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator');
 
@@ -40,11 +41,7 @@ export function filterResultsByValue(
     };
 }
 
-const sortByPrizeAmount = (a: PrizeAwardable, b: PrizeAwardable) => {
-    const subbedValue = a.amount.sub(b.amount);
-    if (subbedValue.isZero()) return 0;
-    if (subbedValue.isNegative()) return -1;
-    return 1;
-};
+const sortByPrizeAmount = (a: PrizeAwardable, b: PrizeAwardable) =>
+    sortByBigNumber(a.amount, b.amount);
 
 const filterZeroPrizeAmount = (prizeAwardable: PrizeAwardable) => !prizeAwardable.amount.isZero();

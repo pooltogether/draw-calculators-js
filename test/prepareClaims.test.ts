@@ -5,10 +5,10 @@ import { batchCalculateDrawResults } from '../src/batchCalculateDrawResults';
 import { prepareClaims } from '../src/prepareClaims';
 
 import { formatDistributionNumber } from './helpers/formatDistributionNumber';
+import { defaultAbiCoder } from '@ethersproject/abi';
 
 describe('prepareClaims()', () => {
     it('returns correct claim struct for user', async () => {
-
         const exampleDrawSettings1: PrizeDistribution = {
             distributions: [
                 formatDistributionNumber('0.3'),
@@ -60,13 +60,14 @@ describe('prepareClaims()', () => {
             [exampleDraw1, exampleDraw2],
             exampleUser,
         );
-        
+
         expect(drawResults.length).to.equal(2);
 
         const claimResult: Claim = prepareClaims(exampleUser, drawResults);
 
         expect(claimResult.drawIds).to.deep.equal([drawIds[0]]);
-        
-        expect(claimResult.data).to.deep.equal([[winningPickIndices]]);
+
+        const expectedData = defaultAbiCoder.encode(['uint256[][]'], [[[winningPickIndices]]]);
+        expect(claimResult.data).to.deep.equal(expectedData);
     });
 });
