@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 import { sortByBigNumber } from './helpers/sortByBigNumber';
 import { User, DrawResults, Claim } from './types';
 
-// for a given User and DrawResult, prepares the input for the contract ClaimableDraw::claim() call
+// for a given User and DrawResult, prepares the input for the contract PrizeDistributor::claim() call
 export function prepareClaims(user: User, drawResults: DrawResults[]): Claim {
     let claim: Claim = {
         userAddress: user.address,
