@@ -88,9 +88,3 @@ describe('batchCalculateDrawResults()', () => {
         expect(results[0].totalValue).to.deep.equal(prizeReceived);
     });
 });
-
-
-
-
-
-

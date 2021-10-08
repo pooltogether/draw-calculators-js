@@ -30,6 +30,6 @@ describe('calculatePrizeForDistributionIndex()', () => {
 
         //calculatePrizeForPrizeDistributionIndex(prizeDistributionIndex: number, drawSettings: TsunamiDrawSettings, draw: Draw)
         const prizeReceivable = calculatePrizeForDistributionIndex(1, exampleDrawSettings);
-        expect(prizeReceivable).to.deep.equal(BigNumber.from("0x1280f39a34855534")); // 1.33333e18
+        expect(prizeReceivable).to.deep.equal(BigNumber.from('0x1280f39a34855534')); // 1.33333e18
     });
-})
+});

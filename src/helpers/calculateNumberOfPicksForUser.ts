@@ -8,7 +8,7 @@ export function calculateNumberOfPicksForUser(
     normalizedBalance: BigNumber,
 ): number {
     const numberOfPicksForDraw = drawSettings.numberOfPicks;
-    debug(`numberOfPicksForDraw: ${numberOfPicksForDraw} `)
-    debug(`normalizedBalance: ${normalizedBalance} `)
+    debug(`numberOfPicksForDraw: ${numberOfPicksForDraw} `);
+    debug(`normalizedBalance: ${normalizedBalance} `);
     return numberOfPicksForDraw.mul(normalizedBalance).div(constants.WeiPerEther).toNumber();
 }

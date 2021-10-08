@@ -20,7 +20,10 @@ describe('calculateNumberOfPrizesForIndex()', () => {
             maxPicksPerUser: 1000,
         };
 
-        const numberOfWinners = calculateNumberOfPrizesForIndex(exampleDrawSettings.bitRangeSize, 1);
+        const numberOfWinners = calculateNumberOfPrizesForIndex(
+            exampleDrawSettings.bitRangeSize,
+            1,
+        );
         expect(numberOfWinners).to.equal(15); // 1.33333e18
     });
-})
+});
