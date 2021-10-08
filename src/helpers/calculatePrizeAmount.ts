@@ -15,7 +15,7 @@ export function calculatePrizeAmount(
         `distributionIndex: ${distributionIndex}, : (${prizeDistribution.matchCardinality} - ${matches} )`,
     );
 
-    if (distributionIndex < prizeDistribution.distributions.length) {
+    if (distributionIndex < prizeDistribution.tiers.length) {
         // user *may* be getting a prize
         const expectedPrizeAmount = calculatePrizeForDistributionIndex(
             distributionIndex,

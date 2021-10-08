@@ -8,7 +8,7 @@ describe('calculateNumberOfPrizesForIndex()', () => {
     it('returns the correct number of winners', async () => {
         // const numberOfPrizes = 2 ^ (bitRangeSize ^ distributionIndex) - 2 ^ (bitRangeSize ^ distributionIndex - 1)= 2 ^ (4 ^ 1) = 16 - 1 = 15
         const exampleDrawSettings: PrizeDistribution = {
-            distributions: [
+            tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
                 formatDistributionNumber('0.1'),
