@@ -2,6 +2,7 @@
 export * from './batchCalculateDrawResults';
 export * from './calculateDrawResults';
 export * from './prepareClaims';
+export * from './computeCardinality';
 
 // Types
 export * from './types';
