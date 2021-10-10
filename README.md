@@ -75,17 +75,17 @@ const results: DrawResults = batchCalculateDrawResults([prizeDistribution], [dra
 
 The `results.totalValue` field should indicate the total amount of prize available for `userAddress` for the `drawId`.
 
-Finally, to claim a prize, forward these `DrawResults` to `prepareClaims(user: User, drawResult: DrawResults[])` to generate the data for the on-chain DrawPrize `claim()` call:
+Finally, to claim a prize, forward these `DrawResults` to `prepareClaims(user: User, drawResult: DrawResults[])` to generate the data for the on-chain PrizeDistributor `claim()` call:
 
 ```js
 const claim: Claim = prepareClaims(user, [results]);
 ```
 
-The on-chain call to `DrawPrize::claim(address _user, uint32[] calldata _drawIds, bytes calldata _data)` can then be populated and called with this data:
+The on-chain call to `PrizeDistributor::claim(address _user, uint32[] calldata _drawIds, bytes calldata _data)` can then be populated and called with this data:
 
 ```js
-const drawPrizeContract = new ethers.Contract(address, drawPrizeAbi, signerOrProvider);
-await drawPrizeContract.functions.claim(
+const PrizeDistributorContract = new ethers.Contract(address, PrizeDistributorAbi, signerOrProvider);
+await PrizeDistributorContract.functions.claim(
     claim.userAddress,
     claim.drawIds,
     claim.encodedWinningPickIndices,
