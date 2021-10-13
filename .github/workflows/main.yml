@@ -1,31 +1,31 @@
 name: Coveralls
 
-on: ["push", "pull_request"]
+on: ['push', 'pull_request']
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v2
-      - name: Use Node.js 16.x
-        uses: actions/setup-node@v2
-        with:
-          node-version: 16.x
-      - name: yarn, compile, hint, coverage
-        continue-on-error: false
-        run: |
-          yarn
-          yarn test
-      # - name: Coverage Artifacts Upload
-      #   uses: actions/upload-artifact@v2
-      #   with:
-      #     name: test-results
-      #     path: test-results.xml
-      # - name: Coverage Artifacts Download
-      #   uses: actions/download-artifact@v2
-      #   with:
-      #     name: test-results
-      # - name: Coveralls
-      #   uses: coverallsapp/github-action@master
-      #   with:
-      #     github-token: ${{ secrets.GITHUB_TOKEN }}
+    build:
+        runs-on: ubuntu-latest
+        steps:
+            - uses: actions/checkout@v2
+            - name: Use Node.js 16.x
+              uses: actions/setup-node@v2
+              with:
+                  node-version: 16.x
+            - name: yarn, compile, hint, coverage
+              continue-on-error: false
+              run: |
+                  yarn
+                  yarn test
+            # - name: Coverage Artifacts Upload
+            #   uses: actions/upload-artifact@v2
+            #   with:
+            #     name: test-results
+            #     path: test-results.xml
+            # - name: Coverage Artifacts Download
+            #   uses: actions/download-artifact@v2
+            #   with:
+            #     name: test-results
+            # - name: Coveralls
+            #   uses: coverallsapp/github-action@master
+            #   with:
+            #     github-token: ${{ secrets.GITHUB_TOKEN }}

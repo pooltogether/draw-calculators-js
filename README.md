@@ -84,7 +84,11 @@ const claim: Claim = prepareClaims(user, [results]);
 The on-chain call to `PrizeDistributor::claim(address _user, uint32[] calldata _drawIds, bytes calldata _data)` can then be populated and called with this data:
 
 ```js
-const PrizeDistributorContract = new ethers.Contract(address, PrizeDistributorAbi, signerOrProvider);
+const PrizeDistributorContract = new ethers.Contract(
+    address,
+    PrizeDistributorAbi,
+    signerOrProvider,
+);
 await PrizeDistributorContract.functions.claim(
     claim.userAddress,
     claim.drawIds,
