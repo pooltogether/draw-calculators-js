@@ -7,14 +7,14 @@ import { formatDistributionNumber } from './helpers/formatDistributionNumber';
 describe('batchCalculateDrawResults()', () => {
     it('Single DrawCalculator run 1 matches', async () => {
         // distributionIndex = matchCardinality - numberOfMatches = 3 - 1 = 2
-        // distributions[2] = 0.1e18 = prizeAtIndex
+        // tiers[2] = 0.1e18 = prizeAtIndex
         // const numberOfPrizes = 2 ^ (bitRangeSize ^ distributionIndex) - ((2 ^ bitRangeSize) ^ distributionIndex - 1) =
         // fractionOfPrize = prizeAtIndex / numberOfPrizes = 0.1e18 / 240 = 4.166666666666667e14
         // prizeAwardable = prize * fractionOfPrize = 100e18 * 4.166666666666667e14 = 4.166666666666667e34
         // div by 1e18 = 4.166666666666667e16 = 0.0416666666666667e18
 
         const exampleDrawSettings: PrizeDistribution = {
-            distributions: [
+            tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
                 formatDistributionNumber('0.1'),
@@ -61,7 +61,7 @@ describe('batchCalculateDrawResults()', () => {
 
         console.log('winning number ', winningRandomNumber);
         const exampleDrawSettings: PrizeDistribution = {
-            distributions: [
+            tiers: [
                 formatDistributionNumber('0.4'),
                 formatDistributionNumber('0.2'),
                 formatDistributionNumber('0.1'),
