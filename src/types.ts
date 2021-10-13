@@ -9,6 +9,7 @@ export type PrizeDistribution = {
     drawStartTimestampOffset?: number;
     drawEndTimestampOffset?: number;
     maxPicksPerUser: number;
+    expiryDuration?: number;
 };
 
 export type Draw = {
