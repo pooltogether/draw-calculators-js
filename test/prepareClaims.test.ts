@@ -10,7 +10,7 @@ import { defaultAbiCoder } from '@ethersproject/abi';
 describe('prepareClaims()', () => {
     it('returns correct claim struct for user', async () => {
         const exampleDrawSettings1: PrizeDistribution = {
-            distributions: [
+            tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
                 formatDistributionNumber('0.1'),
@@ -23,7 +23,7 @@ describe('prepareClaims()', () => {
         };
 
         const exampleDrawSettings2: PrizeDistribution = {
-            distributions: [
+            tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
                 formatDistributionNumber('0.1'),

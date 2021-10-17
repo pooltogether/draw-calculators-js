@@ -9,14 +9,14 @@ import { formatDistributionNumber } from './helpers/formatDistributionNumber';
 describe('calculatePrizeForDistributionIndex()', () => {
     it('can calculate the prize awardable for the prize distribution and prize', async () => {
         // distributionIndex = matchCardinality - numberOfMatches = 3 - 2 = 1
-        // distributions[1] = 0.2e9 = prizeAtIndex
+        // tiers[1] = 0.2e9 = prizeAtIndex
         // const numberOfPrizes = 2 ^ (bitRangeSize ^ distributionIndex) - 2 ^ (bitRangeSize ^ distributionIndex - 1)= 2 ^ (4 ^ 1) = 16 - 1 = 15
         // fractionOfPrize = prizeAtIndex / numberOfPrizes = 0.2e9 / 15 = 1.333e7
         // prizeAwardable = prize * fractionOfPrize = 100e18 * 1.333e7 = 1.333e21
         // div by 1e9 = 1.33333e18
 
         const exampleDrawSettings: PrizeDistribution = {
-            distributions: [
+            tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
                 formatDistributionNumber('0.1'),

@@ -3,7 +3,7 @@ import { BigNumber } from 'ethers';
 export type PrizeDistribution = {
     matchCardinality: number;
     numberOfPicks: BigNumber;
-    distributions: number[];
+    tiers: number[];
     bitRangeSize: number;
     prize: BigNumber;
     drawStartTimestampOffset?: number;

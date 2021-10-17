@@ -16,7 +16,7 @@ export function calculateFractionOfPrize(
 
     debug('numberOfPrizes for index ', numberOfPrizes);
 
-    const valueAtDistributionIndex = drawSettings.distributions[prizeDistributionIndex];
+    const valueAtDistributionIndex = drawSettings.tiers[prizeDistributionIndex];
     debug('valueAtDistributionIndex ', utils.formatEther(valueAtDistributionIndex.toString()));
 
     const valueAtDistributionIndexUnformatted = parseUnits(String(valueAtDistributionIndex), 9);
