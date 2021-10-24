@@ -1,6 +1,6 @@
 import { defaultAbiCoder } from '@ethersproject/abi';
 import { BigNumber } from 'ethers';
-import { sortByBigNumberDesc } from './helpers/sortByBigNumber';
+import { sortByBigNumberAsc } from './helpers/sortByBigNumber';
 import { User, DrawResults, Claim } from './types';
 
 // for a given User and DrawResult, prepares the input for the contract PrizeDistributor::claim() call
@@ -28,7 +28,7 @@ export function prepareClaims(user: User, drawResults: DrawResults[]): Claim {
     });
 
     claim.winningPickIndices = claim.winningPickIndices.map((data) =>
-        data.sort(sortByBigNumberDesc),
+        data.sort(sortByBigNumberAsc),
     );
     claim.encodedWinningPickIndices = defaultAbiCoder.encode(
         ['uint256[][]'],
