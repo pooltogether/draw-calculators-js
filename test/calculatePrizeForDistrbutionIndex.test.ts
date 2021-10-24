@@ -3,8 +3,7 @@ import { expect } from 'chai';
 import { PrizeDistribution } from '../src/types';
 
 import { calculatePrizeForDistributionIndex } from '../src/helpers/calculatePrizeForDistributionIndex';
-
-import { formatDistributionNumber } from './helpers/formatDistributionNumber';
+import { formatDistributionNumber } from '../src/helpers/formatDistributionNumber';
 
 describe('calculatePrizeForDistributionIndex()', () => {
     it('can calculate the prize awardable for the prize distribution and prize', async () => {

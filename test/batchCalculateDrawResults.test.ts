@@ -2,7 +2,7 @@ import { BigNumber, ethers, utils } from 'ethers';
 import { expect } from 'chai';
 import { Draw, PrizeDistribution, User } from '../src/types';
 import { batchCalculateDrawResults } from '../src/batchCalculateDrawResults';
-import { formatDistributionNumber } from './helpers/formatDistributionNumber';
+import { formatDistributionNumber } from '../src/helpers/formatDistributionNumber';
 
 describe('batchCalculateDrawResults()', () => {
     it('Single DrawCalculator run 1 matches', async () => {

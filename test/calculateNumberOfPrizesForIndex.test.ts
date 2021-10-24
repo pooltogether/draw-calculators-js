@@ -1,8 +1,8 @@
 import { BigNumber, utils } from 'ethers';
 import { expect } from 'chai';
 import { PrizeDistribution } from '../src/types';
-import { formatDistributionNumber } from './helpers/formatDistributionNumber';
 import { calculateNumberOfPrizesForIndex } from '../src/helpers/calculateNumberOfPrizesForIndex';
+import { formatDistributionNumber } from '../src/helpers/formatDistributionNumber';
 
 describe('calculateNumberOfPrizesForIndex()', () => {
     it('returns the correct number of winners', async () => {

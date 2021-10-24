@@ -1,6 +1,6 @@
 import { BigNumber } from 'ethers';
 import { DrawResults, PrizeAwardable } from '../types';
-import { sortByBigNumber } from './sortByBigNumber';
+import { sortByBigNumberDesc } from './sortByBigNumber';
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator');
 
@@ -19,7 +19,7 @@ export function filterResultsByValue(
     maxPicksPerUser: number,
 ): DrawResults {
     // sort by value
-    let newPrizes = drawResults.prizes.filter(filterZeroPrizeAmount).sort(sortByPrizeAmount);
+    let newPrizes = drawResults.prizes.filter(filterZeroPrizeAmount).sort(sortByPrizeAmountDesc);
     let newTotalValue = drawResults.totalValue;
 
     // If there's too many prizes to claim, slice & sum total value
@@ -41,7 +41,7 @@ export function filterResultsByValue(
     };
 }
 
-const sortByPrizeAmount = (a: PrizeAwardable, b: PrizeAwardable) =>
-    sortByBigNumber(a.amount, b.amount);
+const sortByPrizeAmountDesc = (a: PrizeAwardable, b: PrizeAwardable) =>
+    sortByBigNumberDesc(a.amount, b.amount);
 
 const filterZeroPrizeAmount = (prizeAwardable: PrizeAwardable) => !prizeAwardable.amount.isZero();

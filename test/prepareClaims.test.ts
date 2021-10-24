@@ -4,8 +4,8 @@ import { Claim, Draw, DrawResults, PrizeDistribution, User } from '../src/types'
 import { batchCalculateDrawResults } from '../src/batchCalculateDrawResults';
 import { prepareClaims } from '../src/prepareClaims';
 
-import { formatDistributionNumber } from './helpers/formatDistributionNumber';
 import { defaultAbiCoder } from '@ethersproject/abi';
+import { formatDistributionNumber } from '../src/helpers/formatDistributionNumber';
 
 describe('prepareClaims()', () => {
     it('returns correct claim struct for user', async () => {
