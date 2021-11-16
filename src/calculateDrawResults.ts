@@ -12,7 +12,9 @@ export function calculateDrawResults(
     draw: Draw,
     user: User,
     drawIndex: number = 0,
+    filter: boolean = true,
 ): DrawResults {
+    debug(`calculateDrawResults() called`);
     // first check PrizeDistribution passed is sane
     const sanityCheckPrizeDistrbutionResult = sanityCheckPrizeDistribution(prizeDistribution);
     if (sanityCheckPrizeDistrbutionResult != '') {
@@ -34,7 +36,8 @@ export function calculateDrawResults(
     );
 
     // sort the picks by value and filter out if some picks beyond the maxUserPicks
-    results = filterResultsByValue(results, prizeDistribution.maxPicksPerUser);
-
+    if (filter) {
+        results = filterResultsByValue(results, prizeDistribution.maxPicksPerUser);
+    }
     return results;
 }

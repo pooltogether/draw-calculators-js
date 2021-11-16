@@ -13,7 +13,7 @@ export function findBitMatchesAtIndex(
     debug(`indexOffset: `, indexOffset);
 
     const word1DataHexString: string = word1.toHexString();
-    const word2DataHexString: string = word2.toHexString();
+    const word2DataHexString: string = BigNumber.from(word2).toHexString();
 
     debug(word1DataHexString);
     debug(word2DataHexString);
