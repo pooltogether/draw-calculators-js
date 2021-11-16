@@ -8,7 +8,9 @@ export function calculatePrizeForDistributionIndex(
 ): BigNumber {
     // totalPrize *  (tiers[index]/(range ^ index)) where index = matchCardinality - numberOfMatches
     const fractionOfPrize = calculateFractionOfPrize(distributionIndex, prizeDistrbution);
-    let expectedPrizeAmount: BigNumber = prizeDistrbution.prize.mul(fractionOfPrize);
+    let expectedPrizeAmount: BigNumber = BigNumber.from(prizeDistrbution.prize).mul(
+        fractionOfPrize,
+    );
     expectedPrizeAmount = expectedPrizeAmount.div(ethers.constants.WeiPerEther);
 
     // console.log("expectedPrizeAmount ", utils.formatEther(expectedPrizeAmount))
