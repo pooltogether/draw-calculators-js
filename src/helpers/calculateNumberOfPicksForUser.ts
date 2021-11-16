@@ -9,9 +9,9 @@ export function calculateNumberOfPicksForUser(
 ): number {
     const numberOfPicksForDraw = drawSettings.numberOfPicks;
     debug(
-        `numberOfPicksForDraw1: ${JSON.stringify(
+        `numberOfPicksForDraw: ${JSON.stringify(
             numberOfPicksForDraw,
-        )} normalizedBalance: ${normalizedBalance}  `,
+        )}, normalizedBalance: ${normalizedBalance}`,
     );
 
     return BigNumber.from(numberOfPicksForDraw)

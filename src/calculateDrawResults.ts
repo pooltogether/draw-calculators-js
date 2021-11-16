@@ -13,7 +13,7 @@ export function calculateDrawResults(
     user: User,
     drawIndex: number = 0,
 ): DrawResults {
-    console.log(`calculateDrawResults()`);
+    debug(`calculateDrawResults() called`);
     // first check PrizeDistribution passed is sane
     const sanityCheckPrizeDistrbutionResult = sanityCheckPrizeDistribution(prizeDistribution);
     if (sanityCheckPrizeDistrbutionResult != '') {
