@@ -9,7 +9,7 @@ import { formatDistributionNumber } from '../src/helpers/formatDistributionNumbe
 
 describe('prepareClaims()', () => {
     it('returns correct claim struct for user', async () => {
-        const exampleDrawSettings1: PrizeDistribution = {
+        const examplePrizeDistribution1: PrizeDistribution = {
             tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
@@ -22,7 +22,7 @@ describe('prepareClaims()', () => {
             maxPicksPerUser: 1000,
         };
 
-        const exampleDrawSettings2: PrizeDistribution = {
+        const examplePrizeDistribution2: PrizeDistribution = {
             tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
@@ -56,7 +56,7 @@ describe('prepareClaims()', () => {
         };
 
         const drawResults: DrawResults[] = batchCalculateDrawResults(
-            [exampleDrawSettings1, exampleDrawSettings2],
+            [examplePrizeDistribution1, examplePrizeDistribution2],
             [exampleDraw1, exampleDraw2],
             exampleUser,
         );

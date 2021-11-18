@@ -14,3 +14,4 @@ export * from './generatePicks';
 export * from './helpers/calculateNumberOfPrizesForIndex';
 export * from './helpers/calculatePrizeForDistributionIndex';
 export * from './helpers/calculateNumberOfPicksForUser';
+export * from './helpers/filterResultsByValue';

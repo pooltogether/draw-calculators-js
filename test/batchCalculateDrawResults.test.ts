@@ -13,7 +13,7 @@ describe('batchCalculateDrawResults()', () => {
         // prizeAwardable = prize * fractionOfPrize = 100e18 * 7.8125E14 = 1.09375e22
         // div by 1e18  = 7.8125E16
 
-        const exampleDrawSettings: PrizeDistribution = {
+        const examplePrizeDistribution: PrizeDistribution = {
             tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
@@ -39,7 +39,7 @@ describe('batchCalculateDrawResults()', () => {
         };
 
         const results = batchCalculateDrawResults(
-            [exampleDrawSettings],
+            [examplePrizeDistribution],
             [exampleDraw],
             exampleUser,
         );
@@ -61,7 +61,7 @@ describe('batchCalculateDrawResults()', () => {
         );
 
         console.log('winning number ', winningRandomNumber);
-        const exampleDrawSettings: PrizeDistribution = {
+        const examplePrizeDistribution: PrizeDistribution = {
             tiers: [
                 formatDistributionNumber('0.4'),
                 formatDistributionNumber('0.2'),
@@ -81,7 +81,7 @@ describe('batchCalculateDrawResults()', () => {
         };
 
         const results = batchCalculateDrawResults(
-            [exampleDrawSettings],
+            [examplePrizeDistribution],
             [exampleDraw],
             exampleUser,
         );

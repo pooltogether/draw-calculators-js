@@ -27,26 +27,26 @@ $ yarn add @pooltogether/draw-calculator-js
 To create a claim or calculate winnings for an address:
 
 1. Run `yarn add @pooltogether/draw-calculator-js` in your project to install the package.
-1. Import the desired functions and types: `import {drawCalculator, Draw, PrizeDistribution, generatePicks, prepareClaims } from "@pooltogether/draw-calculator-js"`
+1. Import the desired functions and types: `import {drawCalculator, Draw, PrizeDistribution, DrawResults, filterResultsByValue, generatePicks, prepareClaims } from "@pooltogether/draw-calculator-js"`
 
-Starting with a particular `drawId` and `userAddress`, fetch the Draw information from the DrawHistory contract:
+Starting with a particular `drawId` and `userAddress`, fetch the Draw information from the DrawBuffer contract:
 
 ```js
-const drawHistory: Contract = new ethers.Contract(address, drawHistoryAbi, signerOrProvider);
-const drawId: number = await drawHistory.getNewestDraw(); // can go back cardinality in time (8 draws)
-const draw: Draw = await drawHistory.functions.getDraw(drawId); // read-only rpc call
+const drawBuffer: Contract = new ethers.Contract(address, drawBufferAbi, signerOrProvider);
+const drawId: number = await drawBuffer.getNewestDraw(); // can go back cardinality in time (8 draws)
+const draw: Draw = await drawBuffer.functions.getDraw(drawId); // read-only rpc call
 ```
 
-Next fetch the PrizeDistribution for the `drawId` from the PrizeDistributionHistory contract:
+Next fetch the PrizeDistribution for the `drawId` from the PrizeDistributionBuffer contract:
 
 ```javascript
 // get PrizeDistribution from the  DrawCalculatorHistory contract for a particular drawId
-const prizeDistributionHistoryContract: Contract = new ethers.Contract(
+const PrizeDistributionBufferContract: Contract = new ethers.Contract(
     address,
-    drawSettingHistoryAbi,
+    prizeDistributionAbi,
     signerOrProvider,
 );
-const prizeDistribution = await prizeDistributionHistoryContract.functions.getPrizeDistribution(
+const prizeDistribution = await PrizeDistributionBufferContract.functions.getPrizeDistribution(
     drawId,
 ); // read-only rpc call
 ```
@@ -70,10 +70,16 @@ const exampleUser: User = {
     normalizedBalances: balances
 }
 
-const results: DrawResults = batchCalculateDrawResults([prizeDistribution], [draw], exampleUser)
+let results: DrawResults = batchCalculateDrawResults([prizeDistribution], [draw], exampleUser)
 ```
 
 The `results.totalValue` field should indicate the total amount of prize available for `userAddress` for the `drawId`.
+
+These results may then need to be filtered by value, since the user can only claim `prizeDistribution.maxPicksPerUser` number of prizes per draw.
+
+```js
+results = filterResultsByValue(results, prizeDistribution.maxPicksPerUser);
+```
 
 Finally, to claim a prize, forward these `DrawResults` to `prepareClaims(user: User, drawResult: DrawResults[])` to generate the data for the on-chain PrizeDistributor `claim()` call:
 

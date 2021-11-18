@@ -14,7 +14,7 @@ describe('calculatePrizeForDistributionIndex()', () => {
         // prizeAwardable = prize * fractionOfPrize = 100e18 * 1.333e7 = 1.333e21
         // div by 1e9 = 1.33333e18
 
-        const exampleDrawSettings: PrizeDistribution = {
+        const examplePrizeDistribution: PrizeDistribution = {
             tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
@@ -27,8 +27,7 @@ describe('calculatePrizeForDistributionIndex()', () => {
             maxPicksPerUser: 1000,
         };
 
-        //calculatePrizeForPrizeDistributionIndex(prizeDistributionIndex: number, drawSettings: TsunamiDrawSettings, draw: Draw)
-        const prizeReceivable = calculatePrizeForDistributionIndex(1, exampleDrawSettings);
+        const prizeReceivable = calculatePrizeForDistributionIndex(1, examplePrizeDistribution);
         expect(prizeReceivable).to.deep.equal(BigNumber.from('0x1280f39a34855534')); // 1.33333e18
     });
 });

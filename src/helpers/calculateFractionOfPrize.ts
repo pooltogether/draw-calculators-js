@@ -7,16 +7,16 @@ const debug = require('debug')('pt:tsunami-sdk-drawCalculator');
 
 export function calculateFractionOfPrize(
     prizeDistributionIndex: number,
-    drawSettings: PrizeDistribution,
+    prizeDistribution: PrizeDistribution,
 ): BigNumber {
     const numberOfPrizes = calculateNumberOfPrizesForIndex(
-        drawSettings.bitRangeSize,
+        prizeDistribution.bitRangeSize,
         prizeDistributionIndex,
     );
 
     debug('numberOfPrizes for index ', numberOfPrizes);
 
-    const valueAtDistributionIndex = drawSettings.tiers[prizeDistributionIndex];
+    const valueAtDistributionIndex = prizeDistribution.tiers[prizeDistributionIndex];
     debug('valueAtDistributionIndex ', utils.formatEther(valueAtDistributionIndex.toString()));
 
     const valueAtDistributionIndexUnformatted = parseUnits(String(valueAtDistributionIndex), 9);
