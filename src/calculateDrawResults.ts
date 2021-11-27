@@ -3,7 +3,6 @@ import { generatePicks } from './generatePicks';
 import { sanityCheckPrizeDistribution } from './helpers/sanityCheckPrizeDistribution';
 import { Draw, DrawResults, PrizeDistribution, User } from './types';
 import { computeDrawResults } from './computeDrawResults';
-import { filterResultsByValue } from './helpers/filterResultsByValue';
 
 const debug = require('debug')('pt:tsunami-sdk-drawCalculator');
 
@@ -13,6 +12,11 @@ export function calculateDrawResults(
     user: User,
     drawIndex: number = 0,
 ): DrawResults {
+    debug(
+        `calculateDrawResults() called with args ${JSON.stringify(
+            prizeDistribution,
+        )}, ${JSON.stringify(draw)}, ${JSON.stringify(user)}`,
+    );
     // first check PrizeDistribution passed is sane
     const sanityCheckPrizeDistrbutionResult = sanityCheckPrizeDistribution(prizeDistribution);
     if (sanityCheckPrizeDistrbutionResult != '') {
@@ -32,9 +36,5 @@ export function calculateDrawResults(
     debug(
         `user ${user.address} has ${utils.formatEther(results.totalValue)} prizes for this draw..`,
     );
-
-    // sort the picks by value and filter out if some picks beyond the maxUserPicks
-    results = filterResultsByValue(results, prizeDistribution.maxPicksPerUser);
-
     return results;
 }

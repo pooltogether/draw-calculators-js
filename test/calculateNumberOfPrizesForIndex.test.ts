@@ -7,7 +7,7 @@ import { formatDistributionNumber } from '../src/helpers/formatDistributionNumbe
 describe('calculateNumberOfPrizesForIndex()', () => {
     it('returns the correct number of winners', async () => {
         // const numberOfPrizes = 2 ^ (bitRangeSize ^ distributionIndex) - 2 ^ (bitRangeSize ^ distributionIndex - 1)= 2 ^ (4 ^ 1) = 16 - 1 = 15
-        const exampleDrawSettings: PrizeDistribution = {
+        const examplePrizeDistribution: PrizeDistribution = {
             tiers: [
                 formatDistributionNumber('0.3'),
                 formatDistributionNumber('0.2'),
@@ -21,7 +21,7 @@ describe('calculateNumberOfPrizesForIndex()', () => {
         };
 
         const numberOfWinners = calculateNumberOfPrizesForIndex(
-            exampleDrawSettings.bitRangeSize,
+            examplePrizeDistribution.bitRangeSize,
             1,
         );
         expect(numberOfWinners).to.equal(15); // 1.33333e18

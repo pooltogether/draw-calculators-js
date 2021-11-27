@@ -3,7 +3,7 @@ import { calculatePickPrize } from './helpers/calculatePickPrize';
 import { ethers } from 'ethers';
 
 export function computeDrawResults(
-    drawSettings: PrizeDistribution,
+    prizeDistribution: PrizeDistribution,
     draw: Draw,
     picks: Pick[],
 ): DrawResults {
@@ -20,7 +20,7 @@ export function computeDrawResults(
         const pickPrize: PickPrize | undefined = calculatePickPrize(
             pick.hash,
             draw.winningRandomNumber,
-            drawSettings,
+            prizeDistribution,
             draw,
         );
 
