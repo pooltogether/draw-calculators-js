@@ -1,15 +1,18 @@
 import { BigNumber } from 'ethers';
 
-export type PrizeDistribution = {
+export type PrizeTiers = {
+    bitRangeSize: number;
+    expiryDuration?: number;
+    maxPicksPerUser: number;
+    prize: BigNumber;
+    tiers: number[];
+};
+
+export type PrizeDistribution = PrizeTiers & {
     matchCardinality: number;
     numberOfPicks: BigNumber;
-    tiers: number[];
-    bitRangeSize: number;
-    prize: BigNumber;
     drawStartTimestampOffset?: number;
     drawEndTimestampOffset?: number;
-    maxPicksPerUser: number;
-    expiryDuration?: number;
 };
 
 export type Draw = {
